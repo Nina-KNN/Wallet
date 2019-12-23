@@ -5,14 +5,14 @@ import java.util.UUID;
 
 public class Balance {
     private UUID id;
-    private String title; // содержить значение "Доход" или "Расход"
+    private String title; // содержит значение "Доход" или "Расход"
     private double operationSum; // сумма операции дохода или расхода
     private boolean profit; // при true это "profit" - доход, при false это "expense" - расход
     private Date date;
 
     public Balance() {
-        this.id = id;
-        this.date = date;
+        id = UUID.randomUUID();
+        date = new Date();
     }
 
     public UUID getId() {
@@ -44,7 +44,7 @@ public class Balance {
         this.title = title;
     }
 
-    public void setOperationSum(double operationSum) {
+    public void setOperationSum(int operationSum) {
         this.operationSum = operationSum;
     }
 

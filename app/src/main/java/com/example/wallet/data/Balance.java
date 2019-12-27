@@ -7,8 +7,9 @@ public class Balance {
     private UUID id;
     private String title; // содержит значение "Доход" или "Расход"
     private double operationSum; // сумма операции дохода или расхода
-    private boolean profit; // при true это "profit" - доход, при false это "expense" - расход
+    private boolean choiceProfit; // при true это "profit" - доход, при false это "expense" - расход
     private Date date;
+    private String comment;
 
     public Balance() {
         id = UUID.randomUUID();
@@ -27,13 +28,18 @@ public class Balance {
         return operationSum;
     }
 
-    public boolean isProfit() {
-        return profit;
+    public boolean isChoiceProfit() {
+        return choiceProfit;
     }
 
     public Date getDate() {
         return date;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
 
 
     public void setId(UUID id) {
@@ -48,11 +54,15 @@ public class Balance {
         this.operationSum = operationSum;
     }
 
-    public void setProfit(boolean profit) {
-        this.profit = profit;
+    public void setChoiceProfit(boolean choiceProfit) {
+        this.choiceProfit = choiceProfit;
     }
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

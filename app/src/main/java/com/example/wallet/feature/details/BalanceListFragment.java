@@ -18,7 +18,7 @@ import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BalanseListFragment extends Fragment {
+public class BalanceListFragment extends Fragment {
 
     //Model
     private List<Balance> balances = generateDemoBalance();

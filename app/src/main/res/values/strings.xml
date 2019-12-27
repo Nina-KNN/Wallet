@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Wallet</string>
+
+    <string name="enter_profit">Enter profit or expense</string>
+    <string name="enter_expense">Enter expense</string>
+
+    <string name="title_profit">PROFIT</string>
+    <string name="title_expense">EXPENSE</string>
+
+    <string name="comment">Enter comment</string>
+    <string name="date">Date</string>
+    <string name="save_button">Save</string>
 </resources>

@@ -25,7 +25,7 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
     public BalanceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View itemView = inflater.inflate(R.layout.item_of_balance, parent, false);
+        View itemView = inflater.inflate(R.layout.item_of_balance_list, parent, false);
 
         return new BalanceViewHolder(itemView);
     }

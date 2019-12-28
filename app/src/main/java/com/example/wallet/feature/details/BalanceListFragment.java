@@ -17,6 +17,7 @@ import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BalanceListFragment extends Fragment {
 
@@ -69,6 +70,8 @@ public class BalanceListFragment extends Fragment {
             Balance balance = new Balance();
             balance.setOperationSum(i);
             balance.setTitle("Balance #" + i);
+            balance.setId(UUID.randomUUID());
+            balance.setComment("utututu " + i);
 
             result.add(balance);
         }

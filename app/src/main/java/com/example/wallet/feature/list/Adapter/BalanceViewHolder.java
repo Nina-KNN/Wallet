@@ -19,14 +19,18 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
 
     private TextView titleView;
     private TextView dateView;
-    private TextView operationSumView;
+    private TextView operationSumTextView;
+    private TextView idTextView;
+    private TextView commentTextView;
 
     public BalanceViewHolder(@NonNull View itemView) {
         super(itemView);
 
         titleView = itemView.findViewById(R.id.title);
         dateView = itemView.findViewById(R.id.date);
-        operationSumView = itemView.findViewById(R.id.sum);
+        operationSumTextView = itemView.findViewById(R.id.sum);
+        idTextView = itemView.findViewById(R.id.id);
+        commentTextView = itemView.findViewById(R.id.comment);
     }
 
     public void bindTo(Balance balance) {
@@ -38,6 +42,8 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
 
         titleView.setText(balance.getTitle());
         dateView.setText(dateText);
-        operationSumView.setText(String.valueOf(balance.getOperationSum()));
+        operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
+        idTextView.setText(balance.getId().toString());
+        commentTextView.setText(balance.getComment());
     }
 }

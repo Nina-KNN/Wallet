@@ -10,4 +10,6 @@
     <string name="comment">Enter comment</string>
     <string name="date">Date</string>
     <string name="save_button">Save</string>
+
+    <string name="menu_add_item">Add</string>
 </resources>

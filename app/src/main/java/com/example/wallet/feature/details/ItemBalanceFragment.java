@@ -19,12 +19,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.UUID;
 
 public class ItemBalanceFragment extends Fragment {
+
+    private static String KEY_ITEM_ID = "key_item_id";
 
     //Model
     private Balance balance;
@@ -43,7 +47,8 @@ public class ItemBalanceFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        balance = new Balance();
+        UUID id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
+        balance = BalanceItemStore.getInstance().getById(id);
     }
 
     @Nullable
@@ -74,24 +79,26 @@ public class ItemBalanceFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         idTextView.setText(balance.getId().toString());
+        commentEditText.setText(balance.getComment());
+        enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
+        makeChoice(balance.isChoiceProfit());
+        // Форматирование времени как "день.месяц.год"
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        dateTextView.setText(dateFormat.format(balance.getDate()));
+
 
         isProfit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 makeChoice(isChecked);
+                enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
             }
         });
-
-        makeChoice(balance.isChoiceProfit());
-
-        // Форматирование времени как "день.месяц.год"
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        dateTextView.setText(dateFormat.format(balance.getDate()));
 
         enterProfitEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                balance.getOperationSum();
+
             }
 
             @Override
@@ -108,7 +115,7 @@ public class ItemBalanceFragment extends Fragment {
         commentEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                balance.getComment();
+
             }
 
             @Override
@@ -137,16 +144,29 @@ public class ItemBalanceFragment extends Fragment {
         balance.setChoiceProfit(choice); // изменение поля в объекте
         isProfit.setChecked(choice); // изменение поля в объекте
 
-        if(choice == true) {
-            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
+        if(choice) {
+//            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
+            balance.setTitle("Profit"); // изменение поля в объекте
             titleTextView.setText(R.string.title_profit);
 
             itemImageView.setImageResource(R.drawable.profit_image);
         } else {
-            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
+//            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
+            balance.setTitle("Expense"); // изменение поля в объекте
             titleTextView.setText(R.string.title_expense);
 
             itemImageView.setImageResource(R.drawable.expense_image);
         }
+    }
+
+
+    public static ItemBalanceFragment makeInstance(UUID id) {
+        ItemBalanceFragment fragment = new ItemBalanceFragment();
+        Bundle args = new Bundle();
+
+        args.putSerializable(KEY_ITEM_ID, id);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

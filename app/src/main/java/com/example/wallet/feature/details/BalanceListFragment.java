@@ -61,6 +61,12 @@ public class BalanceListFragment extends Fragment {
                     getContext(),
                     balance.getTitle() + " was clicked",
                     Toast.LENGTH_SHORT).show();
+
+            //добавить транзакцию фрагмента
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId()))
+                    .addToBackStack(null)
+                    .commit();
         }
     };
 

@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Balance {
     private UUID id;
     private String title; // содержит значение "Доход" или "Расход"
-    private double operationSum; // сумма операции дохода или расхода
+    private int operationSum; // сумма операции дохода или расхода
     private boolean choiceProfit; // при true это "profit" - доход, при false это "expense" - расход
     private Date date;
     private String comment;
@@ -24,7 +24,7 @@ public class Balance {
         return title;
     }
 
-    public double getOperationSum() {
+    public int getOperationSum() {
         return operationSum;
     }
 

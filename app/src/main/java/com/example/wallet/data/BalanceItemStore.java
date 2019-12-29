@@ -38,12 +38,23 @@ public class BalanceItemStore {
         List<Balance> result = new ArrayList<>();
 
         for (int i = 0; i < 15; i++) {
+            boolean prof = false;
+            if (i % 2 == 0) { prof = true;}
+
             Balance balance = new Balance();
-            balance.setOperationSum(i);
-            balance.setTitle("Balance #" + i);
             balance.setId(UUID.randomUUID());
             balance.setComment("com " + i);
-            balance.setChoiceProfit(true);
+            balance.setChoiceProfit(prof);
+
+            if(prof) {
+                balance.setTitle("Profit");
+//                balance.setTitle(String.valueOf(R.string.title_profit));
+                balance.setOperationSum(i);
+            } else {
+//                balance.setTitle(String.valueOf(R.string.title_expense));
+                balance.setTitle("Expense");
+                balance.setOperationSum(-i);
+            }
 
             result.add(balance);
         }

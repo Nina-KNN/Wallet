@@ -17,16 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class BalanceListFragment extends Fragment {
-
-    //Model
-    private List<Balance> balances = generateDemoBalance();
 
     //View
     private RecyclerView recyclerView;
@@ -57,7 +51,7 @@ public class BalanceListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new BalanceListAdapter(balances, itemListener));
+        recyclerView.setAdapter(new BalanceListAdapter(BalanceItemStore.getInstance().getBalanceList(), itemListener));
     }
 
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
@@ -96,19 +90,4 @@ public class BalanceListFragment extends Fragment {
         }
     }
 
-    // Заполнить лист crimes
-    private static List<Balance> generateDemoBalance() {
-        List<Balance> result = new ArrayList<>();
-
-        for (int i = 0; i < 2; i++) {
-            Balance balance = new Balance();
-            balance.setOperationSum(i);
-            balance.setTitle("Balance #" + i);
-            balance.setId(UUID.randomUUID());
-            balance.setComment("com " + i);
-
-            result.add(balance);
-        }
-        return result;
-    }
 }

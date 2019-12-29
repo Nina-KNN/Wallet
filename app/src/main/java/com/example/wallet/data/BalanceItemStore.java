@@ -43,6 +43,7 @@ public class BalanceItemStore {
             balance.setTitle("Balance #" + i);
             balance.setId(UUID.randomUUID());
             balance.setComment("com " + i);
+            balance.setChoiceProfit(true);
 
             result.add(balance);
         }

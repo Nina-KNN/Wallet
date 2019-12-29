@@ -22,17 +22,12 @@ import com.example.wallet.data.Balance;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
-public class AddOperationFragment extends Fragment {
+public class ItemBalanceFragment extends Fragment {
 
     //Model
     private Balance balance;
-    private List<Balance> balances = new ArrayList<>();
 
     //View
     private TextView titleTextView;
@@ -40,7 +35,7 @@ public class AddOperationFragment extends Fragment {
     private EditText enterProfitEditText;
     private EditText commentEditText;
     private Button saveButton;
-    private ImageView profitImageView;
+    private ImageView itemImageView;
     private TextView idTextView;
     private CheckBox isProfit;
 
@@ -68,7 +63,7 @@ public class AddOperationFragment extends Fragment {
         enterProfitEditText = view.findViewById(R.id.enter_operationSum);
         commentEditText = view.findViewById(R.id.enter_comment);
         saveButton = view.findViewById(R.id.save_button);
-        profitImageView = view.findViewById(R.id.value_image);
+        itemImageView = view.findViewById(R.id.value_image);
         idTextView = view.findViewById(R.id.id);
         isProfit = view.findViewById(R.id.choiceProfit);
 
@@ -78,9 +73,7 @@ public class AddOperationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        UUID uuid = UUID.randomUUID();
-        balance.setId(uuid); // заполнение поля в объекте
-        idTextView.setText(String.valueOf(uuid));
+        idTextView.setText(balance.getId().toString());
 
         isProfit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -89,19 +82,16 @@ public class AddOperationFragment extends Fragment {
             }
         });
 
-        makeChoice(false);
+        makeChoice(balance.isChoiceProfit());
 
         // Форматирование времени как "день.месяц.год"
-        Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(date);
-        balance.setDate(date); // заполнение поля в объекте
-        dateTextView.setText(dateText);
+        dateTextView.setText(dateFormat.format(balance.getDate()));
 
         enterProfitEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                balance.getOperationSum();
             }
 
             @Override
@@ -118,7 +108,7 @@ public class AddOperationFragment extends Fragment {
         commentEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                balance.getComment();
             }
 
             @Override
@@ -132,11 +122,11 @@ public class AddOperationFragment extends Fragment {
             }
         });
 
+        // Сохранить изменения при нажатии кнопки
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Добавить данные в лист balances
-                balances.add(balance);
+
             }
         });
     }
@@ -144,19 +134,19 @@ public class AddOperationFragment extends Fragment {
 
     private void makeChoice(boolean choice) {
 
-        balance.setChoiceProfit(choice); // заполнение поля в объекте
-        isProfit.setChecked(choice);
+        balance.setChoiceProfit(choice); // изменение поля в объекте
+        isProfit.setChecked(choice); // изменение поля в объекте
 
         if(choice == true) {
-            balance.setTitle(String.valueOf(R.string.title_profit)); // заполнение поля в объекте
+            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
             titleTextView.setText(R.string.title_profit);
 
-            profitImageView.setImageResource(R.drawable.profit_image);
+            itemImageView.setImageResource(R.drawable.profit_image);
         } else {
-            balance.setTitle(String.valueOf(R.string.title_expense)); // заполнение поля в объекте
+            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
             titleTextView.setText(R.string.title_expense);
 
-            profitImageView.setImageResource(R.drawable.expense_image);
+            itemImageView.setImageResource(R.drawable.expense_image);
         }
     }
 }

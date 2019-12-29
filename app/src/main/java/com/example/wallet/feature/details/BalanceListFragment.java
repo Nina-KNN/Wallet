@@ -57,8 +57,18 @@ public class BalanceListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new BalanceListAdapter(balances));
+        recyclerView.setAdapter(new BalanceListAdapter(balances, itemListener));
     }
+
+    private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
+        @Override
+        public void onBalanceItemClicked(Balance balance) {
+            Toast.makeText(
+                    getContext(),
+                    balance.getTitle() + " was clicked",
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,7 +105,7 @@ public class BalanceListFragment extends Fragment {
             balance.setOperationSum(i);
             balance.setTitle("Balance #" + i);
             balance.setId(UUID.randomUUID());
-            balance.setComment("utututu " + i);
+            balance.setComment("com " + i);
 
             result.add(balance);
         }

@@ -16,6 +16,7 @@ import java.util.Locale;
 class BalanceViewHolder extends RecyclerView.ViewHolder {
 
     private Balance balance;
+    private BalanceListAdapter.ItemListener itemListener;
 
     private TextView titleView;
     private TextView dateView;
@@ -23,7 +24,14 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
     private TextView idTextView;
     private TextView commentTextView;
 
-    public BalanceViewHolder(@NonNull View itemView) {
+    private final View.OnClickListener clicListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            itemListener.onBalanceItemClicked(balance);
+        }
+    };
+
+    public BalanceViewHolder(@NonNull View itemView, BalanceListAdapter.ItemListener itemListener) {
         super(itemView);
 
         titleView = itemView.findViewById(R.id.title);
@@ -31,6 +39,9 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         operationSumTextView = itemView.findViewById(R.id.sum);
         idTextView = itemView.findViewById(R.id.id);
         commentTextView = itemView.findViewById(R.id.comment);
+
+        itemView.setOnClickListener(clicListener);
+        this.itemListener = itemListener;
     }
 
     public void bindTo(Balance balance) {

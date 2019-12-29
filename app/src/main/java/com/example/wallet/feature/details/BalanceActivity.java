@@ -17,8 +17,8 @@ public class BalanceActivity extends AppCompatActivity {
 
         if(fragmentManager.findFragmentById(R.id.fragment_container) == null) {
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, new BalanceListFragment())
-//                    .add(R.id.fragment_container, new AddOperationFragment())
+                    .replace(R.id.fragment_container, new BalanceListFragment())
+//                    .replace(R.id.fragment_container, new AddOperationFragment())
                     .commit();
         }
     }

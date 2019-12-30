@@ -1,6 +1,7 @@
 package com.example.wallet.feature.list.Adapter;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
     private TextView operationSumTextView;
     private TextView idTextView;
     private TextView commentTextView;
+    private ImageView itemImageView;
 
     private final View.OnClickListener clicListener = new View.OnClickListener() {
         @Override
@@ -39,6 +41,7 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         operationSumTextView = itemView.findViewById(R.id.sum);
         idTextView = itemView.findViewById(R.id.id);
         commentTextView = itemView.findViewById(R.id.comment);
+        itemImageView = itemView.findViewById(R.id.value_image);
 
         itemView.setOnClickListener(clicListener);
         this.itemListener = itemListener;
@@ -56,5 +59,11 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());
+
+        if(balance.getTitle().equals("Profit")) {
+            itemImageView.setImageResource(R.drawable.profit_image);
+        } else {
+            itemImageView.setImageResource(R.drawable.expense_image);
+        }
     }
 }

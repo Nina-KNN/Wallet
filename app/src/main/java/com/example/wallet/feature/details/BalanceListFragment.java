@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +23,7 @@ public class BalanceListFragment extends Fragment {
 
     //View
     private RecyclerView recyclerView;
+    private BalanceListAdapter adapter;
 
     @Nullable
     @Override
@@ -50,18 +50,15 @@ public class BalanceListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        adapter = new BalanceListAdapter(BalanceItemStore.getInstance().getBalanceList(), itemListener);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new BalanceListAdapter(BalanceItemStore.getInstance().getBalanceList(), itemListener));
+        recyclerView.setAdapter(adapter);
     }
 
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
-            Toast.makeText(
-                    getContext(),
-                    balance.getTitle() + " was clicked",
-                    Toast.LENGTH_SHORT).show();
-
             //добавить транзакцию фрагмента
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId()))
@@ -89,7 +86,9 @@ public class BalanceListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.add_item) {
-            Toast.makeText(getContext(), "You press button Add", Toast.LENGTH_SHORT).show();
+            BalanceItemStore.getInstance().generateNewRandomItem();
+            adapter.notifyDataSetChanged();
+
             return true;
         } else {
             return super.onOptionsItemSelected(item);

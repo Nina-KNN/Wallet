@@ -2,6 +2,7 @@ package com.example.wallet.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class BalanceItemStore {
@@ -18,7 +19,9 @@ public class BalanceItemStore {
     }
     //End of singleton
 
-    private List<Balance> balanceList = generateDemoBalance();
+
+
+    private List<Balance> balanceList = new ArrayList<>();
 
     public List<Balance> getBalanceList() {
         return balanceList;
@@ -33,31 +36,31 @@ public class BalanceItemStore {
         return null;
     }
 
-    // Заполнить лист crimes
-    private static List<Balance> generateDemoBalance() {
-        List<Balance> result = new ArrayList<>();
 
-        for (int i = 0; i < 15; i++) {
-            boolean prof = false;
-            if (i % 2 == 0) { prof = true;}
+    // Создать рандомный элемент
+    public void generateNewRandomItem() {
+        Random random = new Random();
+        Balance balanceItem = new Balance();
 
-            Balance balance = new Balance();
-            balance.setId(UUID.randomUUID());
-            balance.setComment("com " + i);
-            balance.setChoiceProfit(prof);
+        boolean profit = random.nextBoolean();
+//        int sum = generateRandomEvenNumber();
+        int sum = random.nextInt();
+        if(sum < 0) { sum *= (-1); }
 
-            if(prof) {
-                balance.setTitle("Profit");
-//                balance.setTitle(String.valueOf(R.string.title_profit));
-                balance.setOperationSum(i);
-            } else {
-//                balance.setTitle(String.valueOf(R.string.title_expense));
-                balance.setTitle("Expense");
-                balance.setOperationSum(-i);
-            }
+        balanceItem.setId(UUID.randomUUID());
+        balanceItem.setComment("New item");
+        balanceItem.setChoiceProfit(profit);
 
-            result.add(balance);
+        if(profit) {
+//                balanceItem.setTitle(String.valueOf(R.string.title_profit));
+            balanceItem.setTitle("Profit");
+            balanceItem.setOperationSum(sum);
+        } else {
+//                balanceItem.setTitle(String.valueOf(R.string.title_expense));
+            balanceItem.setTitle("Expense");
+            balanceItem.setOperationSum(-sum);
         }
-        return result;
+
+        balanceList.add(balanceItem);
     }
 }

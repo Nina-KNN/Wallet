@@ -160,6 +160,7 @@ public class ItemBalanceFragment extends Fragment {
     }
 
 
+
     public static ItemBalanceFragment makeInstance(UUID id) {
         ItemBalanceFragment fragment = new ItemBalanceFragment();
         Bundle args = new Bundle();

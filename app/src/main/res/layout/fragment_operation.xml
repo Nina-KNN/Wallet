@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:inputType="number"
-                android:hint="@string/enter_profit" />
+                android:hint="@string/enter_operationSum" />
 
             <EditText
                 android:id="@+id/enter_comment"

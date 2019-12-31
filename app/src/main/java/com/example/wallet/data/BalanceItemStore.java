@@ -1,7 +1,13 @@
 package com.example.wallet.data;
 
+import com.example.wallet.R;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -37,19 +43,19 @@ public class BalanceItemStore {
     }
 
 
-    // Создать рандомный элемент
+//     Создать рандомный элемент
     public void generateNewRandomItem() {
         Random random = new Random();
         Balance balanceItem = new Balance();
 
         boolean profit = random.nextBoolean();
-//        int sum = generateRandomEvenNumber();
         int sum = random.nextInt();
         if(sum < 0) { sum *= (-1); }
 
         balanceItem.setId(UUID.randomUUID());
         balanceItem.setComment("New item");
         balanceItem.setChoiceProfit(profit);
+        balanceItem.setDate(new Date());
 
         if(profit) {
 //                balanceItem.setTitle(String.valueOf(R.string.title_profit));
@@ -62,5 +68,14 @@ public class BalanceItemStore {
         }
 
         balanceList.add(balanceItem);
+    }
+
+
+    // Форматирование времени как "день.месяц.год"
+    public String dateFormatNew (Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String currentDate = dateFormat.format(date);
+
+        return currentDate;
     }
 }

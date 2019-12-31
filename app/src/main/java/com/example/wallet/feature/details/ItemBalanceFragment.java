@@ -91,7 +91,15 @@ public class ItemBalanceFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 makeChoice(isChecked);
-                enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+
+                // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
+                if(isChecked && balance.getOperationSum() < 0) {
+                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+                } else if (! isChecked && balance.getOperationSum() > 0) {
+                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+                } else {
+                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
+                }
             }
         });
 
@@ -103,7 +111,15 @@ public class ItemBalanceFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
+                String inputString = s.toString();
+
+
+                if (inputString != null && ! inputString.equals("") && ! inputString.equals("-")) {
+                    balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
+
+                } else {
+                    balance.setOperationSum(Integer.parseInt("0")); // заполнение поля в объекте
+                }
             }
 
             @Override
@@ -158,7 +174,6 @@ public class ItemBalanceFragment extends Fragment {
             itemImageView.setImageResource(R.drawable.expense_image);
         }
     }
-
 
 
     public static ItemBalanceFragment makeInstance(UUID id) {

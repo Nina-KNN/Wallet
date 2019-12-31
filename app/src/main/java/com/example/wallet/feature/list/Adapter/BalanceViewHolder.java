@@ -7,12 +7,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wallet.data.Balance;
 import com.example.wallet.R;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStore;
 
 class BalanceViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,7 +23,7 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
     private TextView commentTextView;
     private ImageView itemImageView;
 
-    private final View.OnClickListener clicListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             itemListener.onBalanceItemClicked(balance);
@@ -43,19 +40,15 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         commentTextView = itemView.findViewById(R.id.comment);
         itemImageView = itemView.findViewById(R.id.value_image);
 
-        itemView.setOnClickListener(clicListener);
+        itemView.setOnClickListener(clickListener);
         this.itemListener = itemListener;
     }
 
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        // Форматирование времени как "день.месяц.год"
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String dateText = dateFormat.format(balance.getDate());
-
         titleView.setText(balance.getTitle());
-        dateView.setText(dateText);
+        dateView.setText(BalanceItemStore.getInstance().dateFormatNew(balance.getDate()));
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());

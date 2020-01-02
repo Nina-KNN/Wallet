@@ -30,6 +30,15 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         }
     };
 
+    private final View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            itemListener.onBalanceItemLongClicked(balance);
+
+            return true;
+        }
+    };
+
     public BalanceViewHolder(@NonNull View itemView, BalanceListAdapter.ItemListener itemListener) {
         super(itemView);
 
@@ -41,6 +50,7 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
         itemImageView = itemView.findViewById(R.id.value_image);
 
         itemView.setOnClickListener(clickListener);
+        itemView.setOnLongClickListener(longClickListener);
         this.itemListener = itemListener;
     }
 

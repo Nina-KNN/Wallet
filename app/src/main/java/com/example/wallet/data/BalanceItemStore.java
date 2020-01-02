@@ -53,4 +53,9 @@ public class BalanceItemStore {
 
         return currentDate;
     }
+
+    //Удаление объектов
+    public void deleteBalanceItem(Balance balance) {
+        balanceList.remove(balance);
+    }
 }

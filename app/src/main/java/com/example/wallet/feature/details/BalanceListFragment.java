@@ -58,17 +58,6 @@ public class BalanceListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
-        @Override
-        public void onBalanceItemClicked(Balance balance) {
-            //добавить транзакцию фрагмента
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId()))
-                    .addToBackStack(null)
-                    .commit();
-        }
-    };
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +90,23 @@ public class BalanceListFragment extends Fragment {
         }
     }
 
+    private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
+        @Override
+        public void onBalanceItemClicked(Balance balance) {
+            //добавить транзакцию фрагмента
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId()))
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        // Удаление при длительном нажатии
+        @Override
+        public void onBalanceItemLongClicked(Balance balance) {
+            BalanceItemStore.getInstance().deleteBalanceItem(balance);
+            adapter.notifyDataSetChanged();
+        }
+    };
 }
 
 

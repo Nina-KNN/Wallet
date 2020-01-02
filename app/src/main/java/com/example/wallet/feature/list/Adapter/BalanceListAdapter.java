@@ -20,6 +20,13 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
     public BalanceListAdapter(List<Balance> balances, ItemListener itemListener) {
         this.balances = balances;
         this.itemListener = itemListener;
+
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return balances.get(position).hashCode();
     }
 
     @NonNull
@@ -46,5 +53,6 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
 
     public interface ItemListener {
         void onBalanceItemClicked(Balance balance);
+        void onBalanceItemLongClicked(Balance balance);
     }
 }

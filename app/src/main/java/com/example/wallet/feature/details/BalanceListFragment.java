@@ -19,6 +19,8 @@ import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
 
+import java.util.UUID;
+
 public class BalanceListFragment extends Fragment {
 
     //View
@@ -86,7 +88,11 @@ public class BalanceListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.add_item) {
-            BalanceItemStore.getInstance().generateNewRandomItem();
+            //добавить транзакцию фрагмента
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(UUID.randomUUID()))
+                    .addToBackStack(null)
+                    .commit();
             adapter.notifyDataSetChanged();
 
             return true;
@@ -96,3 +102,5 @@ public class BalanceListFragment extends Fragment {
     }
 
 }
+
+

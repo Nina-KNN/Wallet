@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Wallet</string>
 
-    <string name="enter_operationSum">Enter profit or expense</string>
+    <string name="enter_operationSum">Enter operation sum</string>
+    <string name="enter_profit">Enter profit</string>
     <string name="enter_expense">Enter expense</string>
 
     <string name="title_profit">PROFIT</string>
@@ -12,4 +13,5 @@
     <string name="save_button">Save</string>
 
     <string name="menu_add_item">Add</string>
+    <string name="message_about_wrong_data">The field \"Enter profit or expense\" should not be empty and should not be equal to \"0\"</string>
 </resources>

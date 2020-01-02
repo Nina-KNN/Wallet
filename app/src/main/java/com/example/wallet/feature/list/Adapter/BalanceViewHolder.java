@@ -47,15 +47,16 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        titleView.setText(balance.getTitle());
         dateView.setText(BalanceItemStore.getInstance().dateFormatNew(balance.getDate()));
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());
 
-        if(balance.getTitle().equals("Profit")) {
+        if(balance.getTitle().equals(String.valueOf(R.string.title_profit))) {
+            titleView.setText(R.string.title_profit);
             itemImageView.setImageResource(R.drawable.profit_image);
         } else {
+            titleView.setText(R.string.title_expense);
             itemImageView.setImageResource(R.drawable.expense_image);
         }
     }

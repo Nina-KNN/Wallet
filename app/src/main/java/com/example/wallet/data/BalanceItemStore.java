@@ -1,14 +1,11 @@
 package com.example.wallet.data;
 
-import com.example.wallet.R;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.UUID;
 
 public class BalanceItemStore {
@@ -43,31 +40,9 @@ public class BalanceItemStore {
     }
 
 
-//     Создать рандомный элемент
-    public void generateNewRandomItem() {
-        Random random = new Random();
-        Balance balanceItem = new Balance();
-
-        boolean profit = random.nextBoolean();
-        int sum = random.nextInt();
-        if(sum < 0) { sum *= (-1); }
-
-        balanceItem.setId(UUID.randomUUID());
-        balanceItem.setComment("New item");
-        balanceItem.setChoiceProfit(profit);
-        balanceItem.setDate(new Date());
-
-        if(profit) {
-//                balanceItem.setTitle(String.valueOf(R.string.title_profit));
-            balanceItem.setTitle("Profit");
-            balanceItem.setOperationSum(sum);
-        } else {
-//                balanceItem.setTitle(String.valueOf(R.string.title_expense));
-            balanceItem.setTitle("Expense");
-            balanceItem.setOperationSum(-sum);
-        }
-
-        balanceList.add(balanceItem);
+    // Добавить новый объект в список объектов типа Balance
+    public void addNewItemInBalanceList(Balance balance) {
+        balanceList.add(balance);
     }
 
 

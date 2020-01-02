@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +22,7 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.Date;
 import java.util.UUID;
 
 public class ItemBalanceFragment extends Fragment {
@@ -32,6 +31,7 @@ public class ItemBalanceFragment extends Fragment {
 
     //Model
     private Balance balance;
+    UUID id;
 
     //View
     private TextView titleTextView;
@@ -41,14 +41,20 @@ public class ItemBalanceFragment extends Fragment {
     private Button saveButton;
     private ImageView itemImageView;
     private TextView idTextView;
-    private CheckBox isProfit;
+    private CheckBox isProfitCheckBox;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UUID id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
-        balance = BalanceItemStore.getInstance().getById(id);
+        id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
+        if(BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
+            balance = BalanceItemStore.getInstance().getById(id);
+        } else {
+            balance = new Balance();
+        }
+
+
     }
 
     @Nullable
@@ -70,36 +76,40 @@ public class ItemBalanceFragment extends Fragment {
         saveButton = view.findViewById(R.id.save_button);
         itemImageView = view.findViewById(R.id.value_image);
         idTextView = view.findViewById(R.id.id);
-        isProfit = view.findViewById(R.id.choiceProfit);
-
+        isProfitCheckBox = view.findViewById(R.id.choiceProfit);
     }
+
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        idTextView.setText(balance.getId().toString());
-        commentEditText.setText(balance.getComment());
-        enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
-        makeChoice(balance.isChoiceProfit());
-        // Форматирование времени как "день.месяц.год"
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        dateTextView.setText(dateFormat.format(balance.getDate()));
+        if(BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
+            // Если объект уже существует в списке
+            idTextView.setText(balance.getId().toString());
+            commentEditText.setText(balance.getComment());
+            enterProfitEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
+            makeChoice(balance.isChoiceProfit());
+            dateTextView.setText(BalanceItemStore.getInstance().dateFormatNew(balance.getDate()));
+        } else {
+            // Если новый объект
+            Date date = new Date();
 
+            idTextView.setText(id.toString());
+            dateTextView.setText(BalanceItemStore.getInstance().dateFormatNew(date));
+            isProfitCheckBox.setChecked(false);
+            makeChoice(false);
 
-        isProfit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            balance.setId(id);
+            balance.setDate(date);
+        }
+
+        isProfitCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                makeChoice(isChecked);
-
-                // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
-                if(isChecked && balance.getOperationSum() < 0) {
-                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
-                } else if (! isChecked && balance.getOperationSum() > 0) {
-                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
-                } else {
-                    enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
-                }
+            makeChoice(isChecked);
             }
         });
 
@@ -113,10 +123,8 @@ public class ItemBalanceFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String inputString = s.toString();
 
-
-                if (inputString != null && ! inputString.equals("") && ! inputString.equals("-")) {
+                if (s.toString() != null && ! s.toString().equals("")) {
                     balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
-
                 } else {
                     balance.setOperationSum(Integer.parseInt("0")); // заполнение поля в объекте
                 }
@@ -150,30 +158,55 @@ public class ItemBalanceFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+               if(enterProfitEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(enterProfitEditText.getText())) == 0) {
+                   Toast.makeText(
+                           getContext(),
+                           R.string.message_about_wrong_data,
+                           Toast.LENGTH_SHORT)
+                           .show();
+               } else {
+                   // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
+                   if(isProfitCheckBox.isChecked() && balance.getOperationSum() < 0) {
+                        enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+                    } else if (! isProfitCheckBox.isChecked() && balance.getOperationSum() > 0) {
+                        enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+                    } else {
+                        enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
+                    }
+
+                   if (!BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
+                       BalanceItemStore.getInstance().addNewItemInBalanceList(balance);
+                   }
+
+                   getActivity().onBackPressed(); // симулировать нажатие на back
+               }
+
             }
         });
+
     }
+
 
 
     private void makeChoice(boolean choice) {
 
         balance.setChoiceProfit(choice); // изменение поля в объекте
-        isProfit.setChecked(choice); // изменение поля в объекте
+        isProfitCheckBox.setChecked(choice);
 
         if(choice) {
-//            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
-            balance.setTitle("Profit"); // изменение поля в объекте
+            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
             titleTextView.setText(R.string.title_profit);
 
             itemImageView.setImageResource(R.drawable.profit_image);
         } else {
-//            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
-            balance.setTitle("Expense"); // изменение поля в объекте
+            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
             titleTextView.setText(R.string.title_expense);
 
             itemImageView.setImageResource(R.drawable.expense_image);
         }
     }
+
+
 
 
     public static ItemBalanceFragment makeInstance(UUID id) {

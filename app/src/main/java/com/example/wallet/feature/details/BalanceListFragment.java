@@ -18,6 +18,7 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
+import com.example.wallet.feature.list.DeleteConfirmationDialogFragment;
 
 import java.util.UUID;
 
@@ -90,6 +91,28 @@ public class BalanceListFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        BalanceItemStore.getInstance().addListener(balanceListChangedList);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        BalanceItemStore.getInstance().removeListener(balanceListChangedList);
+        super.onPause();
+    }
+
+    private final BalanceItemStore.Listener balanceListChangedList = new BalanceItemStore.Listener() {
+        @Override
+        public void onCrimesListChange() {
+            adapter.notifyDataSetChanged();
+        }
+    };
+
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
@@ -103,8 +126,13 @@ public class BalanceListFragment extends Fragment {
         // Удаление при длительном нажатии
         @Override
         public void onBalanceItemLongClicked(Balance balance) {
-            BalanceItemStore.getInstance().deleteBalanceItem(balance);
-            adapter.notifyDataSetChanged();
+//            BalanceItemStore.getInstance().deleteBalanceItem(balance);
+//            adapter.notifyDataSetChanged();
+
+            DeleteConfirmationDialogFragment dialogFragment = DeleteConfirmationDialogFragment
+                    .makeInctance(balance.getId());
+
+            dialogFragment.show(getFragmentManager(), null);
         }
     };
 }

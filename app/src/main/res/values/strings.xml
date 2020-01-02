@@ -14,4 +14,5 @@
 
     <string name="menu_add_item">Add</string>
     <string name="message_about_wrong_data">The field \"Enter profit or expense\" should not be empty and should not be equal to \"0\"</string>
+    <string name="dialog_delete_item_message">Do you really want to delete this item?</string>
 </resources>

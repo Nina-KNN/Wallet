@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 
 public class BalanceItemStore {
@@ -57,5 +59,38 @@ public class BalanceItemStore {
     //Удаление объектов
     public void deleteBalanceItem(Balance balance) {
         balanceList.remove(balance);
+        notifyListeners();
+    }
+
+    //Удаление объектов по id
+    public void deleteBalanceItem(UUID id) {
+        for(Balance balanceItem : balanceList) {
+            if(balanceItem.getId() == id) {
+                balanceList.remove(balanceItem);
+                notifyListeners();
+                break;
+            }
+        }
+    }
+
+    // Метод для уведомления слушателей об изменениях
+    private void notifyListeners() {
+        for(Listener listener : listenersSet) {
+            listener.onCrimesListChange();
+        }
+    }
+
+    private final Set<Listener> listenersSet = new HashSet<>();
+
+    public void addListener(Listener listener) {
+        listenersSet.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        listenersSet.remove(listener);
+    }
+
+    public interface Listener {
+        void onCrimesListChange();
     }
 }

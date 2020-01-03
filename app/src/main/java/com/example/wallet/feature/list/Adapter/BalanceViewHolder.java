@@ -11,7 +11,7 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 
-class BalanceViewHolder extends RecyclerView.ViewHolder {
+public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
     private Balance balance;
     private BalanceListAdapter.ItemListener itemListener;
@@ -69,5 +69,9 @@ class BalanceViewHolder extends RecyclerView.ViewHolder {
             titleView.setText(R.string.title_expense);
             itemImageView.setImageResource(R.drawable.expense_image);
         }
+    }
+
+    public Balance getBalance() {
+        return balance;
     }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
+import com.example.wallet.feature.list.Adapter.BalanceViewHolder;
 import com.example.wallet.feature.list.DeleteConfirmationDialogFragment;
 
 import java.util.UUID;
@@ -57,6 +59,27 @@ public class BalanceListFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        // Удаление по свайпу в сторону
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                // используется для перемещения итемов между собой
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                BalanceViewHolder balanceViewHolder = (BalanceViewHolder) viewHolder;
+
+                Balance balanceItem = balanceViewHolder.getBalance();
+                BalanceItemStore.getInstance().deleteBalanceItem(balanceItem);
+            }
+        });
+
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override

@@ -73,6 +73,12 @@ public class BalanceItemStore {
         }
     }
 
+    // Востановить удаленный элемент
+    public void resurrectBalanceItem(Balance balanceItem, int position) {
+        balanceList.add(position, balanceItem);
+        notifyListeners();
+    }
+
     // Метод для уведомления слушателей об изменениях
     private void notifyListeners() {
         for(Listener listener : listenersSet) {

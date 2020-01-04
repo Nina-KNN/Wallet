@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStore;
+import com.example.wallet.data.BalanceItemStoreProvider;
 
 import java.util.Date;
 import java.util.UUID;
@@ -48,8 +48,8 @@ public class ItemBalanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
-        if(BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
-            balance = BalanceItemStore.getInstance().getById(id);
+        if(BalanceItemStoreProvider.getInstance().getBalanceList().contains(BalanceItemStoreProvider.getInstance().getById(id))) {
+            balance = BalanceItemStoreProvider.getInstance().getById(id);
         } else {
             balance = new Balance();
         }
@@ -86,19 +86,20 @@ public class ItemBalanceFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
+        if(BalanceItemStoreProvider.getInstance().getBalanceList()
+                .contains(BalanceItemStoreProvider.getInstance().getById(id))) {
             // Если объект уже существует в списке
             idTextView.setText(balance.getId().toString());
             commentEditText.setText(balance.getComment());
             enterProfitEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             makeChoice(balance.isChoiceProfit());
-            dateTextView.setText(BalanceItemStore.getInstance().dateFormatNew(balance.getDate()));
+            dateTextView.setText(BalanceItemStoreProvider.getInstance().dateFormatNew(balance.getDate()));
         } else {
             // Если новый объект
             Date date = new Date();
 
             idTextView.setText(id.toString());
-            dateTextView.setText(BalanceItemStore.getInstance().dateFormatNew(date));
+            dateTextView.setText(BalanceItemStoreProvider.getInstance().dateFormatNew(date));
             isProfitCheckBox.setChecked(false);
             makeChoice(false);
 
@@ -174,8 +175,9 @@ public class ItemBalanceFragment extends Fragment {
                         enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
                     }
 
-                   if (!BalanceItemStore.getInstance().getBalanceList().contains(BalanceItemStore.getInstance().getById(id))) {
-                       BalanceItemStore.getInstance().addNewItemInBalanceList(balance);
+                   if (!BalanceItemStoreProvider.getInstance().getBalanceList()
+                           .contains(BalanceItemStoreProvider.getInstance().getById(id))) {
+                       BalanceItemStoreProvider.getInstance().addNewItemInBalanceList(balance);
                    }
 
                    getActivity().onBackPressed(); // симулировать нажатие на back

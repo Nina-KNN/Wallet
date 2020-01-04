@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallet.R;
-import com.example.wallet.data.BalanceItemStore;
+import com.example.wallet.data.BalanceItemStoreProvider;
 
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ public class DeleteConfirmationDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         UUID idOfItemToDelete = (UUID) getArguments().getSerializable(KEY_ID);
 
-                        BalanceItemStore.getInstance().deleteBalanceItem(idOfItemToDelete);
+                        BalanceItemStoreProvider.getInstance().deleteBalanceItem(idOfItemToDelete);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)

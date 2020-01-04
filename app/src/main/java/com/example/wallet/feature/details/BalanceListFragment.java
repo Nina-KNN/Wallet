@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
+import com.example.wallet.data.BalanceItemStoreProvider;
 import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
 import com.example.wallet.feature.list.Adapter.BalanceViewHolder;
 import com.example.wallet.feature.list.DeleteConfirmationDialogFragment;
@@ -56,7 +57,7 @@ public class BalanceListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new BalanceListAdapter(BalanceItemStore.getInstance().getBalanceList(), itemListener);
+        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance().getBalanceList(), itemListener);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -76,7 +77,7 @@ public class BalanceListFragment extends Fragment {
                 BalanceViewHolder balanceViewHolder = (BalanceViewHolder) viewHolder;
 
                 Balance balanceItem = balanceViewHolder.getBalance();
-//                BalanceItemStore.getInstance().deleteBalanceItem(balanceItem);
+//                BalanceItemStoreProvider.getInstance().deleteBalanceItem(balanceItem);
                 deleteItem(balanceItem, viewHolder.getAdapterPosition());
             }
         });
@@ -87,13 +88,13 @@ public class BalanceListFragment extends Fragment {
     // пр удалении элемента по свайпу вывести сообщение в Snackbar и при необходимости пользователь
     // может востановить удаленный итем
     private void deleteItem(final Balance balance, final int position) {
-        BalanceItemStore.getInstance().deleteBalanceItem(balance);
+        BalanceItemStoreProvider.getInstance().deleteBalanceItem(balance);
 
         Snackbar.make(recyclerView, R.string.snackbar_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BalanceItemStore.getInstance().resurrectBalanceItem(balance, position);
+                        BalanceItemStoreProvider.getInstance().resurrectBalanceItem(balance, position);
                     }
                 })
                 .show();
@@ -136,13 +137,13 @@ public class BalanceListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        BalanceItemStore.getInstance().addListener(balanceListChangedList);
+        BalanceItemStoreProvider.getInstance().addListener(balanceListChangedList);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onPause() {
-        BalanceItemStore.getInstance().removeListener(balanceListChangedList);
+        BalanceItemStoreProvider.getInstance().removeListener(balanceListChangedList);
         super.onPause();
     }
 

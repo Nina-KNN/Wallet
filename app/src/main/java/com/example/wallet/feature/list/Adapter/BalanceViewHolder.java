@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStore;
+import com.example.wallet.data.BalanceItemStoreProvider;
 
 public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
@@ -57,7 +57,7 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        dateView.setText(BalanceItemStore.getInstance().dateFormatNew(balance.getDate()));
+        dateView.setText(BalanceItemStoreProvider.getInstance().dateFormatNew(balance.getDate()));
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());

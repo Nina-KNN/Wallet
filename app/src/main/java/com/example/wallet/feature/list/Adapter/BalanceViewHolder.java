@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStoreProvider;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
@@ -57,7 +60,10 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        dateView.setText(BalanceItemStoreProvider.getInstance().dateFormatNew(balance.getDate()));
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String currentDate = dateFormat.format(balance.getDate());
+
+        dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());

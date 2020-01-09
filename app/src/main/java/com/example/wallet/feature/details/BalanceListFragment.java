@@ -19,13 +19,12 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.data.BalanceItemStoreProvider;
-import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
-import com.example.wallet.feature.list.Adapter.BalanceViewHolder;
 import com.example.wallet.feature.list.DeleteConfirmationDialogFragment;
+import com.example.wallet.feature.list.adapter.BalanceListAdapter;
+import com.example.wallet.feature.list.adapter.BalanceViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
-import java.util.UUID;
 
 public class BalanceListFragment extends Fragment {
 
@@ -40,11 +39,6 @@ public class BalanceListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_balance_list, container, false);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -89,6 +83,9 @@ public class BalanceListFragment extends Fragment {
     // может востановить удаленный итем
     private void deleteItem(final Balance balance, final int position) {
         BalanceItemStoreProvider.getInstance(getContext()).deleteBalanceItem(balance);
+        // При удалении элемента из списка, отрисовать список заново
+        BalanceItemStoreProvider.getInstance(getContext()).addListener(balanceListChangedList);
+        updateList();
 
         Snackbar.make(recyclerView, R.string.snackbar_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_action, new View.OnClickListener() {
@@ -121,7 +118,7 @@ public class BalanceListFragment extends Fragment {
         if(item.getItemId() == R.id.add_item) {
             //добавить транзакцию фрагмента
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(UUID.randomUUID(), true))
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(null))
                     .addToBackStack(null)
                     .commit();
             adapter.notifyDataSetChanged();
@@ -130,15 +127,6 @@ public class BalanceListFragment extends Fragment {
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        BalanceItemStoreProvider.getInstance(getContext()).addListener(balanceListChangedList);
-        updateList();
     }
 
     @Override
@@ -160,12 +148,13 @@ public class BalanceListFragment extends Fragment {
         adapter.submitNewList(balanceList);
     }
 
+    // Обработка нажатия на элемент списка
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
             //добавить транзакцию фрагмента
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId(), false))
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(balance.getId()))
                     .addToBackStack(null)
                     .commit();
         }
@@ -177,6 +166,9 @@ public class BalanceListFragment extends Fragment {
                     .makeInctance(balance.getId());
 
             dialogFragment.show(getFragmentManager(), null);
+
+            // При удалении элемента из списка, отрисовать список заново
+            BalanceItemStoreProvider.getInstance(getContext()).addListener(balanceListChangedList);
         }
     };
 }

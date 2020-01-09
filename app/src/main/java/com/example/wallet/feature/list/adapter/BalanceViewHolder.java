@@ -1,4 +1,4 @@
-package com.example.wallet.feature.list.Adapter;
+package com.example.wallet.feature.list.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -70,10 +70,10 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
         if(balance.getTitle().equals(String.valueOf(R.string.title_profit))) {
             titleView.setText(R.string.title_profit);
-            itemImageView.setImageResource(R.drawable.profit_image);
+            itemImageView.setImageResource(R.drawable.image_profit);
         } else {
             titleView.setText(R.string.title_expense);
-            itemImageView.setImageResource(R.drawable.expense_image);
+            itemImageView.setImageResource(R.drawable.image_expense);
         }
     }
 

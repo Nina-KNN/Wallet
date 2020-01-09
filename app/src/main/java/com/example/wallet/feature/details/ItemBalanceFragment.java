@@ -31,12 +31,10 @@ import java.util.UUID;
 public class ItemBalanceFragment extends Fragment {
 
     private static String KEY_ITEM_ID = "key_item_id";
-    private static String KEY_ITEM_NEW = "key_item_new";
 
     //Model
     private Balance balance;
     UUID id;
-    boolean itemNew; // принимает значение true, если это создание нового элемента
 
     //View
     private TextView titleTextView;
@@ -53,12 +51,11 @@ public class ItemBalanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
-        itemNew = (boolean) getArguments().getSerializable(KEY_ITEM_NEW);
 
-        if(! itemNew) {
-            balance = BalanceItemStoreProvider.getInstance(getContext()).getById(id);
-        } else {
+        if(id == null) {
             balance = new Balance();
+        } else {
+            balance = BalanceItemStoreProvider.getInstance(getContext()).getById(id);
         }
 
 
@@ -87,35 +84,26 @@ public class ItemBalanceFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
-        if(! itemNew) {
+        if(id == null) {
+            // Если новый объект
+            Date date = new Date();
+            balance.setDate(date);
 
+            dateTextView.setText(dateFormat.format(date));
+            isProfitCheckBox.setChecked(false);
+            makeChoice(false);
+        } else {
             // Если объект уже существует в списке
             idTextView.setText(balance.getId().toString());
             commentEditText.setText(balance.getComment());
             enterProfitEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             makeChoice(balance.isChoiceProfit());
             dateTextView.setText(dateFormat.format(balance.getDate()));
-
-        } else {
-
-            // Если новый объект
-            Date date = new Date();
-
-            idTextView.setText(id.toString());
-            dateTextView.setText(dateFormat.format(date));
-            isProfitCheckBox.setChecked(false);
-            makeChoice(false);
-
-            balance.setId(id);
-            balance.setDate(date);
-
         }
 
         isProfitCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -136,7 +124,7 @@ public class ItemBalanceFragment extends Fragment {
                 if (s.toString() != null && ! s.toString().equals("")) {
                     balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
                 } else {
-                    balance.setOperationSum(Integer.parseInt("0")); // заполнение поля в объекте
+                    balance.setOperationSum(0); // заполнение поля в объекте
                 }
             }
 
@@ -175,6 +163,7 @@ public class ItemBalanceFragment extends Fragment {
                             Toast.LENGTH_SHORT)
                             .show();
                 } else {
+
                     // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
                     if(isProfitCheckBox.isChecked() && balance.getOperationSum() < 0) {
                         enterProfitEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
@@ -184,13 +173,16 @@ public class ItemBalanceFragment extends Fragment {
                         enterProfitEditText.setText(String.valueOf(balance.getOperationSum()));
                     }
 
-                    if (itemNew) {
+                    // Сохранить созданный элемент или обновить существующий
+                    if (id == null) {
+                        balance.setId(UUID.randomUUID());
                         BalanceItemStoreProvider.getInstance(getContext()).addNewItemInBalanceList(balance);
                     } else {
-                        BalanceItemStoreProvider.getInstance(getContext()).getById(id);
+                        // обновить уже существующий элемент
                     }
 
-                    getActivity().onBackPressed(); // симулировать нажатие на back
+                    // симулировать нажатие на back
+                    getActivity().onBackPressed();
                 }
 
             }
@@ -201,32 +193,30 @@ public class ItemBalanceFragment extends Fragment {
 
 
     private void makeChoice(boolean choice) {
-
         balance.setChoiceProfit(choice); // изменение поля в объекте
         isProfitCheckBox.setChecked(choice);
 
         if(choice) {
             balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
-            titleTextView.setText(R.string.title_profit);
 
-            itemImageView.setImageResource(R.drawable.profit_image);
+            titleTextView.setText(R.string.title_profit);
+            itemImageView.setImageResource(R.drawable.image_profit);
         } else {
             balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
-            titleTextView.setText(R.string.title_expense);
 
-            itemImageView.setImageResource(R.drawable.expense_image);
+            titleTextView.setText(R.string.title_expense);
+            itemImageView.setImageResource(R.drawable.image_expense);
         }
     }
 
 
 
 
-    public static ItemBalanceFragment makeInstance(UUID id, Boolean itemNew) {
+    public static ItemBalanceFragment makeInstance(UUID id) {
         ItemBalanceFragment fragment = new ItemBalanceFragment();
         Bundle args = new Bundle();
 
         args.putSerializable(KEY_ITEM_ID, id);
-        args.putSerializable(KEY_ITEM_NEW, itemNew);
         fragment.setArguments(args);
 
         return fragment;

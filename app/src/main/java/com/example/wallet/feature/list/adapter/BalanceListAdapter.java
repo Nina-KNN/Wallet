@@ -1,4 +1,4 @@
-package com.example.wallet.feature.list.Adapter;
+package com.example.wallet.feature.list.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

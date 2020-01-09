@@ -10,7 +10,7 @@
         android:id="@+id/value_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/profit_image"
+        android:src="@drawable/image_profit"
         tools:ignore="VectorDrawableCompat" />
 
     <LinearLayout

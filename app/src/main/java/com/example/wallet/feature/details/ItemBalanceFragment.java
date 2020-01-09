@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.data.BalanceItemStoreProvider;
 
 import java.text.DateFormat;
@@ -179,6 +180,7 @@ public class ItemBalanceFragment extends Fragment {
                         BalanceItemStoreProvider.getInstance(getContext()).addNewItemInBalanceList(balance);
                     } else {
                         // обновить уже существующий элемент
+                        saveBalanceItemChange();
                     }
 
                     // симулировать нажатие на back
@@ -209,7 +211,10 @@ public class ItemBalanceFragment extends Fragment {
         }
     }
 
-
+    // Сохранить изменения в существующем объекте
+    private void saveBalanceItemChange() {
+        BalanceItemStoreProvider.getInstance(getContext()).update(balance);
+    }
 
 
     public static ItemBalanceFragment makeInstance(UUID id) {

@@ -20,6 +20,8 @@ public interface BalanceItemStore {
     // Востановить удаленный элемент
     void resurrectBalanceItem(Balance balanceItem, int position);
 
+    void update(Balance balanceItem);
+
     void addListener(Listener listener);
 
     void removeListener(Listener listener);

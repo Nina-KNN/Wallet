@@ -72,4 +72,9 @@ public class RoomBalanceItemStore extends BaseBalanceItemStore {
         balanceDao.add(Converter.convert(balanceItem));
         notifyListeners();
     }
+
+    @Override
+    public void update(Balance balanceItem) {
+        balanceDao.update(Converter.convert(balanceItem));
+    }
 }

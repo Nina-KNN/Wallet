@@ -56,4 +56,10 @@ public class InMemoryBalanceItemStore extends BaseBalanceItemStore {
         notifyListeners();
     }
 
+
+    @Override
+    public void update(Balance balanceItem) {
+        //     Nothing to do here
+    }
+
 }

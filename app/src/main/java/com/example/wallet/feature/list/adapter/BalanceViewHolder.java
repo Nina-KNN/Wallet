@@ -4,11 +4,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.databinding.ItemOfBalanceListBinding;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,20 +42,22 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         }
     };
 
-    public BalanceViewHolder(@NonNull View itemView, BalanceListAdapter.ItemListener itemListener) {
-        super(itemView);
 
-        titleView = itemView.findViewById(R.id.title);
-        dateView = itemView.findViewById(R.id.date);
-        operationSumTextView = itemView.findViewById(R.id.sum);
-        idTextView = itemView.findViewById(R.id.id);
-        commentTextView = itemView.findViewById(R.id.comment);
-        itemImageView = itemView.findViewById(R.id.value_image);
+    public BalanceViewHolder(ItemOfBalanceListBinding binding, BalanceListAdapter.ItemListener itemListener) {
+        super(binding.getRoot());
+
+        titleView = binding.title;
+        dateView = binding.date;
+        operationSumTextView = binding.sum;
+        idTextView = binding.id;
+        commentTextView = binding.comment;
+        itemImageView = binding.imageValue;
 
         itemView.setOnClickListener(clickListener);
         itemView.setOnLongClickListener(longClickListener);
         this.itemListener = itemListener;
     }
+
 
     public void bindTo(Balance balance) {
         this.balance = balance;

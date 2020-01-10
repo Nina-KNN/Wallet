@@ -16,12 +16,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.data.BalanceItemStoreProvider;
+import com.example.wallet.databinding.FragmentOperationBinding;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ public class ItemBalanceFragment extends Fragment {
     //Model
     private Balance balance;
     UUID id;
+    FragmentOperationBinding binding;
 
     //View
     private TextView titleTextView;
@@ -50,7 +52,6 @@ public class ItemBalanceFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         id = (UUID) getArguments().getSerializable(KEY_ITEM_ID);
 
         if(id == null) {
@@ -67,21 +68,23 @@ public class ItemBalanceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_operation, container, false);
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_operation, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        titleTextView = view.findViewById(R.id.title);
-        dateTextView = view.findViewById(R.id.date);
-        enterProfitEditText = view.findViewById(R.id.enter_operationSum);
-        commentEditText = view.findViewById(R.id.enter_comment);
-        saveButton = view.findViewById(R.id.save_button);
-        itemImageView = view.findViewById(R.id.value_image);
-        idTextView = view.findViewById(R.id.id);
-        isProfitCheckBox = view.findViewById(R.id.choiceProfit);
+        titleTextView = binding.title;
+        dateTextView = binding.date;
+        enterProfitEditText = binding.enterOperationSum;
+        commentEditText = binding.enterComment;
+        saveButton = binding.saveButton;
+        itemImageView = binding.imageValue;
+        idTextView = binding.id;
+        isProfitCheckBox = binding.choiceProfit;
     }
 
 

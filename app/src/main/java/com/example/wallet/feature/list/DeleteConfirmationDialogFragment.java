@@ -27,7 +27,7 @@ public class DeleteConfirmationDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         UUID idOfItemToDelete = (UUID) getArguments().getSerializable(KEY_ID);
 
-                        BalanceItemStoreProvider.getInstance().deleteBalanceItem(idOfItemToDelete);
+                        BalanceItemStoreProvider.getInstance(getContext()).deleteBalanceItem(idOfItemToDelete);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)

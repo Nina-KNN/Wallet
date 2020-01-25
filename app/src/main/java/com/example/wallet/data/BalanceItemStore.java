@@ -1,6 +1,5 @@
 package com.example.wallet.data;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,9 +11,6 @@ public interface BalanceItemStore {
     // Добавить новый объект в список объектов типа Balance
     void addNewItemInBalanceList(Balance balance);
 
-    // Форматирование времени как "день.месяц.год"
-    String dateFormatNew (Date date);
-
     //Удаление объектов
     void deleteBalanceItem(Balance balance);
 
@@ -24,11 +20,13 @@ public interface BalanceItemStore {
     // Востановить удаленный элемент
     void resurrectBalanceItem(Balance balanceItem, int position);
 
+    void update(Balance balanceItem);
+
     void addListener(Listener listener);
 
     void removeListener(Listener listener);
 
     public interface Listener {
-        void onCrimesListChange();
+        void onBalanceListChange();
     }
 }

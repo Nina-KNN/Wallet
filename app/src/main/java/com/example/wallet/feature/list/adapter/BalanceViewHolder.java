@@ -1,15 +1,18 @@
-package com.example.wallet.feature.list.Adapter;
+package com.example.wallet.feature.list.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStoreProvider;
+import com.example.wallet.databinding.ItemOfBalanceListBinding;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,35 +42,40 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         }
     };
 
-    public BalanceViewHolder(@NonNull View itemView, BalanceListAdapter.ItemListener itemListener) {
-        super(itemView);
 
-        titleView = itemView.findViewById(R.id.title);
-        dateView = itemView.findViewById(R.id.date);
-        operationSumTextView = itemView.findViewById(R.id.sum);
-        idTextView = itemView.findViewById(R.id.id);
-        commentTextView = itemView.findViewById(R.id.comment);
-        itemImageView = itemView.findViewById(R.id.value_image);
+    public BalanceViewHolder(ItemOfBalanceListBinding binding, BalanceListAdapter.ItemListener itemListener) {
+        super(binding.getRoot());
+
+        titleView = binding.title;
+        dateView = binding.date;
+        operationSumTextView = binding.sum;
+        idTextView = binding.id;
+        commentTextView = binding.comment;
+        itemImageView = binding.imageValue;
 
         itemView.setOnClickListener(clickListener);
         itemView.setOnLongClickListener(longClickListener);
         this.itemListener = itemListener;
     }
 
+
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        dateView.setText(BalanceItemStoreProvider.getInstance().dateFormatNew(balance.getDate()));
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        String currentDate = dateFormat.format(balance.getDate());
+
+        dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());
 
         if(balance.getTitle().equals(String.valueOf(R.string.title_profit))) {
             titleView.setText(R.string.title_profit);
-            itemImageView.setImageResource(R.drawable.profit_image);
+            itemImageView.setImageResource(R.drawable.image_profit);
         } else {
             titleView.setText(R.string.title_expense);
-            itemImageView.setImageResource(R.drawable.expense_image);
+            itemImageView.setImageResource(R.drawable.image_expense);
         }
     }
 

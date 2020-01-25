@@ -8,9 +8,9 @@ public abstract class BaseBalanceItemStore implements BalanceItemStore{
     private final Set<BalanceItemStore.Listener> listenersSet = new HashSet<>();
 
     // Метод для уведомления слушателей об изменениях
-    final void notifyListeners() {
+    protected final void  notifyListeners() {
         for(BalanceItemStore.Listener listener : listenersSet) {
-            listener.onCrimesListChange();
+            listener.onBalanceListChange();
         }
     }
 

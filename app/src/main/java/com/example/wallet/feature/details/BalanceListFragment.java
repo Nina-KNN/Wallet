@@ -19,12 +19,12 @@ import com.example.wallet.R;
 import com.example.wallet.data.Balance;
 import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.data.BalanceItemStoreProvider;
-import com.example.wallet.feature.list.Adapter.BalanceListAdapter;
-import com.example.wallet.feature.list.Adapter.BalanceViewHolder;
 import com.example.wallet.feature.list.DeleteConfirmationDialogFragment;
+import com.example.wallet.feature.list.adapter.BalanceListAdapter;
+import com.example.wallet.feature.list.adapter.BalanceViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.UUID;
+import java.util.List;
 
 public class BalanceListFragment extends Fragment {
 
@@ -42,11 +42,6 @@ public class BalanceListFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -57,7 +52,7 @@ public class BalanceListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance().getBalanceList(), itemListener);
+        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(getContext()).getBalanceList(), itemListener);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -77,7 +72,6 @@ public class BalanceListFragment extends Fragment {
                 BalanceViewHolder balanceViewHolder = (BalanceViewHolder) viewHolder;
 
                 Balance balanceItem = balanceViewHolder.getBalance();
-//                BalanceItemStoreProvider.getInstance().deleteBalanceItem(balanceItem);
                 deleteItem(balanceItem, viewHolder.getAdapterPosition());
             }
         });
@@ -85,16 +79,19 @@ public class BalanceListFragment extends Fragment {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    // пр удалении элемента по свайпу вывести сообщение в Snackbar и при необходимости пользователь
+    // при удалении элемента по свайпу вывести сообщение и при необходимости пользователь
     // может востановить удаленный итем
     private void deleteItem(final Balance balance, final int position) {
-        BalanceItemStoreProvider.getInstance().deleteBalanceItem(balance);
+        BalanceItemStoreProvider.getInstance(getContext()).deleteBalanceItem(balance);
+        // При удалении элемента из списка, отрисовать список заново
+        updateList();
 
         Snackbar.make(recyclerView, R.string.snackbar_message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BalanceItemStoreProvider.getInstance().resurrectBalanceItem(balance, position);
+                        BalanceItemStoreProvider.getInstance(getContext()).resurrectBalanceItem(balance, position);
+                        updateList();
                     }
                 })
                 .show();
@@ -115,13 +112,13 @@ public class BalanceListFragment extends Fragment {
         inflater.inflate(R.menu.create_new_item, menu);
     }
 
-    // Обработка нажатия на кнопку меню
+    // Обработка нажатия на кнопку меню "+"
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.add_item) {
             //добавить транзакцию фрагмента
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(UUID.randomUUID()))
+                    .replace(R.id.fragment_container, ItemBalanceFragment.makeInstance(null))
                     .addToBackStack(null)
                     .commit();
             adapter.notifyDataSetChanged();
@@ -132,28 +129,26 @@ public class BalanceListFragment extends Fragment {
         }
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        BalanceItemStoreProvider.getInstance().addListener(balanceListChangedList);
-        adapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onPause() {
-        BalanceItemStoreProvider.getInstance().removeListener(balanceListChangedList);
+        BalanceItemStoreProvider.getInstance(getContext()).removeListener(balanceListChangedList);
         super.onPause();
     }
 
     private final BalanceItemStore.Listener balanceListChangedList = new BalanceItemStore.Listener() {
         @Override
-        public void onCrimesListChange() {
-            adapter.notifyDataSetChanged();
+        public void onBalanceListChange() {
+            updateList();
         }
     };
 
+    // Обновить список итемов
+    private void updateList() {
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(getContext()).getBalanceList();
+        adapter.submitNewList(balanceList);
+    }
+
+    // Обработка нажатия на элемент списка
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
@@ -171,6 +166,9 @@ public class BalanceListFragment extends Fragment {
                     .makeInctance(balance.getId());
 
             dialogFragment.show(getFragmentManager(), null);
+
+            // При удалении элемента из списка, отрисовать список заново
+            BalanceItemStoreProvider.getInstance(getContext()).addListener(balanceListChangedList);
         }
     };
 }

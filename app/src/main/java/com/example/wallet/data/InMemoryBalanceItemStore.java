@@ -1,11 +1,7 @@
 package com.example.wallet.data;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class InMemoryBalanceItemStore extends BaseBalanceItemStore {
@@ -31,16 +27,7 @@ public class InMemoryBalanceItemStore extends BaseBalanceItemStore {
     @Override
     public void addNewItemInBalanceList(Balance balance) {
         balanceList.add(balance);
-    }
-
-
-    // Форматирование времени как "день.месяц.год"
-    @Override
-    public String dateFormatNew(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(date);
-
-        return currentDate;
+        notifyListeners();
     }
 
     //Удаление объектов
@@ -67,6 +54,12 @@ public class InMemoryBalanceItemStore extends BaseBalanceItemStore {
     public void resurrectBalanceItem(Balance balanceItem, int position) {
         balanceList.add(position, balanceItem);
         notifyListeners();
+    }
+
+
+    @Override
+    public void update(Balance balanceItem) {
+        //     Nothing to do here
     }
 
 }

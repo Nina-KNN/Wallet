@@ -79,12 +79,11 @@ public class BalanceListFragment extends Fragment {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    // при удалении элемента по свайпу вывести сообщение в Snackbar и при необходимости пользователь
+    // при удалении элемента по свайпу вывести сообщение и при необходимости пользователь
     // может востановить удаленный итем
     private void deleteItem(final Balance balance, final int position) {
         BalanceItemStoreProvider.getInstance(getContext()).deleteBalanceItem(balance);
         // При удалении элемента из списка, отрисовать список заново
-        BalanceItemStoreProvider.getInstance(getContext()).addListener(balanceListChangedList);
         updateList();
 
         Snackbar.make(recyclerView, R.string.snackbar_message, Snackbar.LENGTH_LONG)
@@ -92,6 +91,7 @@ public class BalanceListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         BalanceItemStoreProvider.getInstance(getContext()).resurrectBalanceItem(balance, position);
+                        updateList();
                     }
                 })
                 .show();

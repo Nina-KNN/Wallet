@@ -1,5 +1,6 @@
 package com.example.wallet.feature.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +33,7 @@ public class BalanceListFragment extends Fragment {
     //View
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
+    Button newButton;
 
     @Nullable
     @Override
@@ -46,11 +49,20 @@ public class BalanceListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recycler);
+        newButton = view.findViewById(R.id.new_button);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PositiveOperationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(getContext()).getBalanceList(), itemListener);
 

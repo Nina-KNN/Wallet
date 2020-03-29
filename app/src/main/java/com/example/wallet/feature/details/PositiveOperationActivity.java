@@ -1,7 +1,10 @@
 package com.example.wallet.feature.details;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -85,6 +89,7 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         recyclerView = findViewById(R.id.recycler_positive_operation);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setAdapter(new IconsListAdapter(iconsList, itemListener));
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     // Обработка нажатия на элемент списка
@@ -96,6 +101,7 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
 
             iconNameTextView.setText(imageName);
             imageImageView.setImageResource(image);
+            recyclerView.setVisibility(View.INVISIBLE);
         }
     };
 
@@ -118,11 +124,25 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         switch (v.getId()) {
             case R.id.image_value_positive_operation:
                 makeRecyclerView();
-                Toast.makeText(this, "image was pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.save_button_positive_operation:
                 Toast.makeText(this, "save was pressed", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                v.clearFocus();
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
     }
 }

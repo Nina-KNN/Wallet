@@ -10,8 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".feature.details.PositiveOperationActivity" />
-        <activity android:name=".feature.details.BalanceActivity">
+            android:name=".feature.details.PositiveOperationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="nosensor"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity
+            android:name=".feature.details.BalanceActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="nosensor"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

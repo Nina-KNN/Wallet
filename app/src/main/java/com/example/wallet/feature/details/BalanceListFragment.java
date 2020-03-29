@@ -144,6 +144,7 @@ public class BalanceListFragment extends Fragment {
     @Override
     public void onPause() {
         BalanceItemStoreProvider.getInstance(getContext()).removeListener(balanceListChangedList);
+        updateList();
         super.onPause();
     }
 

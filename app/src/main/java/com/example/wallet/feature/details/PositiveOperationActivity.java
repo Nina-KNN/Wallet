@@ -2,6 +2,8 @@ package com.example.wallet.feature.details;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,12 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStoreProvider;
 import com.example.wallet.data.IconObject;
 import com.example.wallet.feature.list.adapter.IconsListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -45,8 +49,10 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
     private EditText commentEditText;
     private Button saveButton;
 
+    private Date date = new Date();
+    private UUID id;
     private int image;
-    private String imageName;
+    private String imageName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,24 +71,38 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         idTextView = findViewById(R.id.id_positive_operation);
         titleTextView = findViewById(R.id.title_positive_operation);
         choiceProfitCheckBox = findViewById(R.id.choice_profit_positive_operation);
-        imageImageView = findViewById(R.id.image_value_positive_operation);
         iconNameTextView = findViewById(R.id.icon_name_positive_operation);
         sumEditText = findViewById(R.id.enter_positive_operation);
         commentEditText = findViewById(R.id.enter_comment_positive_operation);
-        saveButton = findViewById(R.id.save_button_positive_operation);
+
+        findViewById(R.id.image_value_positive_operation).setOnClickListener(this);
+        findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.image_value_positive_operation:
+                makeRecyclerView();
+                break;
+
+            case R.id.save_button_positive_operation:
+                saveBalanceData();
+                break;
+        }
     }
 
     private void fillAndShowAllData() {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(balance.getDate());
+        id = UUID.randomUUID();
 
-        dateTextView.setText(currentDate);
-        idTextView.setText(UUID.randomUUID().toString());
+        dateTextView.setText(dateFormat.format(date));
+        idTextView.setText(id.toString());
         titleTextView.setText(R.string.title_profit);
         choiceProfitCheckBox.setVisibility(View.GONE);
 
-        imageImageView.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
+        enterOperationSum();
+        enterComment();
     }
 
     private void makeRecyclerView() {
@@ -105,6 +125,64 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         }
     };
 
+    private void saveBalanceData() {
+        if(sumEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(sumEditText.getText())) == 0) {
+            Toast.makeText(this, R.string.message_about_wrong_data, Toast.LENGTH_SHORT).show();
+        } else if(imageName.isEmpty()) {
+            Toast.makeText(this, R.string.choice_category, Toast.LENGTH_SHORT).show();
+        } else {
+            balance.setDate(date);
+            balance.setId(id);
+            balance.setTitle(String.valueOf(R.string.title_profit));
+            balance.setChoiceProfit(true);
+
+            BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
+
+            onBackPressed();
+        }
+    }
+
+    private void enterOperationSum() {
+        sumEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString() != null && ! s.toString().equals("")) {
+                    balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
+                } else {
+                    balance.setOperationSum(10); // заполнение поля в объекте
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void enterComment() {
+        commentEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                balance.setComment(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private List<IconObject> createIconList() {
         List<IconObject> iconsList = new ArrayList<>();
 
@@ -119,18 +197,7 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         return iconsList;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.image_value_positive_operation:
-                makeRecyclerView();
-                break;
-            case R.id.save_button_positive_operation:
-                Toast.makeText(this, "save was pressed", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
+    // Скрыть клавиатуру при нажатии на пустое место на экране
     @Override
     public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {

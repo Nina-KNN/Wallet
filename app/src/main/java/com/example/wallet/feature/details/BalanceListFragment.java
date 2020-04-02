@@ -59,7 +59,7 @@ public class BalanceListFragment extends Fragment {
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PositiveOperationActivity.class);
+                Intent intent = new Intent(getContext(), BalancePositiveListActivity.class);
                 startActivity(intent);
             }
         });

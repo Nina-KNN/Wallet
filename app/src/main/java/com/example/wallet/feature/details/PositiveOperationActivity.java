@@ -2,12 +2,16 @@ package com.example.wallet.feature.details;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -119,9 +123,21 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
 
     private void makeRecyclerView() {
         recyclerView = findViewById(R.id.recycler_positive_operation);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount()));
         recyclerView.setAdapter(new IconsListAdapter(iconsList, itemListener));
         recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private int columnsCount(){
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE); //Получаем размер экрана
+        Display display = wm.getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        int screenWidth = point.x; //Ширина экрана
+        int photoWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85, this.getResources().getDisplayMetrics()); //Переводим в точки
+        int columnsCount = screenWidth/photoWidth; //Число столбцов
+
+        return columnsCount;
     }
 
     // Обработка нажатия на элемент списка

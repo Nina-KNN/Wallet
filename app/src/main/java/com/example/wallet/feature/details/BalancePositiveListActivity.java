@@ -1,19 +1,28 @@
 package com.example.wallet.feature.details;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.Balance;
+import com.example.wallet.data.BalanceItemStore;
 import com.example.wallet.data.BalanceItemStoreProvider;
 import com.example.wallet.feature.list.adapter.BalanceListAdapter;
+import com.example.wallet.feature.list.adapter.BalanceViewHolder;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 public class BalancePositiveListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +40,8 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
         adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(this).getBalanceList(), itemListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        makeDeleteItemBySwiped();
     }
 
     private void viewById() {
@@ -47,9 +58,11 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
 
     @Override
     public void onClick(View v) {
+        Intent intent;
+
         switch (v.getId()) {
             case R.id.add_positive_item:
-                Intent intent = new Intent(this, PositiveOperationActivity.class);
+                intent = new Intent(this, PositiveOperationActivity.class);
                 startActivity(intent);
                 break;
 
@@ -62,7 +75,8 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
                 break;
 
             case R.id.go_to_negative_list:
-                Toast.makeText(this, "Negative_List button was presses", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, BalanceActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -77,8 +91,94 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
 
         @Override
         public void onBalanceItemLongClicked(Balance balance) {
-
+            makeDeleteItemByLongPressed(balance);
         }
     };
+
+    private final BalanceItemStore.Listener balanceListChangedList = new BalanceItemStore.Listener() {
+        @Override
+        public void onBalanceListChange() {
+            updateList();
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        updateList();
+        BalanceItemStoreProvider.getInstance(this).removeListener(balanceListChangedList);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        updateList();
+        super.onResume();
+    }
+
+    // Обновить список итемов
+    private void updateList() {
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).getBalanceList();
+        adapter.submitNewList(balanceList);
+    }
+
+    // при удалении элемента по свайпу вывести сообщение и при необходимости пользователь
+    // может востановить удаленный итем
+    private void deleteItem(final Balance balance, final int position) {
+        BalanceItemStoreProvider.getInstance(this).deleteBalanceItem(balance);
+        // При удалении элемента из списка, отрисовать список заново
+        updateList();
+
+        Snackbar.make(recyclerView, R.string.snackbar_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_action, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BalanceItemStoreProvider.getInstance(BalancePositiveListActivity.this).resurrectBalanceItem(balance, position);
+                        updateList();
+                    }
+                })
+                .show();
+    }
+
+    // Удаление по свайпу в сторону
+    private void makeDeleteItemBySwiped() {
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                // используется для перемещения итемов между собой
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                BalanceViewHolder balanceViewHolder = (BalanceViewHolder) viewHolder;
+
+                Balance balanceItem = balanceViewHolder.getBalance();
+                deleteItem(balanceItem, viewHolder.getAdapterPosition());
+            }
+        });
+
+        touchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    // Удаление при длительном нажатии
+    private void makeDeleteItemByLongPressed(final Balance balance) {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.dialog_delete_item_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BalanceItemStoreProvider.getInstance(BalancePositiveListActivity.this).deleteBalanceItem(balance.getId());
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
+
+
+        // При удалении элемента из списка, отрисовать список заново
+        BalanceItemStoreProvider.getInstance(this).addListener(balanceListChangedList);
+    }
 
 }

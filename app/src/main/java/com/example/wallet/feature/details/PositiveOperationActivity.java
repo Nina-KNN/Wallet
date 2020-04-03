@@ -1,13 +1,14 @@
 package com.example.wallet.feature.details;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,11 +35,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class PositiveOperationActivity extends AppCompatActivity implements View.OnClickListener{
-
-    private Balance balance;
-    private RecyclerView recyclerView;
-    private List<IconObject> iconsList = createIconList();
-
     private TextView dateTextView;
     private TextView idTextView;
     private TextView titleTextView;
@@ -47,9 +43,11 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
     private TextView iconNameTextView;
     private EditText sumEditText;
     private EditText commentEditText;
-    private Button saveButton;
 
-    private Date date = new Date();
+    private Balance balance;
+    private RecyclerView recyclerView;
+    private List<IconObject> iconsList = createIconList();
+
     private UUID id;
     private int image;
     private String imageName = "";
@@ -60,8 +58,6 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_positive_operation);
 
         viewById();
-
-        balance = new Balance();
         fillAndShowAllData();
     }
 
@@ -75,7 +71,8 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         sumEditText = findViewById(R.id.enter_positive_operation);
         commentEditText = findViewById(R.id.enter_comment_positive_operation);
 
-        findViewById(R.id.image_value_positive_operation).setOnClickListener(this);
+        imageImageView = findViewById(R.id.image_value_positive_operation);
+        imageImageView.setOnClickListener(this);
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
     }
 
@@ -94,12 +91,27 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
 
     private void fillAndShowAllData() {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        id = UUID.randomUUID();
 
-        dateTextView.setText(dateFormat.format(date));
-        idTextView.setText(id.toString());
+        Intent intent = getIntent();
+        id = (UUID) intent.getSerializableExtra("items_id");
+
         titleTextView.setText(R.string.title_profit);
         choiceProfitCheckBox.setVisibility(View.GONE);
+
+        if(id != null) {
+            // Если объект уже существует в списке
+            balance = BalanceItemStoreProvider.getInstance(this).getById(id);
+
+            dateTextView.setText(dateFormat.format(balance.getDate()));
+            idTextView.setText(id.toString());
+            sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
+            commentEditText.setText(balance.getComment());
+
+            Log.d("12345", "date create " + balance.getDate());
+        } else {
+            // Если новый объект
+            balance = new Balance();
+        }
 
         enterOperationSum();
         enterComment();
@@ -131,12 +143,19 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         } else if(imageName.isEmpty()) {
             Toast.makeText(this, R.string.choice_category, Toast.LENGTH_SHORT).show();
         } else {
-            balance.setDate(date);
-            balance.setId(id);
-            balance.setTitle(String.valueOf(R.string.title_profit));
-            balance.setChoiceProfit(true);
+            // Сохранить созданный элемент или обновить существующий
+            if(id != null) {
+                BalanceItemStoreProvider.getInstance(this).update(balance);
+            } else {
+                id = UUID.randomUUID();
 
-            BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
+                balance.setDate(new Date());
+                balance.setId(id);
+                balance.setTitle(String.valueOf(R.string.title_profit));
+                balance.setChoiceProfit(true);
+
+                BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
+            }
 
             onBackPressed();
         }

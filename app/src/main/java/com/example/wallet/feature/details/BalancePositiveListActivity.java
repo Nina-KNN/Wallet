@@ -85,8 +85,9 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
-            //добавить переход в активити для редактирования итема
-            Toast.makeText(BalancePositiveListActivity.this, "Item was clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(BalancePositiveListActivity.this, PositiveOperationActivity.class);
+            intent.putExtra("items_id", balance.getId());
+            startActivity(intent);
         }
 
         @Override

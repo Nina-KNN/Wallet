@@ -7,6 +7,7 @@
 
     <string name="title_profit">PROFIT</string>
     <string name="title_expense">EXPENSE</string>
+    <string name="title_balance">BALANCE</string>
 
     <string name="comment">Enter comment</string>
     <string name="date">Date</string>

@@ -17,7 +17,7 @@
             android:configChanges="orientation"
             android:screenOrientation="nosensor" />
         <activity
-            android:name=".feature.details.PositiveOperationActivity"
+            android:name=".feature.details.ItemOperationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateAlwaysHidden" />

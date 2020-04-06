@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class PositiveOperationActivity extends AppCompatActivity implements View.OnClickListener{
+public class ItemOperationActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView dateTextView;
     private TextView idTextView;
     private TextView titleTextView;
@@ -59,7 +59,7 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_positive_operation);
+        setContentView(R.layout.activity_item_operation);
 
         viewById();
         fillAndShowAllData();
@@ -99,26 +99,24 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         Intent intent = getIntent();
         id = (UUID) intent.getSerializableExtra("items_id");
 
-        titleTextView.setText(R.string.title_profit);
-        choiceProfitCheckBox.setVisibility(View.GONE);
-
         if(id != null) {
             // Если объект уже существует в списке
             balance = BalanceItemStoreProvider.getInstance(this).getById(id);
 
+            makeChoice(balance.isChoiceProfit());
             dateTextView.setText(dateFormat.format(balance.getDate()));
             idTextView.setText(id.toString());
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
-
-            Log.d("12345", "date create " + balance.getDate());
         } else {
             // Если новый объект
             balance = new Balance();
+            makeChoice(false);
         }
 
         enterOperationSum();
         enterComment();
+        makeCheckBoxListener();
     }
 
     private void makeRecyclerView() {
@@ -128,6 +126,7 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
         recyclerView.setVisibility(View.VISIBLE);
     }
 
+    // вычесление количества столбцов для recyclerView
     private int columnsCount(){
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE); //Получаем размер экрана
         Display display = wm.getDefaultDisplay();
@@ -154,6 +153,16 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
     };
 
     private void saveBalanceData() {
+        // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
+        if(choiceProfitCheckBox.isChecked() && balance.getOperationSum() < 0) {
+            sumEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+        } else if (! choiceProfitCheckBox.isChecked() && balance.getOperationSum() > 0) {
+            sumEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
+        } else {
+            sumEditText.setText(String.valueOf(balance.getOperationSum()));
+        }
+
+
         if(sumEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(sumEditText.getText())) == 0) {
             Toast.makeText(this, R.string.message_about_wrong_data, Toast.LENGTH_SHORT).show();
         } else if(imageName.isEmpty()) {
@@ -167,7 +176,6 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
 
                 balance.setDate(new Date());
                 balance.setId(id);
-                balance.setTitle(String.valueOf(R.string.title_profit));
                 balance.setChoiceProfit(true);
 
                 BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
@@ -216,6 +224,28 @@ public class PositiveOperationActivity extends AppCompatActivity implements View
 
             }
         });
+    }
+
+    private void makeCheckBoxListener() {
+        choiceProfitCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                makeChoice(isChecked);
+            }
+        });
+    }
+
+    private void makeChoice(boolean choice) {
+        balance.setChoiceProfit(choice); // изменение поля в объекте
+        choiceProfitCheckBox.setChecked(choice);
+
+        if(choice) {
+            balance.setTitle(String.valueOf(R.string.title_profit)); // изменение поля в объекте
+            titleTextView.setText(R.string.title_profit);
+        } else {
+            balance.setTitle(String.valueOf(R.string.title_expense)); // изменение поля в объекте
+            titleTextView.setText(R.string.title_expense);
+        }
     }
 
     private List<IconObject> createIconList() {

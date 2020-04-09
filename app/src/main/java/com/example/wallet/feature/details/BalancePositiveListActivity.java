@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,33 +27,41 @@ import java.util.List;
 
 public class BalancePositiveListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView title;
+    private TextView titleTextView;
+    private Button profitButton;
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
+    private boolean profit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance_positive_list);
+//        Intent intent = getIntent();
+//        profit = intent.getSerializableExtra("profit");
+        profit = true;
 
         viewById();
+        makeChangeProfit(profit);
+        makeDeleteItemBySwiped();
+    }
 
-        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(this).getBalanceList(), itemListener);
+    private void makeRecyclerView(boolean isProfit) {
+        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(this).getBalanceList(), itemListener, isProfit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        makeDeleteItemBySwiped();
     }
 
     private void viewById() {
         recyclerView = findViewById(R.id.recycler);
 
+        titleTextView = findViewById(R.id.title_positive_list);
+        profitButton = findViewById(R.id.change_list);
+
         findViewById(R.id.add_positive_item).setOnClickListener(this);
         findViewById(R.id.next_month).setOnClickListener(this);
         findViewById(R.id.previous_month).setOnClickListener(this);
-        findViewById(R.id.go_to_negative_list).setOnClickListener(this);
-
-        title = findViewById(R.id.title_positive_list);
+        profitButton.setOnClickListener(this);
     }
 
 
@@ -62,11 +71,13 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
 
         switch (v.getId()) {
             case R.id.add_positive_item:
-                intent = new Intent(this, PositiveOperationActivity.class);
+                intent = new Intent(this, ItemOperationActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.next_month:
+                intent = new Intent(this, BalanceResultActivity.class);
+                startActivity(intent);
                 Toast.makeText(this, "Next_Month button was presses", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -74,9 +85,9 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
                 Toast.makeText(this, "Previous_Month button was presses", Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.go_to_negative_list:
-                intent = new Intent(this, BalanceActivity.class);
-                startActivity(intent);
+            case R.id.change_list:
+                profit = !profit;
+                makeChangeProfit(profit);
                 break;
         }
     }
@@ -85,7 +96,7 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
-            Intent intent = new Intent(BalancePositiveListActivity.this, PositiveOperationActivity.class);
+            Intent intent = new Intent(BalancePositiveListActivity.this, ItemOperationActivity.class);
             intent.putExtra("items_id", balance.getId());
             startActivity(intent);
         }
@@ -182,4 +193,16 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
         BalanceItemStoreProvider.getInstance(this).addListener(balanceListChangedList);
     }
 
+    // В зависимости от Profit это или Expense отобразить правильные данные
+    private void makeChangeProfit(boolean profit) {
+        if(profit) {
+            profitButton.setText("EXPENSE");
+            titleTextView.setText("PROFIT");
+        } else {
+            profitButton.setText("PROFIT");
+            titleTextView.setText("EXPENSE");
+        }
+
+        makeRecyclerView(profit);;
+    }
 }

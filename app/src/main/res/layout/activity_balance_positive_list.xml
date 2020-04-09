@@ -67,13 +67,12 @@
             android:text="next month"/>
 
         <Button
-            android:id="@+id/go_to_negative_list"
+            android:id="@+id/change_list"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:textSize="8dp"
-            android:text="go to EXPENSE"/>
+            android:textSize="8dp" />
 
     </LinearLayout>
 

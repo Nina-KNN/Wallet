@@ -1,6 +1,7 @@
 package com.example.wallet.feature.list.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,10 +18,12 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
 
     private List<Balance> balanceList;
     private ItemListener itemListener;
+    private boolean profit;
 
-    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener) {
+    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener, boolean profit) {
         this.balanceList = balanceList;
         this.itemListener = itemListener;
+        this.profit = profit;
 
         setHasStableIds(true);
     }
@@ -47,6 +50,17 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull BalanceViewHolder holder, int position) {
         Balance balance = balanceList.get(position);
+
+        holder.itemView.setVisibility(View.VISIBLE);
+        holder.itemView.setLayoutParams(
+                new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // Скрыть элемент
+        if(balance.isChoiceProfit() != profit) {
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+        }
 
         holder.bindTo(balance);
     }

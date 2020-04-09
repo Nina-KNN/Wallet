@@ -11,7 +11,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".feature.details.BalanceResultActivity"
             android:configChanges="orientation"
-            android:screenOrientation="nosensor" />
+            android:screenOrientation="nosensor" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".feature.details.BalancePositiveListActivity"
             android:configChanges="orientation"
@@ -21,17 +28,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".feature.details.BalanceActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="nosensor"
-            android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

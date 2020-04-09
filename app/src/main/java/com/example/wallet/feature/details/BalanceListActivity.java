@@ -25,7 +25,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class BalancePositiveListActivity extends AppCompatActivity implements View.OnClickListener {
+public class BalanceListActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final int REQUEST_ACCESS_TYPE = 1;
+    public static final String PROFIT_VALUE = "profit_value";
+    public static final String ITEMS_ID = "items_id";
 
     private TextView titleTextView;
     private Button profitButton;
@@ -36,10 +40,10 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_balance_positive_list);
-//        Intent intent = getIntent();
-//        profit = intent.getSerializableExtra("profit");
-        profit = true;
+        setContentView(R.layout.activity_balance_list);
+
+        Intent intent = getIntent();
+        profit = (boolean) intent.getSerializableExtra("profit");
 
         viewById();
         makeChangeProfit(profit);
@@ -72,7 +76,8 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
         switch (v.getId()) {
             case R.id.add_positive_item:
                 intent = new Intent(this, ItemOperationActivity.class);
-                startActivity(intent);
+                intent.putExtra(PROFIT_VALUE, profit);
+                startActivityForResult(intent, REQUEST_ACCESS_TYPE);
                 break;
 
             case R.id.next_month:
@@ -96,9 +101,9 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
     private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
         @Override
         public void onBalanceItemClicked(Balance balance) {
-            Intent intent = new Intent(BalancePositiveListActivity.this, ItemOperationActivity.class);
-            intent.putExtra("items_id", balance.getId());
-            startActivity(intent);
+            Intent intent = new Intent(BalanceListActivity.this, ItemOperationActivity.class);
+            intent.putExtra(ITEMS_ID, balance.getId());
+            startActivityForResult(intent, REQUEST_ACCESS_TYPE);
         }
 
         @Override
@@ -106,6 +111,16 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
             makeDeleteItemByLongPressed(balance);
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        profit = (boolean) data.getSerializableExtra("profit");
+        makeChangeProfit(profit);
+    }
 
     private final BalanceItemStore.Listener balanceListChangedList = new BalanceItemStore.Listener() {
         @Override
@@ -144,7 +159,7 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
                 .setAction(R.string.snackbar_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BalanceItemStoreProvider.getInstance(BalancePositiveListActivity.this).resurrectBalanceItem(balance, position);
+                        BalanceItemStoreProvider.getInstance(BalanceListActivity.this).resurrectBalanceItem(balance, position);
                         updateList();
                     }
                 })
@@ -181,7 +196,7 @@ public class BalancePositiveListActivity extends AppCompatActivity implements Vi
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        BalanceItemStoreProvider.getInstance(BalancePositiveListActivity.this).deleteBalanceItem(balance.getId());
+                        BalanceItemStoreProvider.getInstance(BalanceListActivity.this).deleteBalanceItem(balance.getId());
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)

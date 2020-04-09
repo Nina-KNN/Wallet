@@ -38,6 +38,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import static com.example.wallet.feature.details.BalanceListActivity.ITEMS_ID;
+import static com.example.wallet.feature.details.BalanceListActivity.PROFIT_VALUE;
+
 public class ItemOperationActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView dateTextView;
     private TextView idTextView;
@@ -55,6 +58,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     private UUID id;
     private int image;
     private String imageName = "";
+    private boolean profit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +101,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
         Intent intent = getIntent();
-        id = (UUID) intent.getSerializableExtra("items_id");
+        id = (UUID) intent.getSerializableExtra(ITEMS_ID);
 
         if(id != null) {
             // Если объект уже существует в списке
@@ -110,8 +114,9 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             commentEditText.setText(balance.getComment());
         } else {
             // Если новый объект
+            profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
             balance = new Balance();
-            makeChoice(false);
+            makeChoice(profit);
         }
 
         enterOperationSum();
@@ -176,12 +181,13 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
                 balance.setDate(new Date());
                 balance.setId(id);
-                balance.setChoiceProfit(true);
-
                 BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
             }
 
-            onBackPressed();
+            Intent intent = new Intent();
+            intent.putExtra("profit", profit);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 
@@ -236,6 +242,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     }
 
     private void makeChoice(boolean choice) {
+        profit = choice;
         balance.setChoiceProfit(choice); // изменение поля в объекте
         choiceProfitCheckBox.setChecked(choice);
 

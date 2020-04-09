@@ -48,14 +48,14 @@ public class BalanceResultActivity extends AppCompatActivity {
 
             public void onSwipeRight() {
                 // Переход на активити со списком Доходов
-                intent = new Intent(currentActivity, BalancePositiveListActivity.class);
+                intent = new Intent(currentActivity, BalanceListActivity.class);
                 intent.putExtra("profit", true);
                 startActivity(intent);
             }
 
             public void onSwipeLeft() {
                 // Переход на активити со списком Расходов
-                intent = new Intent(currentActivity, BalancePositiveListActivity.class);
+                intent = new Intent(currentActivity, BalanceListActivity.class);
                 intent.putExtra("profit", false);
                 startActivity(intent);
             }

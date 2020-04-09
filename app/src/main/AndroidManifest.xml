@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.details.BalancePositiveListActivity"
+            android:name=".feature.details.BalanceListActivity"
             android:configChanges="orientation"
             android:screenOrientation="nosensor" />
         <activity

@@ -4,7 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +32,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     public static final String ITEMS_ID = "items_id";
 
     private TextView titleTextView;
-    private Button profitButton;
+    private ImageButton profitImageButton;
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
     private boolean profit;
@@ -60,12 +60,13 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         recyclerView = findViewById(R.id.recycler);
 
         titleTextView = findViewById(R.id.title_positive_list);
-        profitButton = findViewById(R.id.change_list);
+        profitImageButton = findViewById(R.id.change_list);
 
-        findViewById(R.id.add_positive_item).setOnClickListener(this);
+        findViewById(R.id.add_item).setOnClickListener(this);
         findViewById(R.id.next_month).setOnClickListener(this);
         findViewById(R.id.previous_month).setOnClickListener(this);
-        profitButton.setOnClickListener(this);
+        findViewById(R.id.balance_list).setOnClickListener(this);
+        profitImageButton.setOnClickListener(this);
     }
 
 
@@ -74,15 +75,13 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         Intent intent;
 
         switch (v.getId()) {
-            case R.id.add_positive_item:
+            case R.id.add_item:
                 intent = new Intent(this, ItemOperationActivity.class);
                 intent.putExtra(PROFIT_VALUE, profit);
                 startActivityForResult(intent, REQUEST_ACCESS_TYPE);
                 break;
 
             case R.id.next_month:
-                intent = new Intent(this, BalanceResultActivity.class);
-                startActivity(intent);
                 Toast.makeText(this, "Next_Month button was presses", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -93,6 +92,11 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
             case R.id.change_list:
                 profit = !profit;
                 makeChangeProfit(profit);
+                break;
+
+            case R.id.balance_list:
+                intent = new Intent(this, BalanceResultActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -211,10 +215,10 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     // В зависимости от Profit это или Expense отобразить правильные данные
     private void makeChangeProfit(boolean profit) {
         if(profit) {
-            profitButton.setText("EXPENSE");
+            profitImageButton.setImageResource(R.drawable.ic_profit_button);
             titleTextView.setText("PROFIT");
         } else {
-            profitButton.setText("PROFIT");
+            profitImageButton.setImageResource(R.drawable.ic_expense_button);
             titleTextView.setText("EXPENSE");
         }
 

@@ -12,7 +12,6 @@ public class BalanceItemStoreProvider {
 
     public static BalanceItemStore getInstance(Context context) {
         if(instance == null) {
-//            instance = new InMemoryBalanceItemStore();
             instance = new RoomBalanceItemStore(context);
         }
 

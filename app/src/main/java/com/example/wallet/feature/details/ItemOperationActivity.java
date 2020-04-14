@@ -53,7 +53,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
     private Balance balance;
     private RecyclerView recyclerView;
-    private List<IconObject> iconsList = createIconList();
+    private List<IconObject> iconsList;
 
     private UUID id;
     private int image;
@@ -75,11 +75,11 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         idTextView = findViewById(R.id.id_positive_operation);
         titleTextView = findViewById(R.id.title_positive_operation);
         choiceProfitCheckBox = findViewById(R.id.choice_profit_positive_operation);
-        iconNameTextView = findViewById(R.id.icon_name_positive_operation);
+        iconNameTextView = findViewById(R.id.icon_name_operation);
         sumEditText = findViewById(R.id.enter_positive_operation);
         commentEditText = findViewById(R.id.enter_comment_positive_operation);
 
-        imageImageView = findViewById(R.id.image_value_positive_operation);
+        imageImageView = findViewById(R.id.image_value_operation);
         imageImageView.setOnClickListener(this);
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
     }
@@ -87,8 +87,8 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.image_value_positive_operation:
-                makeRecyclerView();
+            case R.id.image_value_operation:
+                makeRecyclerView(profit);
                 break;
 
             case R.id.save_button_positive_operation:
@@ -124,7 +124,14 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         makeCheckBoxListener();
     }
 
-    private void makeRecyclerView() {
+    private void makeRecyclerView(boolean choiceProfit) {
+        if(choiceProfit) {
+            iconsList = createProfitIconList();
+        } else {
+            iconsList = createExpenseIconList();
+        }
+
+
         recyclerView = findViewById(R.id.recycler_positive_operation);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount()));
         recyclerView.setAdapter(new IconsListAdapter(iconsList, itemListener));
@@ -158,22 +165,14 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     };
 
     private void saveBalanceData() {
-        // Проверить в каком состоянии сейчас "choiceProfit", и при необходимости изменить знак "operationSum()"
-        if(choiceProfitCheckBox.isChecked() && balance.getOperationSum() < 0) {
-            sumEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
-        } else if (! choiceProfitCheckBox.isChecked() && balance.getOperationSum() > 0) {
-            sumEditText.setText(String.valueOf(balance.getOperationSum() * (-1)));
-        } else {
-            sumEditText.setText(String.valueOf(balance.getOperationSum()));
-        }
-
-
         if(sumEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(sumEditText.getText())) == 0) {
             Toast.makeText(this, R.string.message_about_wrong_data, Toast.LENGTH_SHORT).show();
-        } else if(imageName.isEmpty()) {
+        } else if(imageName.isEmpty() || imageName.equals(String.valueOf(R.string.make_choice))) {
             Toast.makeText(this, R.string.choice_category, Toast.LENGTH_SHORT).show();
         } else {
             // Сохранить созданный элемент или обновить существующий
+            sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
+
             if(id != null) {
                 BalanceItemStoreProvider.getInstance(this).update(balance);
             } else {
@@ -202,7 +201,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
                 if (s.toString() != null && ! s.toString().equals("")) {
                     balance.setOperationSum(Integer.parseInt(s.toString())); // заполнение поля в объекте
                 } else {
-                    balance.setOperationSum(10); // заполнение поля в объекте
+                    balance.setOperationSum(0); // заполнение поля в объекте
                 }
             }
 
@@ -237,6 +236,10 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 makeChoice(isChecked);
+                imageImageView.setImageResource(R.drawable.ic_touch_app);
+                imageName = String.valueOf(R.string.make_choice);
+                iconNameTextView.setText(R.string.make_choice);
+                makeRecyclerView(isChecked);
             }
         });
     }
@@ -255,16 +258,36 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private List<IconObject> createIconList() {
+    private List<IconObject> createProfitIconList() {
         List<IconObject> iconsList = new ArrayList<>();
 
-        iconsList.add(new IconObject(R.drawable.briefcase, "briefcase"));
-        iconsList.add(new IconObject(R.drawable.cards, "cards"));
-        iconsList.add(new IconObject(R.drawable.cash_back, "cash_back"));
-        iconsList.add(new IconObject(R.drawable.coins_1, "coins_1"));
-        iconsList.add(new IconObject(R.drawable.coins_2, "coins_2"));
-        iconsList.add(new IconObject(R.drawable.coins_3, "coins_3"));
-        iconsList.add(new IconObject(R.drawable.book, "book"));
+        iconsList.add(new IconObject(R.drawable.p_coins_1, "coins_1", "id_prof_coins_1", true));
+        iconsList.add(new IconObject(R.drawable.p_calculator, "calculator", "id_calculator", true));
+        iconsList.add(new IconObject(R.drawable.p_cash_back, "cash_back", "id_cash_back", true));
+        iconsList.add(new IconObject(R.drawable.p_hands_1, "hands_1", "id_hands_1", true));
+        iconsList.add(new IconObject(R.drawable.p_safe, "safe", "id_safe", true));
+        iconsList.add(new IconObject(R.drawable.p_coins_2, "coins_2", "id_coins_2", true));
+        iconsList.add(new IconObject(R.drawable.p_coins_3, "coins_3", "id_coins_3", true));
+        iconsList.add(new IconObject(R.drawable.p_growth_chart, "growth_chart", "id_growth_chart", true));
+        iconsList.add(new IconObject(R.drawable.p_men, "men", "id_men", true));
+        iconsList.add(new IconObject(R.drawable.p_money, "money", "id_money", true));
+
+        return iconsList;
+    }
+
+    private List<IconObject> createExpenseIconList() {
+        List<IconObject> iconsList = new ArrayList<>();
+
+        iconsList.add(new IconObject(R.drawable.ex_cocktail, "cocktail", "id_cocktail", false));
+        iconsList.add(new IconObject(R.drawable.ex_gas_station, "gas_station", "id_gas_station", false));
+        iconsList.add(new IconObject(R.drawable.ex_kye, "kye", "id_kye", false));
+        iconsList.add(new IconObject(R.drawable.ex_menu, "menu", "id_menu", false));
+        iconsList.add(new IconObject(R.drawable.ex_shopping_basket, "shopping_basket", "id_shopping_basket", false));
+        iconsList.add(new IconObject(R.drawable.ex_watch, "watch", "id_watch", false));
+        iconsList.add(new IconObject(R.drawable.ex_necklace, "necklace", "id_necklace", false));
+        iconsList.add(new IconObject(R.drawable.ex_cup, "cup", "cup", false));
+        iconsList.add(new IconObject(R.drawable.ex_bus, "bus", "id_bus", false));
+        iconsList.add(new IconObject(R.drawable.ex_car, "car", "id_car", false));
 
         return iconsList;
     }

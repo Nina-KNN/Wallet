@@ -19,4 +19,5 @@
     <string name="snackbar_message">Item was deleted</string>
     <string name="snackbar_action">UNDO</string>
     <string name="choice_category">Please, choice the category</string>
+    <string name="make_choice">Make choice</string>
 </resources>

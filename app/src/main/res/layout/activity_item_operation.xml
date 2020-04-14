@@ -95,19 +95,19 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:id="@+id/image_value_positive_operation"
+                                android:id="@+id/image_value_operation"
                                 android:layout_width="75dp"
                                 android:layout_height="75dp"
                                 android:src="@drawable/ic_touch_app"
                                 tools:ignore="VectorDrawableCompat" />
 
                             <TextView
-                                android:id="@+id/icon_name_positive_operation"
+                                android:id="@+id/icon_name_operation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textSize="10dp"
-                                android:text="Make choice"/>
+                                android:text="@string/make_choice"/>
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>

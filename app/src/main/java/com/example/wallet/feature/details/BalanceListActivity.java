@@ -215,10 +215,10 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     // В зависимости от Profit это или Expense отобразить правильные данные
     private void makeChangeProfit(boolean profit) {
         if(profit) {
-            profitImageButton.setImageResource(R.drawable.ic_profit_button);
+            profitImageButton.setImageResource(R.drawable.ic_expense_button);
             titleTextView.setText("PROFIT");
         } else {
-            profitImageButton.setImageResource(R.drawable.ic_expense_button);
+            profitImageButton.setImageResource(R.drawable.ic_profit_button);
             titleTextView.setText("EXPENSE");
         }
 

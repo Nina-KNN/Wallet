@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.IconObject;
+import com.example.wallet.data.icons.IconObject;
 
 import java.util.List;
 

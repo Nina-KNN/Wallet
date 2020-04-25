@@ -1,4 +1,4 @@
-package com.example.wallet.data;
+package com.example.wallet.data.icons;
 
 public class IconObject {
     private int iconImage;

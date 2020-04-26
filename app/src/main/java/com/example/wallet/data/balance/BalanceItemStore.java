@@ -1,4 +1,4 @@
-package com.example.wallet.data;
+package com.example.wallet.data.balance;
 
 import java.util.List;
 import java.util.UUID;

@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStoreProvider;
+import com.example.wallet.data.balance.Balance;
+import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.feature.list.adapter.IconsListAdapter;
@@ -53,7 +53,6 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
     private Balance balance;
     private RecyclerView recyclerView;
-    private List<IconObject> iconsList;
 
     private UUID id;
     private int image;
@@ -112,6 +111,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             idTextView.setText(id.toString());
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
+            iconNameTextView.setText(balance.getTitle());
         } else {
             // Если новый объект
             profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
@@ -125,7 +125,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     }
 
     private void makeRecyclerView(boolean choiceProfit) {
-        iconsList = CreateIconsList.getInstanceIcon(choiceProfit);
+        List<IconObject> iconsList = CreateIconsList.getInstanceIcon(choiceProfit);
 
         recyclerView = findViewById(R.id.recycler_positive_operation);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount()));
@@ -156,6 +156,8 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             iconNameTextView.setText(imageName);
             imageImageView.setImageResource(image);
             recyclerView.setVisibility(View.INVISIBLE);
+
+            balance.setTitle(imageName);
         }
     };
 

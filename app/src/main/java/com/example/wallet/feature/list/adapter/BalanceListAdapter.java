@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.Balance;
+import com.example.wallet.data.balance.Balance;
 import com.example.wallet.databinding.ItemOfBalanceListBinding;
 
 import java.util.List;

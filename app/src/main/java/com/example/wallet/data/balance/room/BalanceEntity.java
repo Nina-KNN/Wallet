@@ -1,4 +1,4 @@
-package com.example.wallet.data.room;
+package com.example.wallet.data.balance.room;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

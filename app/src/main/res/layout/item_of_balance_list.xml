@@ -6,7 +6,7 @@
     <data>
         <variable
             name="itemOfBalance"
-            type="com.example.wallet.data.Balance" />
+            type="com.example.wallet.data.balance.Balance" />
     </data>
 
     <androidx.cardview.widget.CardView

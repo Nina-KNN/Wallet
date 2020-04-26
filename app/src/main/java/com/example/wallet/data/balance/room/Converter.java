@@ -1,6 +1,6 @@
-package com.example.wallet.data.room;
+package com.example.wallet.data.balance.room;
 
-import com.example.wallet.data.Balance;
+import com.example.wallet.data.balance.Balance;
 
 import java.util.Date;
 import java.util.UUID;

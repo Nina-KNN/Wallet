@@ -1,4 +1,4 @@
-package com.example.wallet.data.room;
+package com.example.wallet.data.balance.room;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

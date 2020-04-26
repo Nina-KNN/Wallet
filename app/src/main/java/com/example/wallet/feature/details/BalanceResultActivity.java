@@ -11,8 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wallet.R;
-import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStoreProvider;
+import com.example.wallet.data.balance.Balance;
+import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.list.OnSwipeTouchListener;
 
 import java.util.List;

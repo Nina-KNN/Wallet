@@ -1,8 +1,8 @@
-package com.example.wallet.data;
+package com.example.wallet.data.balance;
 
 import android.content.Context;
 
-import com.example.wallet.data.room.RoomBalanceItemStore;
+import com.example.wallet.data.balance.room.RoomBalanceItemStore;
 
 public class BalanceItemStoreProvider {
     //Singleton

@@ -1,11 +1,11 @@
-package com.example.wallet.data.room;
+package com.example.wallet.data.balance.room;
 
 import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.wallet.data.Balance;
-import com.example.wallet.data.BaseBalanceItemStore;
+import com.example.wallet.data.balance.Balance;
+import com.example.wallet.data.balance.BaseBalanceItemStore;
 
 import java.util.ArrayList;
 import java.util.List;

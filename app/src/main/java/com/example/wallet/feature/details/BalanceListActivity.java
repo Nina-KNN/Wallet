@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.Balance;
-import com.example.wallet.data.BalanceItemStore;
-import com.example.wallet.data.BalanceItemStoreProvider;
+import com.example.wallet.data.balance.Balance;
+import com.example.wallet.data.balance.BalanceItemStore;
+import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.list.adapter.BalanceListAdapter;
 import com.example.wallet.feature.list.adapter.BalanceViewHolder;
 import com.google.android.material.snackbar.Snackbar;

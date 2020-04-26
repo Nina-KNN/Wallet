@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.Balance;
+import com.example.wallet.data.balance.Balance;
 import com.example.wallet.databinding.ItemOfBalanceListBinding;
 
 import java.text.DateFormat;
@@ -69,12 +69,11 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());
+        titleView.setText(balance.getTitle());
 
-        if(balance.getTitle().equals(String.valueOf(R.string.title_profit))) {
-            titleView.setText(R.string.title_profit);
+        if(balance.isChoiceProfit()) {
             itemImageView.setImageResource(R.drawable.image_profit);
         } else {
-            titleView.setText(R.string.title_expense);
             itemImageView.setImageResource(R.drawable.image_expense);
         }
     }

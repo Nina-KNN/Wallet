@@ -111,7 +111,15 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             idTextView.setText(id.toString());
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
-            iconNameTextView.setText(balance.getTitle());
+            imageImageView.setImageResource(Integer.parseInt(balance.getTitle()));
+
+            for(IconObject iconObject : CreateIconsList.getInstanceIcon(balance.isChoiceProfit())){
+                if(iconObject.getIconImage() == Integer.parseInt(balance.getTitle())) {
+                    imageName = iconObject.getIconName();
+                    iconNameTextView.setText(imageName);
+                    break;
+                }
+            }
         } else {
             // Если новый объект
             profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
@@ -124,8 +132,8 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         makeCheckBoxListener();
     }
 
-    private void makeRecyclerView(boolean choiceProfit) {
-        List<IconObject> iconsList = CreateIconsList.getInstanceIcon(choiceProfit);
+    private void makeRecyclerView(boolean profit) {
+        List<IconObject> iconsList = CreateIconsList.getInstanceIcon(profit);
 
         recyclerView = findViewById(R.id.recycler_positive_operation);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount()));
@@ -157,7 +165,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             imageImageView.setImageResource(image);
             recyclerView.setVisibility(View.INVISIBLE);
 
-            balance.setTitle(imageName);
+            balance.setTitle(String.valueOf(image));
         }
     };
 
@@ -236,7 +244,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
                 imageImageView.setImageResource(R.drawable.ic_touch_app);
                 imageName = String.valueOf(R.string.make_choice);
                 iconNameTextView.setText(R.string.make_choice);
-                makeRecyclerView(isChecked);
+                makeRecyclerView(profit);
             }
         });
     }

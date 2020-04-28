@@ -23,7 +23,6 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
     private TextView titleView;
     private TextView dateView;
     private TextView operationSumTextView;
-    private TextView idTextView;
     private TextView commentTextView;
     private ImageView itemImageView;
 
@@ -50,7 +49,6 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         titleView = binding.title;
         dateView = binding.date;
         operationSumTextView = binding.sum;
-        idTextView = binding.id;
         commentTextView = binding.comment;
         itemImageView = binding.imageValue;
 
@@ -68,7 +66,6 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
         dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
-        idTextView.setText(balance.getId().toString());
         commentTextView.setText(balance.getComment());
 
         itemImageView.setImageResource(Integer.parseInt(balance.getTitle()));

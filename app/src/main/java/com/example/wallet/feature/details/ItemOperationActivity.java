@@ -43,7 +43,6 @@ import static com.example.wallet.feature.details.BalanceListActivity.PROFIT_VALU
 
 public class ItemOperationActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView dateTextView;
-    private TextView idTextView;
     private TextView titleTextView;
     private CheckBox choiceProfitCheckBox;
     private ImageView imageImageView;
@@ -71,7 +70,6 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
     private void viewById() {
         dateTextView = findViewById(R.id.date_positive_operation);
-        idTextView = findViewById(R.id.id_positive_operation);
         titleTextView = findViewById(R.id.title_positive_operation);
         choiceProfitCheckBox = findViewById(R.id.choice_profit_positive_operation);
         iconNameTextView = findViewById(R.id.icon_name_operation);
@@ -81,6 +79,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         imageImageView = findViewById(R.id.image_value_operation);
         imageImageView.setOnClickListener(this);
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
+        findViewById(R.id.button_back_item_operation).setOnClickListener(this);
     }
 
     @Override
@@ -92,6 +91,10 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
             case R.id.save_button_positive_operation:
                 saveBalanceData();
+                break;
+
+            case R.id.button_back_item_operation:
+                onBackPressed();
                 break;
         }
     }
@@ -108,7 +111,6 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
             makeChoice(balance.isChoiceProfit());
             dateTextView.setText(dateFormat.format(balance.getDate()));
-            idTextView.setText(id.toString());
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
             imageImageView.setImageResource(Integer.parseInt(balance.getTitle()));

@@ -30,6 +30,7 @@
                 android:id="@+id/image_value"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center_vertical"
                 tools:ignore="VectorDrawableCompat" />
 
             <LinearLayout
@@ -85,15 +86,6 @@
                         tools:text="sum"/>
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    tools:text="id_balance" />
 
                 <TextView
                     android:id="@+id/comment"

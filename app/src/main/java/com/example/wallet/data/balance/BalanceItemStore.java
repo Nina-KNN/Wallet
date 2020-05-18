@@ -6,6 +6,8 @@ import java.util.UUID;
 public interface BalanceItemStore {
     List<Balance> getBalanceList();
 
+    List<Balance> getBalanceListForPeriod(long startDatePeriod, long endDatePeriod);
+
     Balance getById(UUID id);
 
     // Добавить новый объект в список объектов типа Balance

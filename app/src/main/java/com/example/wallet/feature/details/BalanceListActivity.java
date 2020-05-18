@@ -3,6 +3,7 @@ package com.example.wallet.feature.details;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,7 +24,12 @@ import com.example.wallet.feature.list.adapter.BalanceListAdapter;
 import com.example.wallet.feature.list.adapter.BalanceViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class BalanceListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,6 +42,9 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
     private boolean profit;
+
+    private GregorianCalendar currentDate = new GregorianCalendar();
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +60,10 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void makeRecyclerView(boolean isProfit) {
-        adapter = new BalanceListAdapter(BalanceItemStoreProvider.getInstance(this).getBalanceList(), itemListener, isProfit);
+        adapter = new BalanceListAdapter(
+                BalanceItemStoreProvider.getInstance(this).getBalanceListForPeriod(startDate(), endDate()),
+                itemListener,
+                isProfit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -66,6 +78,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.next_month).setOnClickListener(this);
         findViewById(R.id.previous_month).setOnClickListener(this);
         findViewById(R.id.balance_list).setOnClickListener(this);
+        findViewById(R.id.button_back_balance_list).setOnClickListener(this);
         profitImageButton.setOnClickListener(this);
     }
 
@@ -73,6 +86,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         Intent intent;
+        GregorianCalendar todayDate = new GregorianCalendar();
 
         switch (v.getId()) {
             case R.id.add_item:
@@ -82,11 +96,26 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.next_month:
-                Toast.makeText(this, "Next_Month button was presses", Toast.LENGTH_SHORT).show();
+                currentDate.add(Calendar.MONTH, 1);
+
+                if(currentDate.after(todayDate)) {
+                    currentDate.add(Calendar.MONTH, -1);
+                    Toast.makeText(this, "Next month don't exist", Toast.LENGTH_SHORT).show();
+                } else {
+                    makeRecyclerView(profit);
+                    Toast.makeText(this,"Next_Month button was presses " + dateFormat.format(currentDate.getTime()),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
                 break;
 
             case R.id.previous_month:
-                Toast.makeText(this, "Previous_Month button was presses", Toast.LENGTH_SHORT).show();
+                currentDate.add(Calendar.MONTH, -1);
+                makeRecyclerView(profit);
+                Toast.makeText(this,
+                        "Previous_Month button was presses " + dateFormat.format(currentDate.getTime()),
+                        Toast.LENGTH_SHORT)
+                        .show();
                 break;
 
             case R.id.change_list:
@@ -97,6 +126,11 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
             case R.id.balance_list:
                 intent = new Intent(this, BalanceResultActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.button_back_balance_list:
+                currentDate = todayDate;
+                makeRecyclerView(profit);
                 break;
         }
     }
@@ -148,7 +182,9 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
 
     // Обновить список итемов
     private void updateList() {
-        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).getBalanceList();
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
+            getBalanceListForPeriod(startDate(), endDate());
+
         adapter.submitNewList(balanceList);
     }
 
@@ -223,5 +259,32 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         }
 
         makeRecyclerView(profit);;
+    }
+
+    // Вычислить начало периода
+    private long startDate(){
+        return makeMonthPeriod(true);
+    }
+
+    // Вычислить конец периода
+    private long endDate(){
+        return makeMonthPeriod(false);
+    }
+
+    private long makeMonthPeriod(boolean firstDay){
+        int year = currentDate.get(Calendar.YEAR);
+        int month = currentDate.get(Calendar.MONTH);
+        int day;
+
+        if(firstDay) {
+            day = currentDate.getActualMinimum(Calendar.DAY_OF_MONTH);
+        } else {
+            day = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        }
+
+        GregorianCalendar lastDay = new GregorianCalendar(year, month, day);
+        Log.d("12345", dateFormat.format(lastDay.getTime()));
+
+        return lastDay.getTimeInMillis();
     }
 }

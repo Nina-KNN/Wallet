@@ -29,13 +29,11 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.IconsListAdapter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import static com.example.wallet.feature.details.BalanceListActivity.ITEMS_ID;
@@ -100,8 +98,6 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     }
 
     private void fillAndShowAllData() {
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-
         Intent intent = getIntent();
         id = (UUID) intent.getSerializableExtra(ITEMS_ID);
 
@@ -110,7 +106,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             balance = BalanceItemStoreProvider.getInstance(this).getById(id);
 
             makeChoice(balance.isChoiceProfit());
-            dateTextView.setText(dateFormat.format(balance.getDate()));
+            dateTextView.setText(WorkWithDate.dateFormat.format(balance.getDate()));
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
             imageImageView.setImageResource(Integer.parseInt(balance.getTitle()));

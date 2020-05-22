@@ -10,10 +10,7 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.databinding.ItemOfBalanceListBinding;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import com.example.wallet.feature.list.WorkWithDate;
 
 public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
@@ -61,8 +58,7 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
     public void bindTo(Balance balance) {
         this.balance = balance;
 
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(balance.getDate());
+        String currentDate = WorkWithDate.dateFormat.format(balance.getDate());
 
         dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));

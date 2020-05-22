@@ -3,7 +3,6 @@ package com.example.wallet.feature.details;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,16 +19,14 @@ import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStore;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
+import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.BalanceListAdapter;
 import com.example.wallet.feature.list.adapter.BalanceViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 public class BalanceListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,12 +36,12 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
 
     private TextView titleTextView;
     private ImageButton profitImageButton;
+
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
     private boolean profit;
 
     private GregorianCalendar currentDate = new GregorianCalendar();
-    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +79,9 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         profitImageButton.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
         Intent intent;
-        GregorianCalendar todayDate = new GregorianCalendar();
 
         switch (v.getId()) {
             case R.id.add_item:
@@ -98,12 +93,12 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
             case R.id.next_month:
                 currentDate.add(Calendar.MONTH, 1);
 
-                if(currentDate.after(todayDate)) {
+                if(currentDate.after(WorkWithDate.TODAY_DATE)) {
                     currentDate.add(Calendar.MONTH, -1);
                     Toast.makeText(this, "Next month don't exist", Toast.LENGTH_SHORT).show();
                 } else {
                     makeRecyclerView(profit);
-                    Toast.makeText(this,"Next_Month button was presses " + dateFormat.format(currentDate.getTime()),
+                    Toast.makeText(this,"Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
                             Toast.LENGTH_SHORT)
                             .show();
                 }
@@ -113,7 +108,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
                 currentDate.add(Calendar.MONTH, -1);
                 makeRecyclerView(profit);
                 Toast.makeText(this,
-                        "Previous_Month button was presses " + dateFormat.format(currentDate.getTime()),
+                        "Previous_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
                         Toast.LENGTH_SHORT)
                         .show();
                 break;
@@ -129,7 +124,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.button_back_balance_list:
-                currentDate = todayDate;
+                currentDate = WorkWithDate.TODAY_DATE;
                 makeRecyclerView(profit);
                 break;
         }
@@ -263,28 +258,11 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
 
     // Вычислить начало периода
     private long startDate(){
-        return makeMonthPeriod(true);
+        return WorkWithDate.makeMonthPeriod(true, currentDate);
     }
 
     // Вычислить конец периода
     private long endDate(){
-        return makeMonthPeriod(false);
-    }
-
-    private long makeMonthPeriod(boolean firstDay){
-        int year = currentDate.get(Calendar.YEAR);
-        int month = currentDate.get(Calendar.MONTH);
-        int day;
-
-        if(firstDay) {
-            day = currentDate.getActualMinimum(Calendar.DAY_OF_MONTH);
-        } else {
-            day = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
-        }
-
-        GregorianCalendar lastDay = new GregorianCalendar(year, month, day);
-        Log.d("12345", dateFormat.format(lastDay.getTime()));
-
-        return lastDay.getTimeInMillis();
+        return WorkWithDate.makeMonthPeriod(false, currentDate);
     }
 }

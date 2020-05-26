@@ -3,6 +3,7 @@ package com.example.wallet.feature.details;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -92,16 +93,10 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.next_month:
                 currentDate.add(Calendar.MONTH, 1);
-
-                if(currentDate.after(WorkWithDate.TODAY_DATE)) {
-                    currentDate.add(Calendar.MONTH, -1);
-                    Toast.makeText(this, "Next month don't exist", Toast.LENGTH_SHORT).show();
-                } else {
-                    makeRecyclerView(profit);
-                    Toast.makeText(this,"Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
+                makeRecyclerView(profit);
+                Toast.makeText(this,"Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
+                        Toast.LENGTH_SHORT)
+                    .show();
                 break;
 
             case R.id.previous_month:
@@ -124,7 +119,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.button_back_balance_list:
-                currentDate = WorkWithDate.TODAY_DATE;
+                currentDate = new GregorianCalendar();
                 makeRecyclerView(profit);
                 break;
         }

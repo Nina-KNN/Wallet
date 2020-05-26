@@ -29,10 +29,11 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.feature.list.CalendarDialog;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.IconsListAdapter;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     private int image;
     private String imageName = "";
     private boolean profit;
+    private GregorianCalendar date = new GregorianCalendar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
         imageImageView = findViewById(R.id.image_value_operation);
         imageImageView.setOnClickListener(this);
+        dateTextView.setOnClickListener(this);
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
         findViewById(R.id.button_back_item_operation).setOnClickListener(this);
     }
@@ -94,6 +97,10 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             case R.id.button_back_item_operation:
                 onBackPressed();
                 break;
+
+            case R.id.date_positive_operation:
+                CalendarDialog.setDateForShowCalendarDialog(dateTextView, date, this);
+                break;
         }
     }
 
@@ -104,9 +111,10 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         if(id != null) {
             // Если объект уже существует в списке
             balance = BalanceItemStoreProvider.getInstance(this).getById(id);
+            date.setTime(balance.getDate());
 
             makeChoice(balance.isChoiceProfit());
-            dateTextView.setText(WorkWithDate.dateFormat.format(balance.getDate()));
+            dateTextView.setText(WorkWithDate.showDateUtilsFormat(date, this));
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
             imageImageView.setImageResource(Integer.parseInt(balance.getTitle()));
@@ -123,6 +131,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
             profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
             balance = new Balance();
             makeChoice(profit);
+            dateTextView.setText(WorkWithDate.showDateUtilsFormat(date, this));
         }
 
         enterOperationSum();
@@ -175,13 +184,12 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         } else {
             // Сохранить созданный элемент или обновить существующий
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
+            balance.setDate(date.getTime());
 
             if(id != null) {
                 BalanceItemStoreProvider.getInstance(this).update(balance);
             } else {
                 id = UUID.randomUUID();
-
-                balance.setDate(new Date());
                 balance.setId(id);
                 BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
             }

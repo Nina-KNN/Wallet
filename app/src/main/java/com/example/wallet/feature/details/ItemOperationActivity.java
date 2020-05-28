@@ -78,9 +78,9 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
         imageImageView = findViewById(R.id.image_value_operation);
         imageImageView.setOnClickListener(this);
-        dateTextView.setOnClickListener(this);
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
         findViewById(R.id.button_back_item_operation).setOnClickListener(this);
+        findViewById(R.id.calendar_image_button_item_operation).setOnClickListener(this);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
                 onBackPressed();
                 break;
 
-            case R.id.date_positive_operation:
+            case R.id.calendar_image_button_item_operation:
                 CalendarDialog.setDateForShowCalendarDialog(dateTextView, date, this);
                 break;
         }

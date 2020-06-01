@@ -2,16 +2,12 @@ package com.example.wallet.feature.details;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +16,7 @@ import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStore;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
+import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.BalanceListAdapter;
 import com.example.wallet.feature.list.adapter.BalanceViewHolder;
@@ -29,7 +26,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class BalanceListActivity extends AppCompatActivity implements View.OnClickListener {
+public class BalanceListActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int REQUEST_ACCESS_TYPE = 1;
     public static final String PROFIT_VALUE = "profit_value";
@@ -45,28 +42,15 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     private GregorianCalendar currentDate = new GregorianCalendar();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_balance_list);
+    protected int getLayoutID() {
+        return R.layout.activity_balance_list;
+    }
 
+    @Override
+    protected void initView() {
         Intent intent = getIntent();
         profit = (boolean) intent.getSerializableExtra("profit");
 
-        viewById();
-        makeChangeProfit(profit);
-        makeDeleteItemBySwiped();
-    }
-
-    private void makeRecyclerView(boolean isProfit) {
-        adapter = new BalanceListAdapter(
-                BalanceItemStoreProvider.getInstance(this).getBalanceListForPeriod(startDate(), endDate()),
-                itemListener,
-                isProfit);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void viewById() {
         recyclerView = findViewById(R.id.recycler);
 
         titleTextView = findViewById(R.id.title_positive_list);
@@ -78,51 +62,19 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.balance_list).setOnClickListener(this);
         findViewById(R.id.button_back_balance_list).setOnClickListener(this);
         profitImageButton.setOnClickListener(this);
+
+
+        makeChangeProfit(profit);
+        makeDeleteItemBySwiped();
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-
-        switch (v.getId()) {
-            case R.id.add_item:
-                intent = new Intent(this, ItemOperationActivity.class);
-                intent.putExtra(PROFIT_VALUE, profit);
-                startActivityForResult(intent, REQUEST_ACCESS_TYPE);
-                break;
-
-            case R.id.next_month:
-                currentDate.add(Calendar.MONTH, 1);
-                makeRecyclerView(profit);
-                Toast.makeText(this,"Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
-                        Toast.LENGTH_SHORT)
-                    .show();
-                break;
-
-            case R.id.previous_month:
-                currentDate.add(Calendar.MONTH, -1);
-                makeRecyclerView(profit);
-                Toast.makeText(this,
-                        "Previous_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()),
-                        Toast.LENGTH_SHORT)
-                        .show();
-                break;
-
-            case R.id.change_list:
-                profit = !profit;
-                makeChangeProfit(profit);
-                break;
-
-            case R.id.balance_list:
-                intent = new Intent(this, BalanceResultActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.button_back_balance_list:
-                currentDate = new GregorianCalendar();
-                makeRecyclerView(profit);
-                break;
-        }
+    private void makeRecyclerView(boolean isProfit) {
+        adapter = new BalanceListAdapter(
+                BalanceItemStoreProvider.getInstance(this).getBalanceListForPeriod(firstDayInMonth(), lastDayInMonth()),
+                itemListener,
+                isProfit);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     // Обработка нажатия на элемент списка
@@ -173,7 +125,7 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     // Обновить список итемов
     private void updateList() {
         List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
-            getBalanceListForPeriod(startDate(), endDate());
+            getBalanceListForPeriod(firstDayInMonth(), lastDayInMonth());
 
         adapter.submitNewList(balanceList);
     }
@@ -252,12 +204,52 @@ public class BalanceListActivity extends AppCompatActivity implements View.OnCli
     }
 
     // Вычислить начало периода
-    private long startDate(){
+    private long firstDayInMonth() {
         return WorkWithDate.makeMonthPeriod(true, currentDate);
     }
 
     // Вычислить конец периода
-    private long endDate(){
+    private long lastDayInMonth(){
         return WorkWithDate.makeMonthPeriod(false, currentDate);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+
+        switch (v.getId()) {
+            case R.id.add_item:
+                intent = new Intent(this, ItemOperationActivity.class);
+                intent.putExtra(PROFIT_VALUE, profit);
+                startActivityForResult(intent, REQUEST_ACCESS_TYPE);
+                break;
+
+            case R.id.next_month:
+                currentDate.add(Calendar.MONTH, 1);
+                makeRecyclerView(profit);
+                showToast("Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()));
+                break;
+
+            case R.id.previous_month:
+                currentDate.add(Calendar.MONTH, -1);
+                makeRecyclerView(profit);
+                showToast("Previous_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()));
+                break;
+
+            case R.id.change_list:
+                profit = !profit;
+                makeChangeProfit(profit);
+                break;
+
+            case R.id.balance_list:
+                intent = new Intent(this, BalanceResultActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.button_back_balance_list:
+                currentDate = new GregorianCalendar();
+                makeRecyclerView(profit);
+                break;
+        }
     }
 }

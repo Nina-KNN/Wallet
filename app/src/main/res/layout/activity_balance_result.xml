@@ -90,6 +90,35 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title_balance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:text="@string/title_balance"/>
+
+                <TextView
+                    android:id="@+id/balance_result_balance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:hint="balance"/>
+
+            </LinearLayout>
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="3dp"
@@ -104,23 +133,23 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/title_balance"
+                    android:id="@+id/title_total_balance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="3dp"
-                    android:textSize="25dp"
+                    android:textSize="20dp"
                     android:textStyle="bold"
-                    android:text="@string/title_balance"/>
+                    android:text="@string/total_balance"/>
 
                 <TextView
-                    android:id="@+id/balance_result_balance"
+                    android:id="@+id/total_balance_result_balance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:textSize="25dp"
+                    android:textSize="20dp"
                     android:textStyle="bold"
                     android:hint="balance"/>
 

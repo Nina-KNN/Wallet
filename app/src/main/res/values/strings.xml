@@ -20,4 +20,5 @@
     <string name="snackbar_action">UNDO</string>
     <string name="choice_category">Please, choice the category</string>
     <string name="make_choice">Make choice</string>
+    <string name="total_balance">TOTAL BALANCE</string>
 </resources>

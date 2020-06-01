@@ -3,7 +3,6 @@ package com.example.wallet.feature.details;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -17,10 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +26,7 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.CalendarDialog;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.IconsListAdapter;
@@ -40,7 +38,7 @@ import java.util.UUID;
 import static com.example.wallet.feature.details.BalanceListActivity.ITEMS_ID;
 import static com.example.wallet.feature.details.BalanceListActivity.PROFIT_VALUE;
 
-public class ItemOperationActivity extends AppCompatActivity implements View.OnClickListener{
+public class ItemOperationActivity extends BaseActivity implements View.OnClickListener{
     private TextView dateTextView;
     private TextView titleTextView;
     private CheckBox choiceProfitCheckBox;
@@ -59,16 +57,12 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
     private GregorianCalendar date = new GregorianCalendar();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_operation);
-
-        viewById();
-        fillAndShowAllData();
+    protected int getLayoutID() {
+        return R.layout.activity_item_operation;
     }
 
-
-    private void viewById() {
+    @Override
+    protected void initView() {
         dateTextView = findViewById(R.id.date_positive_operation);
         titleTextView = findViewById(R.id.title_positive_operation);
         choiceProfitCheckBox = findViewById(R.id.choice_profit_positive_operation);
@@ -81,27 +75,8 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.save_button_positive_operation).setOnClickListener(this);
         findViewById(R.id.button_back_item_operation).setOnClickListener(this);
         findViewById(R.id.calendar_image_button_item_operation).setOnClickListener(this);
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.image_value_operation:
-                makeRecyclerView(profit);
-                break;
-
-            case R.id.save_button_positive_operation:
-                saveBalanceData();
-                break;
-
-            case R.id.button_back_item_operation:
-                onBackPressed();
-                break;
-
-            case R.id.calendar_image_button_item_operation:
-                CalendarDialog.setDateForShowCalendarDialog(dateTextView, date, this);
-                break;
-        }
+        fillAndShowAllData();
     }
 
     private void fillAndShowAllData() {
@@ -178,9 +153,9 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
 
     private void saveBalanceData() {
         if(sumEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(sumEditText.getText())) == 0) {
-            Toast.makeText(this, R.string.message_about_wrong_data, Toast.LENGTH_SHORT).show();
+            showToast(getString(R.string.message_about_wrong_data));
         } else if(imageName.isEmpty() || imageName.equals(String.valueOf(R.string.make_choice))) {
-            Toast.makeText(this, R.string.choice_category, Toast.LENGTH_SHORT).show();
+            showToast(getString(R.string.choice_category));
         } else {
             // Сохранить созданный элемент или обновить существующий
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
@@ -281,5 +256,26 @@ public class ItemOperationActivity extends AppCompatActivity implements View.OnC
         }
 
         return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.image_value_operation:
+                makeRecyclerView(profit);
+                break;
+
+            case R.id.save_button_positive_operation:
+                saveBalanceData();
+                break;
+
+            case R.id.button_back_item_operation:
+                onBackPressed();
+                break;
+
+            case R.id.calendar_image_button_item_operation:
+                CalendarDialog.setDateForShowCalendarDialog(dateTextView, date, this);
+                break;
+        }
     }
 }

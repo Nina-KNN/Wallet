@@ -31,7 +31,7 @@ public class WorkWithDate {
         if(firstDay) {
             day = currentDate.getActualMinimum(Calendar.DAY_OF_MONTH);
         } else {
-            day = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+            day = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
         }
 
         GregorianCalendar lastDay = new GregorianCalendar(year, month, day);

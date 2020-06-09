@@ -3,7 +3,7 @@ package com.example.wallet.data.balance;
 import java.util.Date;
 import java.util.UUID;
 
-public class Balance {
+public class Balance implements Comparable<Balance>{
     private UUID id;
     private String title; // содержит значение "Доход" или "Расход"
     private int operationSum; // сумма операции дохода или расхода
@@ -64,5 +64,11 @@ public class Balance {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+
+    @Override
+    public int compareTo(Balance o) {
+        return (int) (o.getDate().getTime() - this.getDate().getTime());
     }
 }

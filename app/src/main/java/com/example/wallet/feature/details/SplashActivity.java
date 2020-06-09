@@ -12,7 +12,7 @@ public class SplashActivity extends BaseActivity {
     private Handler handler;
     private ProgressBar progressBar;
     private int startTime;
-    private final int maxTime = 300;
+    private final int maxTime = 200;
 
     @Override
     protected int getLayoutID() {

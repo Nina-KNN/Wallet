@@ -20,6 +20,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
 
     RelativeLayout relativeLayout;
 
+    private TextView dateTextView;
     private TextView profitTextView;
     private TextView expenseTextView;
     private TextView balanceTextView;
@@ -35,6 +36,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initView() {
         relativeLayout = findViewById(R.id.content_main);
+        dateTextView = findViewById(R.id.date_profit);
         profitTextView = findViewById(R.id.profit_result_balance);
         expenseTextView = findViewById(R.id.expense_result_balance);
         balanceTextView = findViewById(R.id.balance_result_balance);
@@ -42,6 +44,8 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
 
         findViewById(R.id.profit_button_balance_result).setOnClickListener(this);
         findViewById(R.id.expense_button_balance_result).setOnClickListener(this);
+
+        dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(new GregorianCalendar(), this));
 
         showBalance();
         makeTouchListener(BalanceResultActivity.this);
@@ -81,7 +85,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
     }
 
     // Открыть новую активити и передать значение profit
-    private void openNewActivity(Boolean profit) {
+    private void openBalanceListActivity(Boolean profit) {
         Intent intent = new Intent(this, BalanceListActivity.class);
         intent.putExtra("profit", profit);
         startActivity(intent);
@@ -97,12 +101,12 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
 
             public void onSwipeRight() {
                 // Переход на активити со списком Доходов
-                openNewActivity(true);
+                openBalanceListActivity(true);
             }
 
             public void onSwipeLeft() {
                 // Переход на активити со списком Расходов
-                openNewActivity(false);
+                openBalanceListActivity(false);
             }
 
             public void onSwipeBottom() {
@@ -116,10 +120,10 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.profit_button_balance_result:
-                openNewActivity(true);
+                openBalanceListActivity(true);
                 break;
             case R.id.expense_button_balance_result:
-                openNewActivity(false);
+                openBalanceListActivity(false);
                 break;
         }
     }

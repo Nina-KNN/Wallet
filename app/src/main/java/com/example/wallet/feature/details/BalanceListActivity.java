@@ -227,13 +227,11 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             case R.id.next_month:
                 currentDate.add(Calendar.MONTH, 1);
                 makeRecyclerView(profit);
-                showToast("Next_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()));
                 break;
 
             case R.id.previous_month:
                 currentDate.add(Calendar.MONTH, -1);
                 makeRecyclerView(profit);
-                showToast("Previous_Month button was presses " + WorkWithDate.dateFormat.format(currentDate.getTime()));
                 break;
 
             case R.id.change_list:

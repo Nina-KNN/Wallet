@@ -22,6 +22,12 @@ public class WorkWithDate {
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
     }
 
+    public static String showDateUtilsFormatWithoutDay(GregorianCalendar date, Context context) {
+        return DateUtils.formatDateTime(context,
+                date.getTimeInMillis(),
+                DateUtils.FORMAT_NO_MONTH_DAY | DateUtils.FORMAT_SHOW_YEAR);
+    }
+
 
     public static long makeMonthPeriod(boolean firstDay, GregorianCalendar currentDate){
         int year = currentDate.get(Calendar.YEAR);

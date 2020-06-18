@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,52 +7,62 @@
     android:orientation="vertical"
     tools:context=".feature.details.BalanceListActivity">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/colorBlueDark" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorBlueDark" >
 
-            <ImageButton
-                android:id="@+id/button_back_balance_list"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_arrow_left_button"
-                android:layout_marginLeft="8dp"
-                android:background="@android:color/transparent"/>
+        <ImageButton
+            android:id="@+id/button_back_balance_list"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_arrow_left_button"
+            android:layout_marginLeft="8dp"
+            android:background="@android:color/transparent"/>
 
-            <TextView
-                android:id="@+id/title_positive_list"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:paddingRight="30dp"
-                android:layout_marginRight="8dp"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:hint="@string/title_profit"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/title_positive_list"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="70dp"
-            android:padding="5dp"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="30dp"
+            android:layout_marginRight="8dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:hint="@string/title_profit"/>
+    </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
+    <TextView
+        android:id="@+id/month_and_year_balance_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:hint="Month, Year" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="70dp"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="bottom"
+        android:layout_marginTop="-60dp"
         android:padding="5dp"
         android:background="@color/colorBlueDark">
 
@@ -98,4 +108,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

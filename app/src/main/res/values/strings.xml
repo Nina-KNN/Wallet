@@ -21,4 +21,5 @@
     <string name="choice_category">Please, choice the category</string>
     <string name="make_choice">Make choice</string>
     <string name="total_balance">TOTAL BALANCE</string>
+    <string name="developer">by Nina Kruchinkina</string>
 </resources>

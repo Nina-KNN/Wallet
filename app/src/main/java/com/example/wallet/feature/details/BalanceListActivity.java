@@ -34,12 +34,13 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
     private TextView titleTextView;
     private ImageButton profitImageButton;
+    private TextView dateTextView;
 
     private RecyclerView recyclerView;
     private BalanceListAdapter adapter;
     private boolean profit;
 
-    private GregorianCalendar currentDate = new GregorianCalendar();
+    private GregorianCalendar currentDate;
 
     @Override
     protected int getLayoutID() {
@@ -48,6 +49,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initView() {
+        currentDate = new GregorianCalendar();
         Intent intent = getIntent();
         profit = (boolean) intent.getSerializableExtra("profit");
 
@@ -55,6 +57,8 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
         titleTextView = findViewById(R.id.title_positive_list);
         profitImageButton = findViewById(R.id.change_list);
+        dateTextView = findViewById(R.id.month_and_year_balance_list);
+        dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
 
         findViewById(R.id.add_item).setOnClickListener(this);
         findViewById(R.id.next_month).setOnClickListener(this);
@@ -62,7 +66,6 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
         findViewById(R.id.balance_list).setOnClickListener(this);
         findViewById(R.id.button_back_balance_list).setOnClickListener(this);
         profitImageButton.setOnClickListener(this);
-
 
         makeChangeProfit(profit);
         makeDeleteItemBySwiped();
@@ -225,13 +228,23 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.next_month:
-                currentDate.add(Calendar.MONTH, 1);
-                makeRecyclerView(profit);
+                if(WorkWithDate.isMonthInBalanceList(this, lastDayInMonth(), false)) {
+                    currentDate.add(Calendar.MONTH, 1);
+                    dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
+                    makeRecyclerView(profit);
+                } else {
+                    showToast("Data don't exist in next month");
+                }
                 break;
 
             case R.id.previous_month:
-                currentDate.add(Calendar.MONTH, -1);
-                makeRecyclerView(profit);
+                if(WorkWithDate.isMonthInBalanceList(this, firstDayInMonth(), true)) {
+                    currentDate.add(Calendar.MONTH, -1);
+                    dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
+                    makeRecyclerView(profit);
+                } else {
+                    showToast("Data don't exist in previous month");
+                }
                 break;
 
             case R.id.change_list:
@@ -246,6 +259,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
             case R.id.button_back_balance_list:
                 currentDate = new GregorianCalendar();
+                dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
                 makeRecyclerView(profit);
                 break;
         }

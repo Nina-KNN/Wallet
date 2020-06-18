@@ -18,7 +18,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/ic_wallet"/>
+        android:src="@drawable/ic_icon_wallet"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         android:textStyle="italic"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
-        android:text="by Nina Kruchinkina" />
+        android:text="@string/developer" />
 
     </LinearLayout>
 

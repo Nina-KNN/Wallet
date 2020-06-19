@@ -11,6 +11,7 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.OnSwipeTouchListener;
+import com.example.wallet.feature.list.PrefsUtils;
 import com.example.wallet.feature.list.WorkWithDate;
 
 import java.util.GregorianCalendar;
@@ -27,6 +28,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
     private TextView totalBalanceTextView;
 
     private List<Balance> balanceList;
+    private GregorianCalendar today = new GregorianCalendar();
 
     @Override
     protected int getLayoutID() {
@@ -45,7 +47,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.profit_button_balance_result).setOnClickListener(this);
         findViewById(R.id.expense_button_balance_result).setOnClickListener(this);
 
-        dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(new GregorianCalendar(), this));
+        dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(today, this));
 
         showBalance();
         makeTouchListener(BalanceResultActivity.this);
@@ -53,16 +55,25 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
 
     // отобразить доход, расход и баланс на экране
     private void showBalance() {
-        GregorianCalendar todayDate = new GregorianCalendar();
-        long firstDayInMonth = WorkWithDate.makeMonthPeriod(true, todayDate);
-        long lastDayInMonth = WorkWithDate.makeMonthPeriod(false, todayDate);
+        long firstDayInMonth = WorkWithDate.makeMonthPeriod(true, today);
+        long lastDayInMonth = WorkWithDate.makeMonthPeriod(false, today);
 
         balanceList = BalanceItemStoreProvider.getInstance(this).getBalanceList();
         int profit = 0;
         int expense = 0;
         int result = 0;
 
+        long minDay = today.getTimeInMillis();
+        long maxDay = today.getTimeInMillis();
+
         for(Balance balance : balanceList) {
+            if(balance.getDate().getTime() < minDay) {
+                minDay = balance.getDate().getTime();
+            }
+            if(balance.getDate().getTime() > maxDay) {
+                maxDay = balance.getDate().getTime();
+            }
+
             if(balance.isChoiceProfit()) {
                 result += Math.abs(balance.getOperationSum());
 
@@ -78,6 +89,9 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
             }
         }
 
+        CheckCorrectDataInPrefsUtils(minDay, true);
+        CheckCorrectDataInPrefsUtils(maxDay, false);
+
         profitTextView.setText(String.valueOf(profit));
         expenseTextView.setText(String.valueOf(expense));
         balanceTextView.setText(String.valueOf(profit - expense));
@@ -90,6 +104,21 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
         intent.putExtra("profit", profit);
         startActivity(intent);
         finish();
+    }
+
+//    Проверить правильность сохраненных в prefsUtils первого и последнего дня  и при необходимости их перезаписать
+    private void CheckCorrectDataInPrefsUtils(long date, boolean firstDay) {
+        PrefsUtils prefsUtils = new PrefsUtils(this);
+
+        if(firstDay) {
+            if(prefsUtils.getFirstDayInBalanceList() != date) {
+                prefsUtils.saveFirstDateInBalanceList(date);
+            }
+        } else {
+            if(prefsUtils.getLastDayInBalanceList() != date) {
+                prefsUtils.saveLastDayInBalanceList(date);
+            }
+        }
     }
 
     // Действия при свайпах в разные стороны

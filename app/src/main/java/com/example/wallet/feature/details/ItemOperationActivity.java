@@ -160,6 +160,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             // Сохранить созданный элемент или обновить существующий
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             balance.setDate(date.getTime());
+            WorkWithDate.checkCorrectDateInPrefsUtils(date.getTimeInMillis(), this);
 
             if(id != null) {
                 BalanceItemStoreProvider.getInstance(this).update(balance);

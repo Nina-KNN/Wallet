@@ -17,7 +17,7 @@
             android:id="@+id/button_back_item_operation"
             android:layout_width="30dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_arrow_left_button"
+            app:srcCompat="@drawable/ic_arrow_left_button"
             android:layout_marginLeft="8dp"
             android:background="@android:color/transparent"/>
 
@@ -82,7 +82,7 @@
                                 android:id="@+id/image_value_operation"
                                 android:layout_width="75dp"
                                 android:layout_height="75dp"
-                                android:src="@drawable/ic_touch_app"
+                                app:srcCompat="@drawable/ic_touch_app"
                                 tools:ignore="VectorDrawableCompat" />
 
                             <TextView
@@ -126,7 +126,7 @@
                         android:layout_weight="1"
                         android:background="@color/colorPrimary"
                         android:layout_marginLeft="8dp"
-                        android:src="@drawable/ic_arrow_down_button"/>
+                        app:srcCompat="@drawable/ic_arrow_down_button"/>
 
 
                 </LinearLayout>

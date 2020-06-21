@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/p_growth_chart"/>
+                app:srcCompat="@drawable/p_growth_chart"/>
 
             <TextView
                 android:id="@+id/date_profit"
@@ -179,7 +180,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_profit_button"
+                app:srcCompat="@drawable/ic_profit_button"
                 android:background="@android:color/transparent"/>
 
             <ImageButton
@@ -187,7 +188,23 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_expense_button"
+                app:srcCompat="@drawable/ic_expense_button"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/chart_button_balance_result"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_chart_button"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/settings_button_balance_result"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_settings_button"
                 android:background="@android:color/transparent"/>
 
         </LinearLayout>

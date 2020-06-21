@@ -46,6 +46,8 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
 
         findViewById(R.id.profit_button_balance_result).setOnClickListener(this);
         findViewById(R.id.expense_button_balance_result).setOnClickListener(this);
+        findViewById(R.id.chart_button_balance_result).setOnClickListener(this);
+        findViewById(R.id.settings_button_balance_result).setOnClickListener(this);
 
         dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(today, this));
 
@@ -153,6 +155,14 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.expense_button_balance_result:
                 openBalanceListActivity(false);
+                break;
+            case R.id.chart_button_balance_result:
+                showToast("Chart button pressed");
+                // Open Char activity
+                break;
+            case R.id.settings_button_balance_result:
+                showToast("Setting button pressed");
+//                 Open Settings activity
                 break;
         }
     }

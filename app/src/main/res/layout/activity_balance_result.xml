@@ -60,7 +60,7 @@
                     android:layout_weight="1"
                     android:padding="3dp"
                     android:textSize="20dp"
-                    android:text="@string/title_profit"/>
+                    android:text="@string/profit"/>
 
                 <TextView
                     android:id="@+id/profit_result_balance"
@@ -87,7 +87,7 @@
                     android:layout_weight="1"
                     android:padding="3dp"
                     android:textSize="20dp"
-                    android:text="@string/title_expense"/>
+                    android:text="@string/expense"/>
 
                 <TextView
                     android:id="@+id/expense_result_balance"
@@ -115,7 +115,7 @@
                     android:padding="3dp"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:text="@string/title_balance"/>
+                    android:text="@string/balance"/>
 
                 <TextView
                     android:id="@+id/balance_result_balance"

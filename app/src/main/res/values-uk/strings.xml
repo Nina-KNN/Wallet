@@ -1,0 +1,24 @@
+<resources>
+    <string name="title_profit">ДОХІД</string>
+    <string name="title_expense">ВИТРАТИ</string>
+    <string name="title_balance">БАЛАНС</string>
+
+    <string name="profit">Дохід</string>
+    <string name="expense">Витрати</string>
+    <string name="balance">Баланс</string>
+    <string name="total_balance">Сумарний баланс</string>
+
+    <string name="dialog_delete_item_message">Ви дійсно хочете видалити цю позицію?</string>
+    <string name="snackbar_message">Видалено</string>
+    <string name="snackbar_action">Відмінити видалення</string>
+
+    <string name="exist_next_month">Немає записів в наступних місяцях</string>
+    <string name="exist_prev_month">Немає записів в попередніх місяцях</string>
+
+    <string name="enter_operationSum">Введіть суму</string>
+    <string name="comment">Додати замітку</string>
+    <string name="choice_category">Виберіть категорію</string>
+    <string name="make_choice">Виберіть категорію</string>
+    <string name="message_about_wrong_data">Поле \"Введіть суму\" не повинно бути порожнім або дорівнювати \"0\"</string>
+    <string name="save_button">Зберегти</string>
+</resources>

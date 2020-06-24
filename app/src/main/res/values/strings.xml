@@ -1,25 +1,27 @@
 <resources>
-    <string name="app_name">Wallet</string>
-
-    <string name="enter_operationSum">Enter operation sum</string>
-    <string name="enter_profit">Enter profit</string>
-    <string name="enter_expense">Enter expense</string>
+    <string name="app_name" translatable="false">Wallet</string>
+    <string name="developer" translatable="false">by Nina Kruchinkina</string>
 
     <string name="title_profit">PROFIT</string>
     <string name="title_expense">EXPENSE</string>
     <string name="title_balance">BALANCE</string>
 
-    <string name="comment">Enter comment</string>
-    <string name="date">Date</string>
-    <string name="save_button">Save</string>
+    <string name="profit">Profit</string>
+    <string name="expense">Expense</string>
+    <string name="balance">Balance</string>
+    <string name="total_balance">TOTAL BALANCE</string>
 
-    <string name="menu_add_item">Add</string>
-    <string name="message_about_wrong_data">The field \"Enter profit or expense\" should not be empty and should not be equal to \"0\"</string>
-    <string name="dialog_delete_item_message">Do you really want to delete this item?</string>
+    <string name="dialog_delete_item_message">Do you really want to delete this position?</string>
     <string name="snackbar_message">Item was deleted</string>
     <string name="snackbar_action">UNDO</string>
+
+    <string name="exist_next_month">Data don\'t exist in next month</string>
+    <string name="exist_prev_month">Data don\'t exist in previous month</string>
+
+    <string name="enter_operationSum">Enter operation sum</string>
+    <string name="comment">Add note</string>
+    <string name="message_about_wrong_data">The field \"Enter operation sum\" should not be empty and should not be equal to \"0\"</string>
     <string name="choice_category">Please, choice the category</string>
     <string name="make_choice">Make choice</string>
-    <string name="total_balance">TOTAL BALANCE</string>
-    <string name="developer">by Nina Kruchinkina</string>
+    <string name="save_button">Save</string>
 </resources>

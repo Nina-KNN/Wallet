@@ -1,0 +1,24 @@
+<resources>
+    <string name="title_profit">ДОХОД</string>
+    <string name="title_expense">РАСХОД</string>
+    <string name="title_balance">БАЛАНС</string>
+
+    <string name="profit">Доход</string>
+    <string name="expense">Расход</string>
+    <string name="balance">Баланс</string>
+    <string name="total_balance">Итоговый баланс</string>
+
+    <string name="dialog_delete_item_message">Вы действительно хотите удалить эту позицию?</string>
+    <string name="snackbar_message">Удалено</string>
+    <string name="snackbar_action">Отменить удаление</string>
+
+    <string name="exist_next_month">Нет записей в следуюших месяцах</string>
+    <string name="exist_prev_month">Нет записей в предыдущих месяцах</string>
+
+    <string name="enter_operationSum">Введите сумму</string>
+    <string name="comment">Добавить заметку</string>
+    <string name="choice_category">Выбрать категорию</string>
+    <string name="make_choice">Выберети категорию</string>
+    <string name="message_about_wrong_data">Поле \"Введите сумму\" не должно быть пустым или равняться \"0\"</string>
+    <string name="save_button">Сохранить</string>
+</resources>

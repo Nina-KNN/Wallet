@@ -197,10 +197,10 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
     private void makeChangeProfit(boolean profit) {
         if(profit) {
             profitImageButton.setImageResource(R.drawable.ic_expense_button);
-            titleTextView.setText("PROFIT");
+            titleTextView.setText(R.string.title_profit);
         } else {
             profitImageButton.setImageResource(R.drawable.ic_profit_button);
-            titleTextView.setText("EXPENSE");
+            titleTextView.setText(R.string.title_expense);
         }
 
         makeRecyclerView(profit);;
@@ -233,7 +233,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
                     makeRecyclerView(profit);
                 } else {
-                    showToast("Data don't exist in next month");
+                    showToast(getString(R.string.exist_next_month));
                 }
                 break;
 
@@ -243,7 +243,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
                     makeRecyclerView(profit);
                 } else {
-                    showToast("Data don't exist in previous month");
+                    showToast(getString(R.string.exist_prev_month));
                 }
                 break;
 

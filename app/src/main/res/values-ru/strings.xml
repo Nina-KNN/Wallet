@@ -17,8 +17,8 @@
 
     <string name="enter_operationSum">Введите сумму</string>
     <string name="comment">Добавить заметку</string>
-    <string name="choice_category">Выбрать категорию</string>
-    <string name="make_choice">Выберети категорию</string>
+    <string name="choice_category">Пожалуйста, сделайте выбор категории</string>
+    <string name="make_choice">Категория</string>
     <string name="message_about_wrong_data">Поле \"Введите сумму\" не должно быть пустым или равняться \"0\"</string>
     <string name="save_button">Сохранить</string>
 </resources>

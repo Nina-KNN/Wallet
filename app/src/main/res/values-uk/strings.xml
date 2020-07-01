@@ -17,8 +17,8 @@
 
     <string name="enter_operationSum">Введіть суму</string>
     <string name="comment">Додати замітку</string>
-    <string name="choice_category">Виберіть категорію</string>
-    <string name="make_choice">Виберіть категорію</string>
+    <string name="choice_category">Будь ласка, виберіть категорію</string>
+    <string name="make_choice">Категорія</string>
     <string name="message_about_wrong_data">Поле \"Введіть суму\" не повинно бути порожнім або дорівнювати \"0\"</string>
     <string name="save_button">Зберегти</string>
 </resources>

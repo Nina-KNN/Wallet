@@ -55,3 +55,22 @@ public class CreateIconsList {
         return iconsList;
     }
 }
+
+
+  /*
+public class BalanceItemStoreProvider {
+    //Singleton
+    private static BalanceItemStore instance;
+
+    private BalanceItemStoreProvider() {}
+
+    public static BalanceItemStore getInstance(Context context) {
+        if(instance == null) {
+            instance = new RoomBalanceItemStore(context);
+        }
+
+        return instance;
+    }
+    //End of singleton
+}
+     */

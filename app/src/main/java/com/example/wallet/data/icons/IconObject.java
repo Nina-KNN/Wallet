@@ -1,17 +1,40 @@
 package com.example.wallet.data.icons;
 
+import java.util.UUID;
+
 public class IconObject {
 
+    private UUID iconId;
     private int iconImage;
     private String iconName;
-    private boolean profit;
+    private boolean iconProfit;
     private boolean iconVisibility;
+    private int iconPosition;
 
-    public IconObject(int iconImage, String iconName, boolean profit, boolean iconVisibility) {
+    public IconObject() {}
+
+    public IconObject(int iconImage, String iconName, boolean iconProfit, boolean iconVisibility) {
         this.iconImage = iconImage;
         this.iconName = iconName;
-        this.profit = profit;
+        this.iconProfit = iconProfit;
         this.iconVisibility = iconVisibility;
+    }
+
+    public IconObject(UUID iconId, int iconImage, String iconName, boolean iconProfit, boolean iconVisibility, int position) {
+        this.iconId = iconId;
+        this.iconImage = iconImage;
+        this.iconName = iconName;
+        this.iconProfit = iconProfit;
+        this.iconVisibility = iconVisibility;
+        this.iconPosition = position;
+    }
+
+    public UUID getIconId() {
+        return iconId;
+    }
+
+    public void setIconId(UUID iconId) {
+        this.iconId = iconId;
     }
 
     public int getIconImage() {
@@ -30,12 +53,12 @@ public class IconObject {
         this.iconName = iconName;
     }
 
-    public boolean isProfit() {
-        return profit;
+    public boolean isIconProfit() {
+        return iconProfit;
     }
 
-    public void setProfit(boolean profit) {
-        this.profit = profit;
+    public void setIconProfit(boolean iconProfit) {
+        this.iconProfit = iconProfit;
     }
 
     public boolean isIconVisibility() {
@@ -44,5 +67,13 @@ public class IconObject {
 
     public void setIconVisibility(boolean iconVisibility) {
         this.iconVisibility = iconVisibility;
+    }
+
+    public int getIconPosition() {
+        return iconPosition;
+    }
+
+    public void setIconPosition(int iconPosition) {
+        this.iconPosition = iconPosition;
     }
 }

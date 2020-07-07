@@ -24,4 +24,6 @@
     <string name="choice_category">Please, choice the category</string>
     <string name="make_choice">Category</string>
     <string name="save_button">Save</string>
+
+    <string name="category_setting">CATEGORY SETTING</string>
 </resources>

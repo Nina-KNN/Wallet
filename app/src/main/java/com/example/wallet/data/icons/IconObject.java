@@ -13,13 +13,6 @@ public class IconObject {
 
     public IconObject() {}
 
-    public IconObject(int iconImage, String iconName, boolean iconProfit, boolean iconVisibility) {
-        this.iconImage = iconImage;
-        this.iconName = iconName;
-        this.iconProfit = iconProfit;
-        this.iconVisibility = iconVisibility;
-    }
-
     public IconObject(UUID iconId, int iconImage, String iconName, boolean iconProfit, boolean iconVisibility, int position) {
         this.iconId = iconId;
         this.iconImage = iconImage;

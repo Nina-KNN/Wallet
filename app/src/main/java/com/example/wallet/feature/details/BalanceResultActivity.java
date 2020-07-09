@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.wallet.IconsSettingsActivity;
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
@@ -162,7 +161,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
                 // Open Char activity
                 break;
             case R.id.settings_button_balance_result:
-                Intent intent = new Intent(this, IconsSettingsActivity.class);
+                Intent intent = new Intent(this, CategorySettingsActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -33,7 +33,7 @@
             android:screenOrientation="nosensor"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".IconsSettingsActivity"
+            android:name=".feature.details.CategorySettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="nosensor" />
     </application>

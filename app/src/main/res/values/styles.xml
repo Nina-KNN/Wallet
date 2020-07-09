@@ -11,12 +11,10 @@
 
     <style name="boldText">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
     </style>
 
     <style name="normalText">
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">10dp</item>
     </style>
 
 </resources>

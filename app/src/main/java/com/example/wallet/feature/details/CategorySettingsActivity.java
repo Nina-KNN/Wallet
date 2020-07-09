@@ -1,4 +1,4 @@
-package com.example.wallet;
+package com.example.wallet.feature.details;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,12 +7,19 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.wallet.R;
+import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.OnSwipeTouchListener;
+import com.example.wallet.feature.list.adapter.CategorySettingAdapter;
 
-public class IconsSettingsActivity extends BaseActivity implements View.OnClickListener{
+public class CategorySettingsActivity extends BaseActivity implements View.OnClickListener{
 
     RelativeLayout relativeLayout;
+    private RecyclerView recyclerView;
 
     private TextView profitTextView;
     private TextView expenseTextView;
@@ -21,7 +28,7 @@ public class IconsSettingsActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_icons_settings;
+        return R.layout.activity_category_settings;
     }
 
     @Override
@@ -37,12 +44,19 @@ public class IconsSettingsActivity extends BaseActivity implements View.OnClickL
         expenseTextView.setOnClickListener(this);
 
         makeTouchListener(this);
+        makeRecyclerView(false);
     }
 
+    private void makeRecyclerView(boolean isProfit) {
+        recyclerView = findViewById(R.id.recycler_category_setting);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new CategorySettingAdapter(CreateIconsList.getInstanceIcon(isProfit)));
+    }
 
     private void profitOrExpenseWasChoice(boolean isProfit) {
         Resources res = getResources();
         int lineColor = res.getColor(R.color.colorBlueDark);
+        makeRecyclerView(isProfit);
 
         if(isProfit) {
             profitTextView.setTextAppearance(getApplicationContext(), R.style.boldText);

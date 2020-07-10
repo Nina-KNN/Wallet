@@ -38,7 +38,7 @@
                 android:layout_gravity="center_vertical"
                 tools:text="Category name" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/shown_eye_category_setting"
                 android:layout_width="0dp"
                 android:layout_height="30dp"

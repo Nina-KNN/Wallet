@@ -1,21 +1,22 @@
 package com.example.wallet.feature.list.adapter;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.icons.IconObject;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CategorySettingAdapter extends RecyclerView.Adapter<CategorySettingViewHolder>{
 
@@ -54,7 +55,7 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
 
     private ImageView categoryImageView;
     private TextView categoryNameTextView;
-    private ImageView shownCategoryImageView;
+    private ImageButton shownCategoryImageButton;
     private ImageButton editImageButton;
 
     public CategorySettingViewHolder(@NonNull View itemView) {
@@ -62,28 +63,61 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
 
         categoryImageView = itemView.findViewById(R.id.icon_image_category_setting);
         categoryNameTextView = itemView.findViewById(R.id.category_name_category_setting);
-        shownCategoryImageView = itemView.findViewById(R.id.shown_eye_category_setting);
+        shownCategoryImageButton = itemView.findViewById(R.id.shown_eye_category_setting);
         editImageButton = itemView.findViewById(R.id.edit_category_setting);
     }
 
     public void bindTo(IconObject icon) {
         this.icon = icon;
 
-        UUID iconId = icon.getIconId();
         categoryImageView.setImageResource(icon.getIconImage());
         categoryNameTextView.setText(icon.getIconName());
         if(icon.isIconVisibility()) {
-            shownCategoryImageView.setImageResource(R.drawable.ic_eye_on_button);
+            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_on_button);
         } else {
-            shownCategoryImageView.setImageResource(R.drawable.ic_eye_off_button);
+            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
         }
 
         editImageButton.setOnClickListener(this);
+        shownCategoryImageButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Log.d("12345", "Button pressed" + " " + v.getId() + " " + icon.getIconId());
+        switch (v.getId()) {
+            case R.id.shown_eye_category_setting:
+                changeCategoryVisibility(v.getContext(), icon);
+                break;
+            case R.id.edit_category_setting:
+                createAlertDialog(v.getContext(), icon);
+                break;
+        }
+    }
 
+    private void changeCategoryVisibility(Context context, IconObject icon) {
+        if(icon.isIconVisibility()) {
+            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
+        } else {
+            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_on_button);
+        }
+    }
+
+    private AlertDialog createAlertDialog(Context context, IconObject icon) {
+        EditText inputEditTextField = new EditText(context);
+        inputEditTextField.setText(icon.getIconName());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Edit category " + "\"" + icon.getIconName() + "\" to:")
+                .setView(inputEditTextField)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String editTextInput = inputEditTextField.getText().toString();
+                    categoryNameTextView.setText(editTextInput);
+                    dialog.cancel();
+                })
+                .setNegativeButton("Cancel", null);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        return alertDialog;
     }
 }

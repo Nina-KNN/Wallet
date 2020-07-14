@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase;
 
 @Database(
         entities = {BalanceEntity.class},
-        version = 1,
+        version = 2,
         exportSchema = false
 )
 public abstract class BalanceDatabase extends RoomDatabase {

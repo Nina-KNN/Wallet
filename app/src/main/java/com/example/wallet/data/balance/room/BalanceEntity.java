@@ -9,8 +9,7 @@ public class BalanceEntity {
     @PrimaryKey
     @NonNull
     public String id;
-
-    public String title;
+    public String categoryId;
     public int operationSum;
     public boolean choiceProfit;
     public long date;

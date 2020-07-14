@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.data.balance.Balance;
-import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.databinding.ItemOfBalanceListBinding;
@@ -68,81 +67,12 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         commentTextView.setText(balance.getComment());
 
-//        IconObject icon = IconsItemStoreProvider.getInstance(context).getIconById(balance.getTitle());
-//        itemImageView.setImageResource(icon.getIconImage());
-//        titleView.setText(icon.getIconName());
+        IconObject icon = IconsItemStoreProvider.getInstance(context).getIconById(balance.getCategoryId());
+        itemImageView.setImageResource(icon.getIconImage());
+        titleView.setText(icon.getIconName());
     }
 
     public Balance getBalance() {
         return balance;
     }
 }
-
-
-/*
-public class BalanceViewHolder extends RecyclerView.ViewHolder {
-
-    private Balance balance;
-    private BalanceListAdapter.ItemListener itemListener;
-
-    private TextView titleView;
-    private TextView dateView;
-    private TextView operationSumTextView;
-    private TextView commentTextView;
-    private ImageView itemImageView;
-
-    private final View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            itemListener.onBalanceItemClicked(balance);
-        }
-    };
-
-    private final View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            itemListener.onBalanceItemLongClicked(balance);
-
-            return true;
-        }
-    };
-
-
-    public BalanceViewHolder(ItemOfBalanceListBinding binding, BalanceListAdapter.ItemListener itemListener) {
-        super(binding.getRoot());
-
-        titleView = binding.title;
-        dateView = binding.date;
-        operationSumTextView = binding.sum;
-        commentTextView = binding.comment;
-        itemImageView = binding.imageValue;
-
-        itemView.setOnClickListener(clickListener);
-        itemView.setOnLongClickListener(longClickListener);
-        this.itemListener = itemListener;
-    }
-
-
-    public void bindTo(Balance balance) {
-        this.balance = balance;
-
-        String currentDate = WorkWithDate.dateFormat.format(balance.getDate());
-
-        dateView.setText(currentDate);
-        operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
-        commentTextView.setText(balance.getComment());
-
-        itemImageView.setImageResource(Integer.parseInt(balance.getTitle()));
-        for(IconObject iconObject : CreateIconsList.getInstanceIcon(balance.isChoiceProfit())){
-            if(iconObject.getIconImage() == Integer.parseInt(balance.getTitle())) {
-                titleView.setText(iconObject.getIconName());
-                break;
-            }
-        }
-    }
-
-    public Balance getBalance() {
-        return balance;
-    }
-}
- */

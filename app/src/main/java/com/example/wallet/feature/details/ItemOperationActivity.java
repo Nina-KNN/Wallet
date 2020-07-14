@@ -51,8 +51,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
     private RecyclerView recyclerView;
 
     private UUID id;
-    private int image;
-    private String imageName = "";
+    private UUID categoryId;
     private boolean profit;
     private GregorianCalendar date = new GregorianCalendar();
 
@@ -93,16 +92,10 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             commentEditText.setText(balance.getComment());
 
-// Нужно изменить
-            imageImageView.setImageResource(Integer.parseInt(balance.getTitle()));
-            for(IconObject iconObject : IconsItemStoreProvider.getInstance(this).getIconsList(balance.isChoiceProfit(), true)) {
-                if(iconObject.getIconImage() == Integer.parseInt(balance.getTitle())) {
-                    imageName = iconObject.getIconName();
-                    iconNameTextView.setText(imageName);
-                    break;
-                }
-            }
-// Нужно изменить
+            categoryId = balance.getCategoryId();
+            IconObject icon = IconsItemStoreProvider.getInstance(this).getIconById(categoryId);
+            imageImageView.setImageResource(icon.getIconImage());
+            iconNameTextView.setText(icon.getIconName());
         } else {
             // Если новый объект
             profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
@@ -142,25 +135,20 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
     private final IconsListAdapter.ItemListenerForIcons itemListener = new IconsListAdapter.ItemListenerForIcons() {
         @Override
         public void onIconClickListener(IconObject icon) {
-            image = icon.getIconImage();
-            imageName = icon.getIconName();
+            categoryId = icon.getIconId();
 
-//добавить переменную для хранения UUID категории
-
-            iconNameTextView.setText(imageName);
-            imageImageView.setImageResource(image);
+            iconNameTextView.setText(icon.getIconName());
+            imageImageView.setImageResource(icon.getIconImage());
             recyclerView.setVisibility(View.INVISIBLE);
 
-// Нужно изменить на Хранение UUID
-            balance.setTitle(String.valueOf(image));
+            balance.setCategoryId(categoryId);
         }
     };
 
     private void saveBalanceData() {
         if(sumEditText.getText().length() == 0 || Integer.parseInt(String.valueOf(sumEditText.getText())) == 0) {
             showToast(getString(R.string.message_about_wrong_data));
-// Нужно изменить ImageName На UUID
-        } else if(imageName.isEmpty() || imageName.equals(String.valueOf(R.string.make_choice))) {
+        } else if(categoryId == null) {
             showToast(getString(R.string.choice_category));
         } else {
             // Сохранить созданный элемент или обновить существующий
@@ -230,7 +218,6 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 makeChoice(isChecked);
                 imageImageView.setImageResource(R.drawable.ic_touch_app);
-                imageName = String.valueOf(R.string.make_choice);
                 iconNameTextView.setText(R.string.make_choice);
                 makeRecyclerView(profit);
             }

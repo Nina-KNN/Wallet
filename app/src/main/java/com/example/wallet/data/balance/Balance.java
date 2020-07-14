@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Balance implements Comparable<Balance>{
     private UUID id;
-    private String title; // содержит значение "Доход" или "Расход"
+    private UUID categoryId; // содержит значение "Доход" или "Расход"
     private int operationSum; // сумма операции дохода или расхода
     private boolean choiceProfit; // при true это "profit" - доход, при false это "expense" - расход
     private Date date;
@@ -20,8 +20,8 @@ public class Balance implements Comparable<Balance>{
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public UUID getCategoryId() {
+        return categoryId;
     }
 
     public int getOperationSum() {
@@ -46,8 +46,8 @@ public class Balance implements Comparable<Balance>{
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
     }
 
     public void setOperationSum(int operationSum) {

@@ -12,7 +12,7 @@ public class Converter {
         Balance balance = new Balance();
 
         balance.setId(UUID.fromString(entity.id));
-        balance.setTitle(entity.title);
+        balance.setCategoryId(UUID.fromString(entity.categoryId));
         balance.setOperationSum(entity.operationSum);
         balance.setChoiceProfit(entity.choiceProfit);
         balance.setDate(new Date(entity.date));
@@ -28,7 +28,7 @@ public class Converter {
         BalanceEntity balanceEntity = new BalanceEntity();
 
         balanceEntity.id = balance.getId().toString();
-        balanceEntity.title = balance.getTitle();
+        balanceEntity.categoryId = balance.getCategoryId().toString();
         balanceEntity.operationSum = balance.getOperationSum();
         balanceEntity.choiceProfit = balance.isChoiceProfit();
         balanceEntity.date = balance.getDate().getTime();

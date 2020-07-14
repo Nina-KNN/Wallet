@@ -1,5 +1,6 @@
 package com.example.wallet.feature.list.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,14 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
 
     private List<Balance> balanceList;
     private ItemListener itemListener;
+    private Context context;
     private boolean profit;
 
-    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener, boolean profit) {
+    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener, boolean profit, Context context) {
         this.balanceList = balanceList;
         this.itemListener = itemListener;
         this.profit = profit;
+        this.context = context;
 
         setHasStableIds(true);
     }
@@ -44,7 +47,8 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         ItemOfBalanceListBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_of_balance_list, parent, false);
-        return new BalanceViewHolder(binding, itemListener);
+//        return new BalanceViewHolder(binding, itemListener);
+        return new BalanceViewHolder(binding, itemListener, context);
     }
 
     @Override

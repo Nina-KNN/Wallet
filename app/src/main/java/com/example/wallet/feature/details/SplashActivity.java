@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.widget.ProgressBar;
 
 import com.example.wallet.R;
+import com.example.wallet.data.icons.CreateIconsList;
 import com.example.wallet.feature.details.base.BaseActivity;
 
 public class SplashActivity extends BaseActivity {
@@ -21,6 +22,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        CreateIconsList.addIconsToRoom(this);
+
         progressBar = findViewById(R.id.progressBar);
         progressBar.setMax(maxTime);
         progressBar.setProgress(0);

@@ -10,6 +10,9 @@ import java.util.List;
 
 @Dao
 public interface IconDao {
+    @Query("SELECT * FROM IconEntity")
+    List<IconEntity> getAllIconList();
+
     @Query("SELECT * FROM IconEntity WHERE iconProfit == :iconProfit")
     List<IconEntity> getIconList(boolean iconProfit);
 

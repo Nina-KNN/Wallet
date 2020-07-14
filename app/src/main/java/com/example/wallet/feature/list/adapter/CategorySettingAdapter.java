@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.data.icons.IconsItemStoreProvider;
 
 import java.util.List;
 
@@ -72,11 +73,7 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
 
         categoryImageView.setImageResource(icon.getIconImage());
         categoryNameTextView.setText(icon.getIconName());
-        if(icon.isIconVisibility()) {
-            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_on_button);
-        } else {
-            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
-        }
+        shownCategoryVisibility(icon.isIconVisibility());
 
         editImageButton.setOnClickListener(this);
         shownCategoryImageButton.setOnClickListener(this);
@@ -95,10 +92,17 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     private void changeCategoryVisibility(Context context, IconObject icon) {
-        if(icon.isIconVisibility()) {
-            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
-        } else {
+        boolean changeVisibility = ! icon.isIconVisibility();
+        shownCategoryVisibility(changeVisibility);
+        icon.setIconVisibility(changeVisibility);
+        IconsItemStoreProvider.getInstance(context).update(icon);
+    }
+
+    private void shownCategoryVisibility(boolean isShown) {
+        if(isShown) {
             shownCategoryImageButton.setImageResource(R.drawable.ic_eye_on_button);
+        } else {
+            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
         }
     }
 
@@ -107,14 +111,16 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
         inputEditTextField.setText(icon.getIconName());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Edit category " + "\"" + icon.getIconName() + "\" to:")
+        builder.setTitle(context.getString(R.string.edit_category_name) + "\"" + icon.getIconName() + "\":")
                 .setView(inputEditTextField)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton(R.string.save_button, (dialog, which) -> {
                     String editTextInput = inputEditTextField.getText().toString();
                     categoryNameTextView.setText(editTextInput);
+                    icon.setIconName(editTextInput);
+                    IconsItemStoreProvider.getInstance(context).update(icon);
                     dialog.cancel();
                 })
-                .setNegativeButton("Cancel", null);
+                .setNegativeButton(R.string.cancel_button, null);
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

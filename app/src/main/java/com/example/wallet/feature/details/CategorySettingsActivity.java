@@ -11,10 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
-import com.example.wallet.data.icons.CreateIconsList;
+import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.OnSwipeTouchListener;
 import com.example.wallet.feature.list.adapter.CategorySettingAdapter;
+
+import java.util.List;
 
 public class CategorySettingsActivity extends BaseActivity implements View.OnClickListener{
 
@@ -48,9 +51,11 @@ public class CategorySettingsActivity extends BaseActivity implements View.OnCli
     }
 
     private void makeRecyclerView(boolean isProfit) {
+        List<IconObject> categoryList = IconsItemStoreProvider.getInstance(this).getIconsList(isProfit);
+
         recyclerView = findViewById(R.id.recycler_category_setting);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new CategorySettingAdapter(CreateIconsList.getInstanceIcon(isProfit)));
+        recyclerView.setAdapter(new CategorySettingAdapter(categoryList));
     }
 
     private void profitOrExpenseWasChoice(boolean isProfit) {

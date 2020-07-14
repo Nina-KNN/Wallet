@@ -75,7 +75,8 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
         adapter = new BalanceListAdapter(
                 BalanceItemStoreProvider.getInstance(this).getBalanceListForPeriod(firstDayInMonth(), lastDayInMonth()),
                 itemListener,
-                isProfit);
+                isProfit,
+                this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

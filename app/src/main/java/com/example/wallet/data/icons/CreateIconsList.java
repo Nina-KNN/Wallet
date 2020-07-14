@@ -1,5 +1,7 @@
 package com.example.wallet.data.icons;
 
+import android.content.Context;
+
 import com.example.wallet.R;
 
 import java.util.ArrayList;
@@ -8,25 +10,11 @@ import java.util.UUID;
 
 public class CreateIconsList {
 
-    // Singleton
-    private static List<IconObject> instanceIcon;
-
-    public static List<IconObject> getInstanceIcon(boolean profit) {
-        if(profit) {
-            instanceIcon = createProfitIconList();
-        } else {
-            instanceIcon = createExpenseIconList();
-        }
-
-        return instanceIcon;
-    }
-    //End of singleton
-
-    private static List<IconObject> createExpenseIconList() {
+    private static List<IconObject> createIconList() {
         List<IconObject> iconsList = new ArrayList<>();
 
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_cocktail, "cocktail", false, true, 1));
-        iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_gas_station, "gas_station", false, false, 2));
+        iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_gas_station, "gas_station", false, true, 2));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_kye, "kye", false, true, 3));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_menu, "menu", false, true, 4));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_shopping_basket, "shopping_basket", false, true, 5));
@@ -35,12 +23,6 @@ public class CreateIconsList {
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_cup, "cup", false, true, 8));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_bus, "bus", false, true, 9));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.ex_car, "car", false, true, 10));
-
-        return iconsList;
-    }
-
-    private static List<IconObject> createProfitIconList() {
-        List<IconObject> iconsList = new ArrayList<>();
 
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.p_coins_1, "coins_1", true, true, 11));
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.p_calculator, "calculator", true, true, 12));
@@ -54,5 +36,17 @@ public class CreateIconsList {
         iconsList.add(new IconObject(UUID.randomUUID(), R.drawable.p_money, "money",true, true, 20));
 
         return iconsList;
+    }
+
+    public static void addIconsToRoom(Context context) {
+        List<IconObject> iconsFromRoom = IconsItemStoreProvider.getInstance(context).getAllIconsList();
+
+        if(iconsFromRoom.size() == 0) {
+            List<IconObject> iconList = createIconList();
+
+            for (IconObject icon : iconList) {
+                IconsItemStoreProvider.getInstance(context).addItemInIconObjectList(icon);
+            }
+        }
     }
 }

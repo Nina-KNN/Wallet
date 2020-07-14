@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IconItemStore {
+    // Вывести весь список категорий
+    List<IconObject> getAllIconsList();
+
     // Вывести список категорий в зависимости от того это "Доход" или "Расход"
     List<IconObject> getIconsList(boolean isProfit);
 

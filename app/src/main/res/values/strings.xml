@@ -23,7 +23,9 @@
     <string name="message_about_wrong_data">The field \"Enter operation sum\" should not be empty and should not be equal to \"0\"</string>
     <string name="choice_category">Please, choice the category</string>
     <string name="make_choice">Category</string>
-    <string name="save_button">Save</string>
 
     <string name="category_setting">CATEGORY SETTING</string>
+    <string name="edit_category_name">Edit category name</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
 </resources>

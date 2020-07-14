@@ -26,6 +26,18 @@ public class RoomIconStore extends BaseIconItemStore {
     }
 
     @Override
+    public List<IconObject> getAllIconsList() {
+        List<IconEntity> iconEntityList = iconDao.getAllIconList();
+        List<IconObject> resultList = new ArrayList<>();
+
+        for(IconEntity iconEntity : iconEntityList) {
+            resultList.add(IconConverter.iconConverter(iconEntity));
+        }
+
+        return resultList;
+    }
+
+    @Override
     public List<IconObject> getIconsList(boolean isProfit) {
         List<IconEntity> iconEntityList = iconDao.getIconList(isProfit);
         List<IconObject> resultList = new ArrayList<>();

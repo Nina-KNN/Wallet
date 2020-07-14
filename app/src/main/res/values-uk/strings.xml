@@ -20,7 +20,9 @@
     <string name="choice_category">Будь ласка, виберіть категорію</string>
     <string name="make_choice">Категорія</string>
     <string name="message_about_wrong_data">Поле \"Введіть суму\" не повинно бути порожнім або дорівнювати \"0\"</string>
-    <string name="save_button">Зберегти</string>
 
     <string name="category_setting">НАЛАШТУВАННЯ КАТЕГОРІЙ</string>
+    <string name="edit_category_name">Редагувати назву категорії</string>
+    <string name="save_button">Зберегти</string>
+    <string name="cancel_button">Скасувати</string>
 </resources>

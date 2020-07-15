@@ -15,6 +15,8 @@
     <string name="exist_next_month">Немає записів в наступних місяцях</string>
     <string name="exist_prev_month">Немає записів в попередніх місяцях</string>
 
+    <string name="edit_note">РЕДАГУВАТИ ЗАПИС</string>
+    <string name="add_new_note">ДОДАТИ НОВИЙ ЗАПИС</string>
     <string name="enter_operationSum">Введіть суму</string>
     <string name="comment">Додати замітку</string>
     <string name="choice_category">Будь ласка, виберіть категорію</string>

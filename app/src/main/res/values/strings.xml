@@ -18,6 +18,8 @@
     <string name="exist_next_month">Data don\'t exist in next month</string>
     <string name="exist_prev_month">Data don\'t exist in previous month</string>
 
+    <string name="edit_note">EDIT NOTE</string>
+    <string name="add_new_note">ADD NEW NOTE</string>
     <string name="enter_operationSum">Enter operation sum</string>
     <string name="comment">Add note</string>
     <string name="message_about_wrong_data">The field \"Enter operation sum\" should not be empty and should not be equal to \"0\"</string>

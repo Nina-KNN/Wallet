@@ -60,7 +60,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
     private UUID id;
     private UUID categoryId;
     private boolean profit;
-    private GregorianCalendar date = new GregorianCalendar();
+    private GregorianCalendar date;
 
     @Override
     protected int getLayoutID() {
@@ -100,7 +100,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
         if(id != null) {
             // Если объект уже существует в списке
             balance = BalanceItemStoreProvider.getInstance(this).getById(id);
-            date.setTime(balance.getDate());
+            date = balance.getDate();
             profit = balance.isChoiceProfit();
 
             dateTextView.setText(WorkWithDate.showDateUtilsFormat(date, this));
@@ -118,6 +118,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             // Если новый объект
             profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
             balance = new Balance();
+            date = new GregorianCalendar();
             dateTextView.setText(WorkWithDate.showDateUtilsFormat(date, this));
 
             titleTextView.setText(R.string.add_new_note);
@@ -173,7 +174,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             // Сохранить созданный элемент или обновить существующий
             sumEditText.setText(String.valueOf(Math.abs(balance.getOperationSum())));
             balance.setChoiceProfit(profit);
-            balance.setDate(date.getTime());
+            balance.setDate(date);
             WorkWithDate.checkCorrectDateInPrefsUtils(date.getTimeInMillis(), this);
 
             if(id != null) {

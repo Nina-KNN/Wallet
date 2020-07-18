@@ -69,23 +69,23 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
         long maxDay = today.getTimeInMillis();
 
         for(Balance balance : balanceList) {
-            if(balance.getDate().getTime() < minDay) {
-                minDay = balance.getDate().getTime();
+            if(balance.getDate().getTimeInMillis() < minDay) {
+                minDay = balance.getDate().getTimeInMillis();
             }
-            if(balance.getDate().getTime() > maxDay) {
-                maxDay = balance.getDate().getTime();
+            if(balance.getDate().getTimeInMillis() > maxDay) {
+                maxDay = balance.getDate().getTimeInMillis();
             }
 
             if(balance.isChoiceProfit()) {
                 result += Math.abs(balance.getOperationSum());
 
-                if(balance.getDate().getTime() >= firstDayInMonth && balance.getDate().getTime() <= lastDayInMonth) {
+                if(balance.getDate().getTimeInMillis() >= firstDayInMonth && balance.getDate().getTimeInMillis() <= lastDayInMonth) {
                     profit += Math.abs(balance.getOperationSum());
                 }
             } else {
                 result -= Math.abs(balance.getOperationSum());
 
-                if(balance.getDate().getTime() >= firstDayInMonth && balance.getDate().getTime() <= lastDayInMonth) {
+                if(balance.getDate().getTimeInMillis() >= firstDayInMonth && balance.getDate().getTimeInMillis() <= lastDayInMonth) {
                     expense += Math.abs(balance.getOperationSum());
                 }
             }

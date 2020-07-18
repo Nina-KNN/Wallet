@@ -14,8 +14,6 @@ import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.list.WorkWithDate;
 
-import java.util.GregorianCalendar;
-
 public class BalanceViewHolder extends RecyclerView.ViewHolder{
 
     private Balance balance;
@@ -61,10 +59,8 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder{
 
     public void bindTo(Balance balance) {
         this.balance = balance;
-        GregorianCalendar date = new GregorianCalendar();
-        date.setTime(balance.getDate());
 
-        String currentDate = WorkWithDate.showDateUtilsFormat(date, context);
+        String currentDate = WorkWithDate.showDateUtilsFormat(balance.getDate(), context);
         dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         commentTextView.setText(balance.getComment());

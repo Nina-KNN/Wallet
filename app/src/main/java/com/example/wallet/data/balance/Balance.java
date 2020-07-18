@@ -1,19 +1,19 @@
 package com.example.wallet.data.balance;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class Balance implements Comparable<Balance>{
     private UUID id;
-    private UUID categoryId; // содержит значение "Доход" или "Расход"
-    private int operationSum; // сумма операции дохода или расхода
-    private boolean choiceProfit; // при true это "profit" - доход, при false это "expense" - расход
-    private Date date;
+    private UUID categoryId;
+    private int operationSum;
+    private boolean choiceProfit;
+    private GregorianCalendar date;
     private String comment;
 
     public Balance() {
         id = UUID.randomUUID();
-        date = new Date();
+        date = new GregorianCalendar();
     }
 
     public UUID getId() {
@@ -32,7 +32,7 @@ public class Balance implements Comparable<Balance>{
         return choiceProfit;
     }
 
-    public Date getDate() {
+    public GregorianCalendar getDate() {
         return date;
     }
 
@@ -58,7 +58,7 @@ public class Balance implements Comparable<Balance>{
         this.choiceProfit = choiceProfit;
     }
 
-    public void setDate(Date date) {
+    public void setDate(GregorianCalendar date) {
         this.date = date;
     }
 
@@ -69,6 +69,6 @@ public class Balance implements Comparable<Balance>{
 
     @Override
     public int compareTo(Balance o) {
-        return (int) (o.getDate().getTime() - this.getDate().getTime());
+        return (int) (o.getDate().getTimeInMillis() - this.getDate().getTimeInMillis());
     }
 }

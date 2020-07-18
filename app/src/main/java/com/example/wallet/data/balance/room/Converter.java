@@ -2,7 +2,7 @@ package com.example.wallet.data.balance.room;
 
 import com.example.wallet.data.balance.Balance;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class Converter {
@@ -10,12 +10,14 @@ public class Converter {
     //Конвертация объектов BalanceEntity в объекты Balance
     static Balance convert(BalanceEntity entity) {
         Balance balance = new Balance();
+        GregorianCalendar date = new GregorianCalendar();
+        date.setTimeInMillis(entity.date);
 
         balance.setId(UUID.fromString(entity.id));
         balance.setCategoryId(UUID.fromString(entity.categoryId));
         balance.setOperationSum(entity.operationSum);
         balance.setChoiceProfit(entity.choiceProfit);
-        balance.setDate(new Date(entity.date));
+        balance.setDate(date);
         balance.setComment(entity.comment);
 
         return balance;
@@ -31,7 +33,7 @@ public class Converter {
         balanceEntity.categoryId = balance.getCategoryId().toString();
         balanceEntity.operationSum = balance.getOperationSum();
         balanceEntity.choiceProfit = balance.isChoiceProfit();
-        balanceEntity.date = balance.getDate().getTime();
+        balanceEntity.date = balance.getDate().getTimeInMillis();
         balanceEntity.comment = balance.getComment();
 
         return balanceEntity;

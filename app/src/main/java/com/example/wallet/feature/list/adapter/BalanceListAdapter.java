@@ -6,16 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
-import com.example.wallet.databinding.ItemOfBalanceListBinding;
 
 import java.util.List;
 
-public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> {
+public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder>{
 
     private List<Balance> balanceList;
     private ItemListener itemListener;
@@ -44,11 +42,10 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder> 
     @NonNull
     @Override
     public BalanceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_of_balance_list, parent, false);
 
-        ItemOfBalanceListBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_of_balance_list, parent, false);
-//        return new BalanceViewHolder(binding, itemListener);
-        return new BalanceViewHolder(binding, itemListener, context);
+        return new BalanceViewHolder(itemView, itemListener, context);
     }
 
     @Override

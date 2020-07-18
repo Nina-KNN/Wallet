@@ -5,15 +5,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.data.icons.IconsItemStoreProvider;
-import com.example.wallet.databinding.ItemOfBalanceListBinding;
 import com.example.wallet.feature.list.WorkWithDate;
 
-public class BalanceViewHolder extends RecyclerView.ViewHolder {
+import java.util.GregorianCalendar;
+
+public class BalanceViewHolder extends RecyclerView.ViewHolder{
 
     private Balance balance;
     private BalanceListAdapter.ItemListener itemListener;
@@ -41,15 +44,14 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         }
     };
 
+    public BalanceViewHolder(@NonNull View itemView, BalanceListAdapter.ItemListener itemListener, Context context) {
+        super(itemView);
 
-    public BalanceViewHolder(ItemOfBalanceListBinding binding, BalanceListAdapter.ItemListener itemListener, Context context) {
-        super(binding.getRoot());
-
-        titleView = binding.title;
-        dateView = binding.date;
-        operationSumTextView = binding.sum;
-        commentTextView = binding.comment;
-        itemImageView = binding.imageValue;
+        titleView = itemView.findViewById(R.id.title_item_balance);
+        dateView = itemView.findViewById(R.id.date_item_balance);
+        operationSumTextView = itemView.findViewById(R.id.sum_item_balance);
+        commentTextView = itemView.findViewById(R.id.comment_item_balance);
+        itemImageView = itemView.findViewById(R.id.image_value_item_balance);
 
         itemView.setOnClickListener(clickListener);
         itemView.setOnLongClickListener(longClickListener);
@@ -57,12 +59,12 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder {
         this.context = context;
     }
 
-
     public void bindTo(Balance balance) {
         this.balance = balance;
+        GregorianCalendar date = new GregorianCalendar();
+        date.setTime(balance.getDate());
 
-        String currentDate = WorkWithDate.dateFormat.format(balance.getDate());
-
+        String currentDate = WorkWithDate.showDateUtilsFormat(date, context);
         dateView.setText(currentDate);
         operationSumTextView.setText(String.valueOf(balance.getOperationSum()));
         commentTextView.setText(balance.getComment());

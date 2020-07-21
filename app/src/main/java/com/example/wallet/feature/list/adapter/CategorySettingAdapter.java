@@ -1,112 +1,70 @@
 package com.example.wallet.feature.list.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.data.icons.IconsItemStoreProvider;
+import com.example.wallet.feature.details.base.BaseActivity;
+import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
 import java.util.List;
 
-public class CategorySettingAdapter extends RecyclerView.Adapter<CategorySettingViewHolder>{
+public class CategorySettingAdapter extends BaseRecyclerAdapter<IconObject> {
 
-    private List<IconObject> iconsList;
-
-    public CategorySettingAdapter(List<IconObject> iconsList) {
-        this.iconsList = iconsList;
-    }
-
-    @NonNull
-    @Override
-    public CategorySettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.item_of_category_setting, parent, false);
-
-        return new CategorySettingViewHolder(itemView);
+    public CategorySettingAdapter(BaseActivity baseActivity, List<IconObject> items) {
+        super(baseActivity, items);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategorySettingViewHolder holder, int position) {
-        holder.bindTo(iconsList.get(position));
+    protected int getCardLayoutID() {
+        return R.layout.item_of_category_setting;
     }
 
     @Override
-    public int getItemCount() {
-        return iconsList.size();
+    protected BaseItem createViewHolder(View view) {
+
+        return new BaseItem(view) {
+            @Override
+            public void bind(IconObject item) {
+                ImageView categoryImageView =  itemView.findViewById(R.id.icon_image_category_setting);
+                TextView categoryNameTextView = itemView.findViewById(R.id.category_name_category_setting);
+                ImageButton shownCategoryImageButton = itemView.findViewById(R.id.shown_eye_category_setting);
+                ImageButton editImageButton = itemView.findViewById(R.id.edit_category_setting);
+
+                categoryImageView.setImageResource(item.getIconImage());
+                categoryNameTextView.setText(item.getIconName());
+                shownCategoryVisibility(item.isIconVisibility(), shownCategoryImageButton);
+
+                editImageButton.setOnClickListener(v -> createAlertDialog(v.getContext(), item, categoryNameTextView));
+                shownCategoryImageButton.setOnClickListener(v -> changeCategoryVisibility(v.getContext(), item, shownCategoryImageButton));
+            }
+        };
     }
 
-}
-
-
-
-class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-    private IconObject icon;
-
-    private ImageView categoryImageView;
-    private TextView categoryNameTextView;
-    private ImageButton shownCategoryImageButton;
-    private ImageButton editImageButton;
-
-    public CategorySettingViewHolder(@NonNull View itemView) {
-        super(itemView);
-
-        categoryImageView = itemView.findViewById(R.id.icon_image_category_setting);
-        categoryNameTextView = itemView.findViewById(R.id.category_name_category_setting);
-        shownCategoryImageButton = itemView.findViewById(R.id.shown_eye_category_setting);
-        editImageButton = itemView.findViewById(R.id.edit_category_setting);
-    }
-
-    public void bindTo(IconObject icon) {
-        this.icon = icon;
-
-        categoryImageView.setImageResource(icon.getIconImage());
-        categoryNameTextView.setText(icon.getIconName());
-        shownCategoryVisibility(icon.isIconVisibility());
-
-        editImageButton.setOnClickListener(this);
-        shownCategoryImageButton.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.shown_eye_category_setting:
-                changeCategoryVisibility(v.getContext(), icon);
-                break;
-            case R.id.edit_category_setting:
-                createAlertDialog(v.getContext(), icon);
-                break;
-        }
-    }
-
-    private void changeCategoryVisibility(Context context, IconObject icon) {
+    private void changeCategoryVisibility(Context context, IconObject icon, ImageButton imageButton) {
         boolean changeVisibility = ! icon.isIconVisibility();
-        shownCategoryVisibility(changeVisibility);
+        shownCategoryVisibility(changeVisibility, imageButton);
         icon.setIconVisibility(changeVisibility);
         IconsItemStoreProvider.getInstance(context).update(icon);
     }
 
-    private void shownCategoryVisibility(boolean isShown) {
+    private void shownCategoryVisibility(boolean isShown, ImageButton imageButton) {
         if(isShown) {
-            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_on_button);
+            imageButton.setImageResource(R.drawable.ic_eye_on_button);
         } else {
-            shownCategoryImageButton.setImageResource(R.drawable.ic_eye_off_button);
+            imageButton.setImageResource(R.drawable.ic_eye_off_button);
         }
     }
 
-    private AlertDialog createAlertDialog(Context context, IconObject icon) {
+    private AlertDialog createAlertDialog(Context context, IconObject icon, TextView categoryName) {
         EditText inputEditTextField = new EditText(context);
         inputEditTextField.setText(icon.getIconName());
 
@@ -115,7 +73,7 @@ class CategorySettingViewHolder extends RecyclerView.ViewHolder implements View.
                 .setView(inputEditTextField)
                 .setPositiveButton(R.string.save_button, (dialog, which) -> {
                     String editTextInput = inputEditTextField.getText().toString();
-                    categoryNameTextView.setText(editTextInput);
+                    categoryName.setText(editTextInput);
                     icon.setIconName(editTextInput);
                     IconsItemStoreProvider.getInstance(context).update(icon);
                     dialog.cancel();

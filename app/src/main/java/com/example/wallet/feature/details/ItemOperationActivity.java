@@ -134,7 +134,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
 
         recyclerView = findViewById(R.id.recycler_item_operation);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount()));
-        recyclerView.setAdapter(new IconsListAdapter(iconsList, itemListener));
+        recyclerView.setAdapter(new IconsListAdapter(this, iconsList, itemListener));
         recyclerView.setVisibility(View.VISIBLE);
     }
 
@@ -152,16 +152,22 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
     }
 
     // Обработка нажатия на элемент списка
-    private final IconsListAdapter.ItemListenerForIcons itemListener = new IconsListAdapter.ItemListenerForIcons() {
-        @Override
-        public void onIconClickListener(IconObject icon) {
-            categoryId = icon.getIconId();
+    private final IconsListAdapter.OnItemClick<IconObject> itemListener = new IconsListAdapter.OnItemClick<IconObject>() {
 
-            iconNameTextView.setText(icon.getIconName());
-            imageImageView.setImageResource(icon.getIconImage());
+        @Override
+        public void onItemClick(IconObject item, int position) {
+            categoryId = item.getIconId();
+
+            iconNameTextView.setText(item.getIconName());
+            imageImageView.setImageResource(item.getIconImage());
             recyclerView.setVisibility(View.INVISIBLE);
 
             balance.setCategoryId(categoryId);
+        }
+
+        @Override
+        public void onItemLongClick(IconObject item, int position) {
+
         }
     };
 

@@ -55,7 +55,7 @@ public class CategorySettingsActivity extends BaseActivity implements View.OnCli
 
         recyclerView = findViewById(R.id.recycler_category_setting);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new CategorySettingAdapter(categoryList));
+        recyclerView.setAdapter(new CategorySettingAdapter(this, categoryList));
     }
 
     private void profitOrExpenseWasChoice(boolean isProfit) {

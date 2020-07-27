@@ -41,8 +41,8 @@ public class RoomBalanceItemStore extends BaseBalanceItemStore {
     }
 
     @Override
-    public List<Balance> getBalanceListForPeriod(long startDatePeriod, long endDatePeriod){
-        List<BalanceEntity> balanceEntityList = balanceDao.getBalanceListForPeriod(startDatePeriod, endDatePeriod);
+    public List<Balance> getBalanceListForIsProfitPeriod(long startDatePeriod, long endDatePeriod, boolean isProfit) {
+        List<BalanceEntity> balanceEntityList = balanceDao.getBalanceListForIsProfitPeriod(startDatePeriod, endDatePeriod, isProfit);
         List<Balance> resultList = new ArrayList<>();
 
         for(BalanceEntity balanceEntity : balanceEntityList) {

@@ -18,12 +18,10 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder>{
     private List<Balance> balanceList;
     private ItemListener itemListener;
     private Context context;
-    private boolean profit;
 
-    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener, boolean profit, Context context) {
+    public BalanceListAdapter(List<Balance> balanceList, ItemListener itemListener, Context context) {
         this.balanceList = balanceList;
         this.itemListener = itemListener;
-        this.profit = profit;
         this.context = context;
 
         setHasStableIds(true);
@@ -56,12 +54,6 @@ public class BalanceListAdapter extends RecyclerView.Adapter<BalanceViewHolder>{
         holder.itemView.setLayoutParams(
                 new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        // Скрыть элемент
-        if(balance.isChoiceProfit() != profit) {
-            holder.itemView.setVisibility(View.GONE);
-            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
-        }
 
         holder.bindTo(balance);
     }

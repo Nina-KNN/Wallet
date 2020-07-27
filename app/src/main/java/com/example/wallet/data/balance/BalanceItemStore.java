@@ -6,7 +6,7 @@ import java.util.UUID;
 public interface BalanceItemStore {
     List<Balance> getBalanceList();
 
-    List<Balance> getBalanceListForPeriod(long startDatePeriod, long endDatePeriod);
+    List<Balance> getBalanceListForIsProfitPeriod(long startDatePeriod, long endDatePeriod, boolean isProfit);
 
     Balance getById(UUID id);
 

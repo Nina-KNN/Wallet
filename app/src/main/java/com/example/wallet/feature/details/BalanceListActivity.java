@@ -72,11 +72,10 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void makeRecyclerView(boolean isProfit) {
-        adapter = new BalanceListAdapter(
-                BalanceItemStoreProvider.getInstance(this).getBalanceListForPeriod(firstDayInMonth(), lastDayInMonth()),
-                itemListener,
-                isProfit,
-                this);
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
+                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), profit);
+
+        adapter = new BalanceListAdapter(balanceList, itemListener,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -129,7 +128,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
     // Обновить список итемов
     private void updateList() {
         List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
-            getBalanceListForPeriod(firstDayInMonth(), lastDayInMonth());
+                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), profit);
 
         adapter.submitNewList(balanceList);
     }

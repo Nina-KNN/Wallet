@@ -122,6 +122,7 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
             dateTextView.setText(WorkWithDate.showDateUtilsFormat(date, this));
 
             titleTextView.setText(R.string.add_new_note);
+            makeRecyclerView(profit);
         }
 
         profitOrExpenseWasChoice(profit);

@@ -71,7 +71,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
         makeDeleteItemBySwiped();
     }
 
-    private void makeRecyclerView(boolean isProfit) {
+    private void makeRecyclerView() {
         List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
                 getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), profit);
 
@@ -203,7 +203,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             titleTextView.setText(R.string.title_expense);
         }
 
-        makeRecyclerView(profit);;
+        makeRecyclerView();;
     }
 
     // Вычислить начало периода
@@ -231,7 +231,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 if(WorkWithDate.isMonthInBalanceList(this, lastDayInMonth(), false)) {
                     currentDate.add(Calendar.MONTH, 1);
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
-                    makeRecyclerView(profit);
+                    makeRecyclerView();
                 } else {
                     showToast(getString(R.string.exist_next_month));
                 }
@@ -241,7 +241,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 if(WorkWithDate.isMonthInBalanceList(this, firstDayInMonth(), true)) {
                     currentDate.add(Calendar.MONTH, -1);
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
-                    makeRecyclerView(profit);
+                    makeRecyclerView();
                 } else {
                     showToast(getString(R.string.exist_prev_month));
                 }
@@ -260,7 +260,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             case R.id.button_back_balance_list:
                 currentDate = new GregorianCalendar();
                 dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
-                makeRecyclerView(profit);
+                makeRecyclerView();
                 break;
         }
     }

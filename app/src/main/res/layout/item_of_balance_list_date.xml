@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/image_value_item_balance_for_day"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/title_item_balance_for_day"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="Title"/>
+
+    <TextView
+        android:id="@+id/sum_item_balance_for_day"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"
+        android:gravity="center"
+        tools:text="sum"/>
+
+    <TextView
+        android:id="@+id/comment_item_balance_for_day"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textStyle="italic"
+        android:textSize="10dp"
+        tools:text="Comment" />
+</LinearLayout>

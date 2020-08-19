@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".BalanceListDateActivity">
+    tools:context=".feature.details.BalanceListDateSortActivity">
 
     <TextView
+        android:id="@+id/title_balance_list_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

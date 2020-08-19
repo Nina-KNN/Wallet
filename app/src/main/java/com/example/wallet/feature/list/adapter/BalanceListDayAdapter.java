@@ -14,8 +14,11 @@ import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 import java.util.List;
 
 public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
+    private BaseRecyclerAdapter.OnItemClick<Balance> itemListener;
+
     protected BalanceListDayAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
         super(baseActivity, items, onItemClick);
+        this.itemListener = onItemClick;
     }
 
     @Override
@@ -38,7 +41,27 @@ public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
                 categoryNameTextView.setText(icon.getIconName());
                 sumTextView.setText(String.valueOf(item.getOperationSum()));
                 commentTextView.setText(item.getComment());
+
+                view.setOnClickListener(makeItemClickListener(item, view.getId()));
+                view.setOnLongClickListener(makeItemLongClickListener(item, view.getId()));
             }
         };
+    }
+
+    private View.OnClickListener makeItemClickListener(Balance item, int id) {
+        View.OnClickListener clickListener = v -> {
+            itemListener.onItemClick(item, id);
+        };
+
+        return clickListener;
+    }
+
+    private View.OnLongClickListener makeItemLongClickListener(Balance item, int id) {
+        View.OnLongClickListener longClickListener = v -> {
+            itemListener.onItemLongClick(item, id);
+            return true;
+        };
+
+        return longClickListener;
     }
 }

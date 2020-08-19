@@ -1,8 +1,12 @@
-package com.example.wallet;
+package com.example.wallet.feature.details;
+
+import android.content.Intent;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
@@ -15,10 +19,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class BalanceListDateActivity extends BaseActivity {
+public class BalanceListDateSortActivity extends BaseActivity implements View.OnClickListener{
 
     private RecyclerView recyclerView;
     private GregorianCalendar currentDate;
+    private boolean itemVisibility;
 
     @Override
     protected int getLayoutID() {
@@ -28,15 +33,17 @@ public class BalanceListDateActivity extends BaseActivity {
     @Override
     protected void initView() {
         currentDate = new GregorianCalendar();
+        findViewById(R.id.title_balance_list_date).setOnClickListener(this);
 
         recyclerView = findViewById(R.id.recycler_balance_list_date_sort);
-        makeRecyclerView(true);
+        itemVisibility = false;
+        makeRecyclerView(true, itemVisibility);
     }
 
-    private void makeRecyclerView(boolean isProfit) {
+    private void makeRecyclerView(boolean isProfit, boolean visibility) {
         List<Balance> balanceList = makeBalanceListWithoutRepeatingDate(true);
 
-        BalanceListDateSortAdapter adapter = new BalanceListDateSortAdapter(this, balanceList, itemListener);
+        BalanceListDateSortAdapter adapter = new BalanceListDateSortAdapter(this, balanceList, itemListener, visibility);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -45,7 +52,8 @@ public class BalanceListDateActivity extends BaseActivity {
     BalanceListDateSortAdapter.OnItemClick<Balance> itemListener = new BaseRecyclerAdapter.OnItemClick<Balance>() {
         @Override
         public void onItemClick(Balance item, int position) {
-            showToast("Item pressed");
+            itemVisibility = !itemVisibility;
+            makeRecyclerView(true, itemVisibility);
         }
 
         @Override
@@ -99,5 +107,16 @@ public class BalanceListDateActivity extends BaseActivity {
         }
 
         return balanceListWithoutRepeatingDate;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.title_balance_list_date:
+                Intent intent = new Intent(this, BalanceResultActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
     }
 }

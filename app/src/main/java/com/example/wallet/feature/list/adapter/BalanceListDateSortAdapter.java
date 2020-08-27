@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +13,7 @@ import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.details.ItemOperationActivity;
 import com.example.wallet.feature.details.base.BaseActivity;
+import com.example.wallet.feature.list.DeleteConfirmationDialog;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
@@ -24,20 +24,18 @@ import java.util.List;
 public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
     public static final String ITEMS_ID = "items_id";
     private Context context;
-    private boolean visibility;
 
     private List<Balance> items;
     private TextView sum;
 
     private BalanceListDayAdapter adapter;
     private RecyclerView recyclerView;
-    private BaseRecyclerAdapter.OnItemClick<Balance> dayItemListener;
+    private BaseRecyclerAdapter.OnItemClick<Balance> outerItemListener;
 
-    public BalanceListDateSortAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick, Boolean visibility) {
+    public BalanceListDateSortAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
         super(baseActivity, items, onItemClick);
-        this.visibility = visibility;
         this.items = items;
-        this.dayItemListener = onItemClick;
+        this.outerItemListener = onItemClick;
     }
 
     @Override
@@ -65,14 +63,14 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
     }
 
     private void makeRecyclerView(List<Balance> balanceList) {
-        adapter = new BalanceListDayAdapter((BaseActivity) context, balanceList, itemListener);
+        adapter = new BalanceListDayAdapter((BaseActivity) context, balanceList, innerItemListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
     }
 
     private View.OnClickListener makeItemClickListener(Balance item, int id) {
         View.OnClickListener clickListener = v -> {
-            itemListener.onItemClick(item, id);
+            outerItemListener.onItemClick(item, id);
         };
 
         return clickListener;
@@ -86,9 +84,8 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
         for(Balance balance : balanceList) {
             if(balance.getDate().get(Calendar.DATE) == item.getDate().get(Calendar.DATE)
                     && balance.isChoiceProfit() == item.isChoiceProfit()) {
-                if(visibility) {
-                    dayBalanceList.add(balance);
-                }
+
+                dayBalanceList.add(balance);
                 daySum += balance.getOperationSum();
             }
         }
@@ -99,7 +96,7 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
     }
 
     // Обработка нажатий на элементы во внутреннем ресайлере
-    private BalanceListDayAdapter.OnItemClick<Balance> itemListener = new OnItemClick<Balance>() {
+    private BalanceListDayAdapter.OnItemClick<Balance> innerItemListener = new OnItemClick<Balance>() {
         @Override
         public void onItemClick(Balance item, int position) {
             Intent intent = new Intent(context, ItemOperationActivity.class);
@@ -109,22 +106,14 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
 
         @Override
         public void onItemLongClick(Balance item, int position) {
-            makeDeleteItemByLongPressed(item);
+            // Удаление при длительном нажатии
+            DeleteConfirmationDialog dialogFragment = new DeleteConfirmationDialog();
+            dialogFragment.onCreateDialog(item, context).show();
         }
     };
 
-    // Удаление при длительном нажатии
-    private void makeDeleteItemByLongPressed(final Balance balance) {
-        new AlertDialog.Builder(context)
-                .setMessage(R.string.dialog_delete_item_message)
-                .setPositiveButton(android.R.string.yes, (dialog, which) ->
-                        BalanceItemStoreProvider.getInstance(context).deleteBalanceItem(balance.getId()))
-                .setNegativeButton(android.R.string.no, null)
-                .create()
-                .show();
-
-
-        // При удалении элемента из списка, отрисовать список заново
-        makeRecyclerView(items);
+    public void submitNewList(List<Balance> newBalanceList) {
+        this.items = newBalanceList;
+        notifyDataSetChanged();
     }
 }

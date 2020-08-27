@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
+import com.example.wallet.data.balance.BalanceItemStore;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.WorkWithDate;
@@ -23,7 +24,7 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
 
     private RecyclerView recyclerView;
     private GregorianCalendar currentDate;
-    private boolean itemVisibility;
+    private BalanceListDateSortAdapter adapter;
 
     @Override
     protected int getLayoutID() {
@@ -36,14 +37,12 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
         findViewById(R.id.title_balance_list_date).setOnClickListener(this);
 
         recyclerView = findViewById(R.id.recycler_balance_list_date_sort);
-        itemVisibility = false;
-        makeRecyclerView(true, itemVisibility);
+        makeRecyclerView(true);
     }
 
-    private void makeRecyclerView(boolean isProfit, boolean visibility) {
+    private void makeRecyclerView(boolean isProfit) {
         List<Balance> balanceList = makeBalanceListWithoutRepeatingDate(true);
-
-        BalanceListDateSortAdapter adapter = new BalanceListDateSortAdapter(this, balanceList, itemListener, visibility);
+        adapter = new BalanceListDateSortAdapter(this, balanceList, itemListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -52,8 +51,7 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     BalanceListDateSortAdapter.OnItemClick<Balance> itemListener = new BaseRecyclerAdapter.OnItemClick<Balance>() {
         @Override
         public void onItemClick(Balance item, int position) {
-            itemVisibility = !itemVisibility;
-            makeRecyclerView(true, itemVisibility);
+
         }
 
         @Override
@@ -107,6 +105,29 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
         }
 
         return balanceListWithoutRepeatingDate;
+    }
+
+    private final BalanceItemStore.Listener balanceListChangedList = () -> updateList();
+
+    @Override
+    protected void onPause() {
+        updateList();
+        BalanceItemStoreProvider.getInstance(this).removeListener(balanceListChangedList);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        updateList();
+        super.onResume();
+    }
+
+    // Обновить список итемов
+    private void updateList() {
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
+                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), true);
+
+        adapter.submitNewList(balanceList);
     }
 
     @Override

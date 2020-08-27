@@ -96,4 +96,19 @@ public class WorkWithDate {
         }
         return false;
     }
+
+    // Высчитать начало или конец дня
+    public static long makeStartDateValue(GregorianCalendar currentDay, boolean isStartDay){
+        int year = currentDay.get(Calendar.YEAR);
+        int month = currentDay.get(Calendar.MONTH);
+        int day = currentDay.get(Calendar.DATE);
+
+        GregorianCalendar date;
+        if(isStartDay) {
+            date = new GregorianCalendar(year, month, day, 0, 0, 0);
+        } else {
+            date = new GregorianCalendar(year, month, day, 24, 0, 0);
+        }
+        return date.getTimeInMillis();
+    }
 }

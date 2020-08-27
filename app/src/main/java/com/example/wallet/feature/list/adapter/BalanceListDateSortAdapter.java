@@ -17,8 +17,6 @@ import com.example.wallet.feature.list.DeleteConfirmationDialog;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
@@ -77,22 +75,21 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
     }
 
     private List<Balance> makeBalanceListForDay(Balance item) {
-        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(context).getBalanceList();
-        List<Balance> dayBalanceList = new ArrayList<>();
+        long startDateValue = WorkWithDate.makeStartDateValue(item.getDate(), true);
+        long finishDateValue = WorkWithDate.makeStartDateValue(item.getDate(), false);
+
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(context)
+                .getBalanceListForIsProfitPeriod(startDateValue, finishDateValue,true);
+
         int daySum = 0;
 
         for(Balance balance : balanceList) {
-            if(balance.getDate().get(Calendar.DATE) == item.getDate().get(Calendar.DATE)
-                    && balance.isChoiceProfit() == item.isChoiceProfit()) {
-
-                dayBalanceList.add(balance);
                 daySum += balance.getOperationSum();
-            }
         }
 
         sum.setText(String.valueOf(daySum));
 
-        return dayBalanceList;
+        return balanceList;
     }
 
     // Обработка нажатий на элементы во внутреннем ресайлере

@@ -35,27 +35,28 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     protected void initView() {
         currentDate = new GregorianCalendar();
         findViewById(R.id.title_balance_list_date).setOnClickListener(this);
+        findViewById(R.id.change_view_list_date_button).setOnClickListener(this);
 
         recyclerView = findViewById(R.id.recycler_balance_list_date_sort);
         makeRecyclerView(true);
     }
 
     private void makeRecyclerView(boolean isProfit) {
-        List<Balance> balanceList = makeBalanceListWithoutRepeatingDate(true);
-        adapter = new BalanceListDateSortAdapter(this, balanceList, itemListener);
+        List<GregorianCalendar> calendarList = makeCalendarList(true);
+        adapter = new BalanceListDateSortAdapter(this, calendarList, itemListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
     // Обработка нажатия на элемент списка
-    BalanceListDateSortAdapter.OnItemClick<Balance> itemListener = new BaseRecyclerAdapter.OnItemClick<Balance>() {
+    BalanceListDateSortAdapter.OnItemClick<GregorianCalendar> itemListener = new BaseRecyclerAdapter.OnItemClick<GregorianCalendar>() {
         @Override
-        public void onItemClick(Balance item, int position) {
+        public void onItemClick(GregorianCalendar item, int position) {
 
         }
 
         @Override
-        public void onItemLongClick(Balance item, int position) {
+        public void onItemLongClick(GregorianCalendar item, int position) {
 
         }
     };
@@ -76,22 +77,20 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
         return balanceList;
     }
 
-    private List<Balance> makeBalanceListWithoutRepeatingDate(boolean isProfit) {
+    private List<GregorianCalendar> makeCalendarList(boolean isProfit) {
         List<Balance> balanceList = makeBalanceListForMonth(isProfit);
-        List<Balance> balanceListWithoutRepeatingDate = new ArrayList<>();
+        List<GregorianCalendar> CalendarList = new ArrayList<>();
 
         for(Balance balance: balanceList) {
-            if(balanceListWithoutRepeatingDate.size() < 1) {
-                balanceListWithoutRepeatingDate.add(balance);
+            if(CalendarList.size() < 1) {
+                CalendarList.add(balance.getDate());
             }
 
             GregorianCalendar calendar = balance.getDate();
             int newItem = 0;
 
-            for(Balance bal : balanceListWithoutRepeatingDate) {
-                GregorianCalendar cal = bal.getDate();
-
-                if(calendar.get(Calendar.DATE) != cal.get(Calendar.DATE)) {
+            for(GregorianCalendar date : CalendarList) {
+                if(calendar.get(Calendar.DATE) != date.get(Calendar.DATE)) {
                     newItem++;
                 } else {
                     newItem = 0;
@@ -100,11 +99,11 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
             }
 
             if (newItem > 0) {
-                balanceListWithoutRepeatingDate.add(balance);
+                CalendarList.add(balance.getDate());
             }
         }
 
-        return balanceListWithoutRepeatingDate;
+        return CalendarList;
     }
 
     private final BalanceItemStore.Listener balanceListChangedList = () -> updateList();
@@ -124,10 +123,8 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
 
     // Обновить список итемов
     private void updateList() {
-        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
-                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), true);
-
-        adapter.submitNewList(balanceList);
+        List<GregorianCalendar> calendarList = makeCalendarList(true);
+        adapter.submitNewList(calendarList);
     }
 
     @Override
@@ -137,6 +134,9 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
                 Intent intent = new Intent(this, BalanceResultActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.change_view_list_date_button:
+                // переключение между сортировкой по дате и по категориям списка Balance
                 break;
         }
     }

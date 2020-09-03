@@ -17,20 +17,21 @@ import com.example.wallet.feature.list.DeleteConfirmationDialog;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
-public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
+public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<GregorianCalendar> {
     public static final String ITEMS_ID = "items_id";
     private Context context;
 
-    private List<Balance> items;
+    private List<GregorianCalendar> items;
     private TextView sum;
 
     private BalanceListDayAdapter adapter;
     private RecyclerView recyclerView;
-    private BaseRecyclerAdapter.OnItemClick<Balance> outerItemListener;
+    private BaseRecyclerAdapter.OnItemClick<GregorianCalendar> outerItemListener;
 
-    public BalanceListDateSortAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
+    public BalanceListDateSortAdapter(BaseActivity baseActivity, List<GregorianCalendar> items, OnItemClick<GregorianCalendar> onItemClick) {
         super(baseActivity, items, onItemClick);
         this.items = items;
         this.outerItemListener = onItemClick;
@@ -45,12 +46,12 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
     protected BaseItem createViewHolder(View view) {
         return new BaseItem(view) {
             @Override
-            public void bind(Balance item) {
+            public void bind(GregorianCalendar item) {
                 context = view.getContext();
 
                 sum = view.findViewById(R.id.sum_item_balance_date_title);
                 TextView date = view.findViewById(R.id.date_item_balance_date_title);
-                date.setText(WorkWithDate.showSimpleDateFormat(item.getDate()));
+                date.setText(WorkWithDate.showSimpleDateFormat(item));
 
                 List<Balance> dayBalanceList = makeBalanceListForDay(item);
                 recyclerView = view.findViewById(R.id.recycler_balance_list_for_day);
@@ -66,7 +67,7 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
         recyclerView.setAdapter(adapter);
     }
 
-    private View.OnClickListener makeItemClickListener(Balance item, int id) {
+    private View.OnClickListener makeItemClickListener(GregorianCalendar item, int id) {
         View.OnClickListener clickListener = v -> {
             outerItemListener.onItemClick(item, id);
         };
@@ -74,9 +75,9 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
         return clickListener;
     }
 
-    private List<Balance> makeBalanceListForDay(Balance item) {
-        long startDateValue = WorkWithDate.makeStartDateValue(item.getDate(), true);
-        long finishDateValue = WorkWithDate.makeStartDateValue(item.getDate(), false);
+    private List<Balance> makeBalanceListForDay(GregorianCalendar date) {
+        long startDateValue = WorkWithDate.makeStartDateValue(date, true);
+        long finishDateValue = WorkWithDate.makeStartDateValue(date, false);
 
         List<Balance> balanceList = BalanceItemStoreProvider.getInstance(context)
                 .getBalanceListForIsProfitPeriod(startDateValue, finishDateValue,true);
@@ -84,7 +85,7 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
         int daySum = 0;
 
         for(Balance balance : balanceList) {
-                daySum += balance.getOperationSum();
+            daySum += balance.getOperationSum();
         }
 
         sum.setText(String.valueOf(daySum));
@@ -109,8 +110,8 @@ public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
         }
     };
 
-    public void submitNewList(List<Balance> newBalanceList) {
-        this.items = newBalanceList;
+    public void submitNewList(List<GregorianCalendar> newCalendarList) {
+        this.items = newCalendarList;
         notifyDataSetChanged();
     }
 }

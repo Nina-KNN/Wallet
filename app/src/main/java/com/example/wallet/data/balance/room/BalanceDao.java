@@ -23,6 +23,16 @@ public interface BalanceDao {
             boolean isProfit
     );
 
+    @Query("SELECT * FROM BalanceEntity WHERE " +
+            "date >= :startDatePeriodParam AND date <= :endDatePeriodParam " +
+            "AND choiceProfit == :isProfit AND categoryId == :categoryId")
+    List<BalanceEntity> getBalanceListForIsProfitPeriod(
+            long startDatePeriodParam,
+            long endDatePeriodParam,
+            boolean isProfit,
+            String categoryId
+    );
+
     @Query("SELECT * FROM BalanceEntity WHERE id == :idParam")
     BalanceEntity getBalanceById(String idParam);
 

@@ -8,6 +8,11 @@ public interface BalanceItemStore {
 
     List<Balance> getBalanceListForIsProfitPeriod(long startDatePeriod, long endDatePeriod, boolean isProfit);
 
+    List<Balance> getBalanceListForIsProfitPeriodAndCategory(long startDatePeriod,
+                                                             long endDatePeriod,
+                                                             boolean isProfit,
+                                                             String categoryId);
+
     Balance getById(UUID id);
 
     // Добавить новый объект в список объектов типа Balance

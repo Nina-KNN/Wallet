@@ -1,14 +1,10 @@
 package com.example.wallet.feature.details;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,15 +12,19 @@ import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStore;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
+import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.WorkWithDate;
-import com.example.wallet.feature.list.adapter.BalanceListAdapter;
-import com.example.wallet.feature.list.adapter.BalanceViewHolder;
+import com.example.wallet.feature.list.adapter.BalanceListCategorySortAdapter;
+import com.example.wallet.feature.list.adapter.BalanceListDateSortAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 
 public class BalanceListActivity extends BaseActivity implements View.OnClickListener {
 
@@ -37,7 +37,9 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
     private TextView dateTextView;
 
     private RecyclerView recyclerView;
-    private BalanceListAdapter adapter;
+    private BalanceListDateSortAdapter adapterDateSort;
+    private BalanceListCategorySortAdapter adapterCategorySort;
+    private int viewTypeRecycler = 1;
     private boolean profit;
 
     private GregorianCalendar currentDate;
@@ -60,40 +62,78 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
         dateTextView = findViewById(R.id.month_and_year_balance_list);
         dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
 
+
         findViewById(R.id.add_item).setOnClickListener(this);
         findViewById(R.id.next_month).setOnClickListener(this);
         findViewById(R.id.previous_month).setOnClickListener(this);
+        findViewById(R.id.change_view_list).setOnClickListener(this);
         findViewById(R.id.balance_list).setOnClickListener(this);
         findViewById(R.id.button_back_balance_list).setOnClickListener(this);
         profitImageButton.setOnClickListener(this);
 
         makeChangeProfit(profit);
-        makeDeleteItemBySwiped();
     }
 
     private void makeRecyclerView() {
-        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
-                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), profit);
-
-        adapter = new BalanceListAdapter(balanceList, itemListener,this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        if(viewTypeRecycler == 1) {
+            List<GregorianCalendar> calendarList = makeCalendarList();
+            adapterDateSort = new BalanceListDateSortAdapter(this, calendarList, profit);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapterDateSort);
+        } else {
+            List<IconObject> categoryList = makeCategoryList();
+            adapterCategorySort = new BalanceListCategorySortAdapter(this, categoryList, profit, firstDayInMonth(), lastDayInMonth());
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapterCategorySort);
+        }
     }
 
-    // Обработка нажатия на элемент списка
-    private final BalanceListAdapter.ItemListener itemListener = new BalanceListAdapter.ItemListener() {
-        @Override
-        public void onBalanceItemClicked(Balance balance) {
-            Intent intent = new Intent(BalanceListActivity.this, ItemOperationActivity.class);
-            intent.putExtra(ITEMS_ID, balance.getId());
-            startActivityForResult(intent, REQUEST_ACCESS_TYPE);
+    private List<Balance> makeBalanceListForMonth(boolean isProfit) {
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
+                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), isProfit);
+        return balanceList;
+    }
+
+    private List<GregorianCalendar> makeCalendarList() {
+        List<Balance> balanceList = makeBalanceListForMonth(profit);
+        List<GregorianCalendar> calendarList = new ArrayList<>();
+        List<Integer> dateList = new ArrayList<>();
+
+        for(Balance bal : balanceList) {
+            if(calendarList.isEmpty()) {
+                dateList.add(bal.getDate().get(Calendar.DATE));
+                calendarList.add(bal.getDate());
+            } else {
+                if(!dateList.contains(bal.getDate().get(Calendar.DATE))) {
+                    dateList.add(bal.getDate().get(Calendar.DATE));
+                    calendarList.add(bal.getDate());
+                }
+            }
         }
 
-        @Override
-        public void onBalanceItemLongClicked(Balance balance) {
-            makeDeleteItemByLongPressed(balance);
+        return calendarList;
+    }
+
+    private List<IconObject> makeCategoryList() {
+        List<Balance> balanceList = makeBalanceListForMonth(profit);
+        List<IconObject> categoryList = new ArrayList<>();
+        List<UUID> iconIdList = new ArrayList<>();
+
+        for(Balance bal : balanceList) {
+            UUID id = bal.getCategoryId();
+            if(iconIdList.isEmpty()) {
+                categoryList.add(IconsItemStoreProvider.getInstance(this).getIconById(id));
+                iconIdList.add(bal.getCategoryId());
+            } else {
+                if(!iconIdList.contains(bal.getCategoryId())) {
+                    iconIdList.add(bal.getCategoryId());
+                    categoryList.add(IconsItemStoreProvider.getInstance(this).getIconById(id));
+                }
+            }
         }
-    };
+
+        return categoryList;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,10 +167,13 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
     // Обновить список итемов
     private void updateList() {
-        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(this).
-                getBalanceListForIsProfitPeriod(firstDayInMonth(), lastDayInMonth(), profit);
-
-        adapter.submitNewList(balanceList);
+        if (viewTypeRecycler == 1) {
+            List<GregorianCalendar> calendarList = makeCalendarList();
+            adapterDateSort.submitNewList(calendarList);
+        } else {
+            List<IconObject> categoryList = makeCategoryList();
+            adapterCategorySort.submitNewList(categoryList);
+        }
     }
 
     // при удалении элемента по свайпу вывести сообщение и при необходимости пользователь
@@ -151,46 +194,14 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 .show();
     }
 
-    // Удаление по свайпу в сторону
-    private void makeDeleteItemBySwiped() {
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                // используется для перемещения итемов между собой
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                BalanceViewHolder balanceViewHolder = (BalanceViewHolder) viewHolder;
-
-                Balance balanceItem = balanceViewHolder.getBalance();
-                deleteItem(balanceItem, viewHolder.getAdapterPosition());
-            }
-        });
-
-        touchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    // Удаление при длительном нажатии
-    private void makeDeleteItemByLongPressed(final Balance balance) {
-        new AlertDialog.Builder(this)
-                .setMessage(R.string.dialog_delete_item_message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BalanceItemStoreProvider.getInstance(BalanceListActivity.this).deleteBalanceItem(balance.getId());
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .create()
-                .show();
-
-
-        // При удалении элемента из списка, отрисовать список заново
-        BalanceItemStoreProvider.getInstance(this).addListener(balanceListChangedList);
+    // переключение между сортировкой по дате и по категориям списка Balance
+    private void changeViewTypeRecycler() {
+        if (viewTypeRecycler == 1) {
+            viewTypeRecycler = 2;
+        } else {
+            viewTypeRecycler = 1;
+        }
+        makeRecyclerView();
     }
 
     // В зависимости от Profit это или Expense отобразить правильные данные
@@ -250,6 +261,11 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             case R.id.change_list:
                 profit = !profit;
                 makeChangeProfit(profit);
+                break;
+
+            case R.id.change_view_list:
+                // переключение между сортировкой по дате и по категориям списка Balance
+                changeViewTypeRecycler();
                 break;
 
             case R.id.balance_list:

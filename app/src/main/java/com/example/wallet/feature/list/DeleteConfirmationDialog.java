@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
-import com.example.wallet.feature.details.BalanceListDateSortActivity;
+import com.example.wallet.feature.details.BalanceListActivity;
 
 public class DeleteConfirmationDialog {
 
@@ -23,7 +23,7 @@ public class DeleteConfirmationDialog {
 
     private final void actionPressedPositiveButton(Balance balance, Context context) {
         BalanceItemStoreProvider.getInstance(context).deleteBalanceItem(balance.getId());
-        Intent intent = new Intent(context, BalanceListDateSortActivity.class);
+        Intent intent = new Intent(context, BalanceListActivity.class);
         context.startActivity(intent);
     }
 

@@ -159,9 +159,7 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
             case R.id.chart_button_balance_result:
                 showToast("Chart button pressed");
                 // Open Char activity
-                Intent intent2 = new Intent(this, BalanceListDateSortActivity.class);
-                startActivity(intent2);
-                finish();
+
                 break;
             case R.id.settings_button_balance_result:
                 Intent intent = new Intent(this, CategorySettingsActivity.class);

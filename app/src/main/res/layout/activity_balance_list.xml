@@ -14,16 +14,32 @@
         android:orientation="horizontal"
         android:background="@color/colorBlueDark" >
 
+        <TextView
+            android:id="@+id/title_positive_list"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:hint="@string/title_profit"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <ImageButton
             android:id="@+id/button_back_balance_list"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_arrow_left_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_arrow_left_blue_button"
             android:layout_marginLeft="8dp"
             android:background="@android:color/transparent"/>
 
         <TextView
-            android:id="@+id/title_positive_list"
+            android:id="@+id/month_and_year_balance_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -31,19 +47,8 @@
             android:paddingRight="30dp"
             android:layout_marginRight="8dp"
             android:textSize="15dp"
-            android:textStyle="bold"
-            android:hint="@string/title_profit"/>
+            android:hint="Month, Year" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/month_and_year_balance_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="15dp"
-        android:hint="Month, Year" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -89,6 +94,14 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_add_button"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/change_view_list"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_view_button"
             android:background="@android:color/transparent"/>
 
         <ImageButton

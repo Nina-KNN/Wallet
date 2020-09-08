@@ -46,7 +46,6 @@ public class BalanceListCategorySortInnerAdapter extends BaseRecyclerAdapter<Bal
 
     private View.OnClickListener makeItemClickListener(Balance item, int id) {
         View.OnClickListener clickListener = v -> itemListener.onItemClick(item, id);
-
         return clickListener;
     }
 
@@ -55,7 +54,6 @@ public class BalanceListCategorySortInnerAdapter extends BaseRecyclerAdapter<Bal
             itemListener.onItemLongClick(item, id);
             return true;
         };
-
         return longClickListener;
     }
 

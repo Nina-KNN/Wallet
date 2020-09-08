@@ -1,67 +1,107 @@
 package com.example.wallet.feature.list.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
-import com.example.wallet.data.icons.IconObject;
-import com.example.wallet.data.icons.IconsItemStoreProvider;
+import com.example.wallet.data.balance.BalanceItemStoreProvider;
+import com.example.wallet.feature.details.ItemOperationActivity;
 import com.example.wallet.feature.details.base.BaseActivity;
+import com.example.wallet.feature.list.DeleteConfirmationDialog;
+import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
-public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<Balance> {
-    private BaseRecyclerAdapter.OnItemClick<Balance> itemListener;
+public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<GregorianCalendar> {
+    public static final String ITEMS_ID = "items_id";
+    private Context context;
 
-    protected BalanceListDateSortAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
-        super(baseActivity, items, onItemClick);
-        this.itemListener = onItemClick;
+    private List<GregorianCalendar> items;
+    private TextView sumTextView;
+    private boolean isProfit;
+
+    private BalanceListDateSortInnerAdapter adapter;
+    private RecyclerView recyclerView;
+
+    public BalanceListDateSortAdapter(BaseActivity baseActivity, List<GregorianCalendar> items, boolean isProfit) {
+        super(baseActivity, items);
+        this.items = items;
+        this.isProfit = isProfit;
+
     }
 
     @Override
     protected int getCardLayoutID() {
-        return R.layout.item_of_balance_list_date;
+        return R.layout.item_of_balance_list_date_title;
     }
 
     @Override
     protected BaseItem createViewHolder(View view) {
         return new BaseItem(view) {
             @Override
-            public void bind(Balance item) {
-                ImageView categoryImageView = view.findViewById(R.id.image_value_item_balance_for_day);
-                TextView categoryNameTextView = view.findViewById(R.id.title_item_balance_for_day);
-                TextView sumTextView = view.findViewById(R.id.sum_item_balance_for_day);
-                TextView commentTextView = view.findViewById(R.id.comment_item_balance_for_day);
+            public void bind(GregorianCalendar item) {
+                context = view.getContext();
 
-                IconObject icon = IconsItemStoreProvider.getInstance(view.getContext()).getIconById(item.getCategoryId());
-                categoryImageView.setImageResource(icon.getIconImage());
-                categoryNameTextView.setText(icon.getIconName());
-                sumTextView.setText(String.valueOf(item.getOperationSum()));
-                commentTextView.setText(item.getComment());
+                sumTextView = view.findViewById(R.id.sum_item_balance_date_title);
+                TextView date = view.findViewById(R.id.date_item_balance_date_title);
+                date.setText(WorkWithDate.showSimpleDateFormat(item));
 
-                view.setOnClickListener(makeItemClickListener(item, view.getId()));
-                view.setOnLongClickListener(makeItemLongClickListener(item, view.getId()));
+                List<Balance> dayBalanceList = makeBalanceListForDay(item);
+                recyclerView = view.findViewById(R.id.recycler_balance_list_for_day);
+                makeRecyclerView(dayBalanceList);
             }
         };
     }
 
-    private View.OnClickListener makeItemClickListener(Balance item, int id) {
-        View.OnClickListener clickListener = v -> {
-            itemListener.onItemClick(item, id);
-        };
-
-        return clickListener;
+    private void makeRecyclerView(List<Balance> balanceList) {
+        adapter = new BalanceListDateSortInnerAdapter((BaseActivity) context, balanceList, innerItemListener);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
     }
 
-    private View.OnLongClickListener makeItemLongClickListener(Balance item, int id) {
-        View.OnLongClickListener longClickListener = v -> {
-            itemListener.onItemLongClick(item, id);
-            return true;
-        };
+    private List<Balance> makeBalanceListForDay(GregorianCalendar date) {
+        long startDateValue = WorkWithDate.makeStartDateValue(date, true);
+        long finishDateValue = WorkWithDate.makeStartDateValue(date, false);
 
-        return longClickListener;
+        List<Balance> balanceList = BalanceItemStoreProvider.getInstance(context)
+                .getBalanceListForIsProfitPeriod(startDateValue, finishDateValue, isProfit);
+
+        int daySum = 0;
+        for(Balance balance : balanceList) {
+            daySum += balance.getOperationSum();
+        }
+        sumTextView.setText(String.valueOf(daySum));
+
+        return balanceList;
+    }
+
+    // Обработка нажатий на элементы во внутреннем ресайлере
+    private BalanceListDateSortInnerAdapter.OnItemClick<Balance> innerItemListener = new OnItemClick<Balance>() {
+        @Override
+        public void onItemClick(Balance item, int position) {
+            Intent intent = new Intent(context, ItemOperationActivity.class);
+            intent.putExtra(ITEMS_ID, item.getId());
+            context.startActivity(intent);
+        }
+
+        @Override
+        public void onItemLongClick(Balance item, int position) {
+            // Удаление при длительном нажатии
+            DeleteConfirmationDialog dialogFragment = new DeleteConfirmationDialog();
+            dialogFragment.onCreateDialog(item, context).show();
+        }
+    };
+
+    public void submitNewList(List<GregorianCalendar> newCalendarList) {
+        this.items = newCalendarList;
+        notifyDataSetChanged();
     }
 }

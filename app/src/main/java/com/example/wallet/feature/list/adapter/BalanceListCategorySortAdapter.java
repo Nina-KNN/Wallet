@@ -16,10 +16,8 @@ import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.feature.details.ItemOperationActivity;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.DeleteConfirmationDialog;
-import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<IconObject> {
@@ -28,9 +26,17 @@ public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<IconObje
     private BalanceListCategorySortInnerAdapter adapter;
     private RecyclerView recyclerView;
     private List<Balance> balanceList;
+    private List<IconObject> items;
+    private boolean isProfit;
+    private long firstDay;
+    private long lastDay;
 
-    public BalanceListCategorySortAdapter(BaseActivity baseActivity, List<IconObject> items) {
+    public BalanceListCategorySortAdapter(BaseActivity baseActivity, List<IconObject> items, boolean isProfit, long firstDay, long lastDay) {
         super(baseActivity, items);
+        this.items = items;
+        this.isProfit = isProfit;
+        this.firstDay = firstDay;
+        this.lastDay = lastDay;
     }
 
     @Override
@@ -68,36 +74,21 @@ public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<IconObje
 
     private List<Balance> BalanceListForOneCategory(IconObject category) {
         List<Balance> balanceList = BalanceItemStoreProvider.getInstance(context)
-                .getBalanceListForIsProfitPeriodAndCategory(
-                        firstDay(new GregorianCalendar()), // ИЗМЕНИТЬ
-                        lastDay(new GregorianCalendar()), // ИЗМЕНИТЬ
-                        true,
-                        String.valueOf(category.getIconId())
-                );
+                .getBalanceListForIsProfitPeriodAndCategory(firstDay, lastDay, isProfit, String.valueOf(category.getIconId()));
 
         return balanceList;
     }
 
     private String balanceCategorySum(List<Balance> balanceList) {
         int sum = 0;
-
         for(Balance bal : balanceList) {
             sum += bal.getOperationSum();
         }
-
         return String.valueOf(sum);
     }
 
-    private long firstDay(GregorianCalendar date) {
-        return WorkWithDate.makeMonthPeriod(true, date);
-    }
-
-    private long lastDay(GregorianCalendar date) {
-        return WorkWithDate.makeMonthPeriod(false, date);
-    }
-
     // Обработка нажатий на элементы во внутреннем ресайлере
-    private BalanceListDateSortAdapter.OnItemClick<Balance> innerItemListener = new OnItemClick<Balance>() {
+    private BalanceListCategorySortInnerAdapter.OnItemClick<Balance> innerItemListener = new OnItemClick<Balance>() {
         @Override
         public void onItemClick(Balance item, int position) {
             Intent intent = new Intent(context, ItemOperationActivity.class);
@@ -112,4 +103,9 @@ public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<IconObje
             dialogFragment.onCreateDialog(item, context).show();
         }
     };
+
+    public void submitNewList(List<IconObject> iconObjectList) {
+        this.items = iconObjectList;
+        notifyDataSetChanged();
+    }
 }

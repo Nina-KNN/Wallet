@@ -34,8 +34,8 @@ public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<Balance>
                 TextView sumTextView = view.findViewById(R.id.sum_recycler_one_category);
                 TextView commentTextView = view.findViewById(R.id.comment_recycler_one_category);
 
-                dateTextView.setText(WorkWithDate.showDateUtilsFormat(item.getDate(), view.getContext()));
-                sumTextView.setText(item.getOperationSum());
+                dateTextView.setText(WorkWithDate.showSimpleDateFormat(item.getDate()));
+                sumTextView.setText(String.valueOf(item.getOperationSum()));
                 commentTextView.setText(item.getComment());
 
                 view.setOnClickListener(makeItemClickListener(item, view.getId()));

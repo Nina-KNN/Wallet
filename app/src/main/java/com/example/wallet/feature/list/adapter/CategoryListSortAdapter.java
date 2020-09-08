@@ -27,8 +27,9 @@ public class CategoryListSortAdapter extends BaseRecyclerAdapter<IconObject> {
     private Context context;
     private BalanceListCategorySortAdapter adapter;
     private RecyclerView recyclerView;
+    private List<Balance> balanceList;
 
-    protected CategoryListSortAdapter(BaseActivity baseActivity, List<IconObject> items) {
+    public CategoryListSortAdapter(BaseActivity baseActivity, List<IconObject> items) {
         super(baseActivity, items);
     }
 
@@ -42,6 +43,8 @@ public class CategoryListSortAdapter extends BaseRecyclerAdapter<IconObject> {
         return new BaseItem(view) {
             @Override
             public void bind(IconObject item) {
+                balanceList = BalanceListForOneCategory(item);
+
                 ImageView imageView = view.findViewById(R.id.image_recycler_category_title);
                 TextView categoryNameTextView = view.findViewById(R.id.category_recycler_category_title);
                 TextView sumTextView = view.findViewById(R.id.sum_recycler_category_title);
@@ -50,9 +53,9 @@ public class CategoryListSortAdapter extends BaseRecyclerAdapter<IconObject> {
                 context = view.getContext();
                 imageView.setImageResource(item.getIconImage());
                 categoryNameTextView.setText(item.getIconName());
-                sumTextView.setText("15");  // ИЗМЕНИТЬ
+                sumTextView.setText(balanceCategorySum(balanceList));
 
-                makeRecyclerView(BalanceListForOneCategory(item));
+                makeRecyclerView(balanceList);
             }
         };
     }
@@ -73,6 +76,16 @@ public class CategoryListSortAdapter extends BaseRecyclerAdapter<IconObject> {
                 );
 
         return balanceList;
+    }
+
+    private String balanceCategorySum(List<Balance> balanceList) {
+        int sum = 0;
+
+        for(Balance bal : balanceList) {
+            sum += bal.getOperationSum();
+        }
+
+        return String.valueOf(sum);
     }
 
     private long firstDay(GregorianCalendar date) {

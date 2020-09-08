@@ -10,21 +10,27 @@ import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
 import com.example.wallet.data.balance.BalanceItemStore;
 import com.example.wallet.data.balance.BalanceItemStoreProvider;
+import com.example.wallet.data.icons.IconObject;
+import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.BalanceListDateSortAdapter;
+import com.example.wallet.feature.list.adapter.CategoryListSortAdapter;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 
 public class BalanceListDateSortActivity extends BaseActivity implements View.OnClickListener{
 
     private RecyclerView recyclerView;
     private GregorianCalendar currentDate;
-    private BalanceListDateSortAdapter adapter;
+    private BalanceListDateSortAdapter adapterDateSort;
+    private CategoryListSortAdapter adapterCategorySort;
+    private int viewTypeRecycler = 1;
 
     @Override
     protected int getLayoutID() {
@@ -42,10 +48,18 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     }
 
     private void makeRecyclerView(boolean isProfit) {
-        List<GregorianCalendar> calendarList = makeCalendarList(true);
-        adapter = new BalanceListDateSortAdapter(this, calendarList, itemListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        if(viewTypeRecycler == 1) {
+            List<GregorianCalendar> calendarList = makeCalendarList(true);
+            adapterDateSort = new BalanceListDateSortAdapter(this, calendarList, itemListener);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapterDateSort);
+        } else {
+            List<IconObject> categoryList = makeCategoryList(true);
+            adapterCategorySort = new CategoryListSortAdapter(this, categoryList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapterCategorySort);
+        }
+
     }
 
     // Обработка нажатия на элемент списка
@@ -79,32 +93,45 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
 
     private List<GregorianCalendar> makeCalendarList(boolean isProfit) {
         List<Balance> balanceList = makeBalanceListForMonth(isProfit);
-        List<GregorianCalendar> CalendarList = new ArrayList<>();
+        List<GregorianCalendar> calendarList = new ArrayList<>();
+        List<Integer> dateList = new ArrayList<>();
 
-        for(Balance balance: balanceList) {
-            if(CalendarList.size() < 1) {
-                CalendarList.add(balance.getDate());
-            }
-
-            GregorianCalendar calendar = balance.getDate();
-            int newItem = 0;
-
-            for(GregorianCalendar date : CalendarList) {
-                if(calendar.get(Calendar.DATE) != date.get(Calendar.DATE)) {
-                    newItem++;
-                } else {
-                    newItem = 0;
-                    break;
+        for(Balance bal : balanceList) {
+            if(calendarList.isEmpty()) {
+                dateList.add(bal.getDate().get(Calendar.DATE));
+                calendarList.add(bal.getDate());
+            } else {
+                if(!dateList.contains(bal.getDate().get(Calendar.DATE))) {
+                    dateList.add(bal.getDate().get(Calendar.DATE));
+                    calendarList.add(bal.getDate());
                 }
-            }
-
-            if (newItem > 0) {
-                CalendarList.add(balance.getDate());
             }
         }
 
-        return CalendarList;
+        return calendarList;
     }
+
+    private List<IconObject> makeCategoryList(boolean isProfit) {
+        List<Balance> balanceList = makeBalanceListForMonth(isProfit);
+        List<IconObject> categoryList = new ArrayList<>();
+        List<UUID> iconIdList = new ArrayList<>();
+
+        for(Balance bal : balanceList) {
+            UUID id = bal.getCategoryId();
+            if(iconIdList.isEmpty()) {
+                categoryList.add(IconsItemStoreProvider.getInstance(this).getIconById(id));
+                iconIdList.add(bal.getCategoryId());
+            } else {
+                if(!iconIdList.contains(bal.getCategoryId())) {
+                    iconIdList.add(bal.getCategoryId());
+                    categoryList.add(IconsItemStoreProvider.getInstance(this).getIconById(id));
+                }
+            }
+        }
+
+        return categoryList;
+    }
+
 
     private final BalanceItemStore.Listener balanceListChangedList = () -> updateList();
 
@@ -124,7 +151,17 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     // Обновить список итемов
     private void updateList() {
         List<GregorianCalendar> calendarList = makeCalendarList(true);
-        adapter.submitNewList(calendarList);
+        adapterDateSort.submitNewList(calendarList);
+    }
+
+    // переключение между сортировкой по дате и по категориям списка Balance
+    private void changeViewTypeRecycler() {
+        if (viewTypeRecycler == 1) {
+            viewTypeRecycler = 2;
+        } else {
+            viewTypeRecycler = 1;
+        }
+        makeRecyclerView(true);
     }
 
     @Override
@@ -137,6 +174,7 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
                 break;
             case R.id.change_view_list_date_button:
                 // переключение между сортировкой по дате и по категориям списка Balance
+                changeViewTypeRecycler();
                 break;
         }
     }

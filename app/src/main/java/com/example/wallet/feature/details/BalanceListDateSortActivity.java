@@ -14,8 +14,8 @@ import com.example.wallet.data.icons.IconObject;
 import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
 import com.example.wallet.feature.list.WorkWithDate;
-import com.example.wallet.feature.list.adapter.BalanceListDateSortAdapter;
-import com.example.wallet.feature.list.adapter.CategoryListSortAdapter;
+import com.example.wallet.feature.list.adapter.BalanceListDateSortInnerAdapter;
+import com.example.wallet.feature.list.adapter.BalanceListCategorySortAdapter;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
 
     private RecyclerView recyclerView;
     private GregorianCalendar currentDate;
-    private BalanceListDateSortAdapter adapterDateSort;
-    private CategoryListSortAdapter adapterCategorySort;
+    private BalanceListDateSortInnerAdapter adapterDateSort;
+    private BalanceListCategorySortAdapter adapterCategorySort;
     private int viewTypeRecycler = 1;
 
     @Override
@@ -50,12 +50,12 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     private void makeRecyclerView(boolean isProfit) {
         if(viewTypeRecycler == 1) {
             List<GregorianCalendar> calendarList = makeCalendarList(true);
-            adapterDateSort = new BalanceListDateSortAdapter(this, calendarList, itemListener);
+            adapterDateSort = new BalanceListDateSortInnerAdapter(this, calendarList, itemListener);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapterDateSort);
         } else {
             List<IconObject> categoryList = makeCategoryList(true);
-            adapterCategorySort = new CategoryListSortAdapter(this, categoryList);
+            adapterCategorySort = new BalanceListCategorySortAdapter(this, categoryList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapterCategorySort);
         }
@@ -63,7 +63,7 @@ public class BalanceListDateSortActivity extends BaseActivity implements View.On
     }
 
     // Обработка нажатия на элемент списка
-    BalanceListDateSortAdapter.OnItemClick<GregorianCalendar> itemListener = new BaseRecyclerAdapter.OnItemClick<GregorianCalendar>() {
+    BalanceListDateSortInnerAdapter.OnItemClick<GregorianCalendar> itemListener = new BaseRecyclerAdapter.OnItemClick<GregorianCalendar>() {
         @Override
         public void onItemClick(GregorianCalendar item, int position) {
 

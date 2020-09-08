@@ -1,29 +1,28 @@
 package com.example.wallet.feature.list.adapter;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wallet.R;
 import com.example.wallet.data.balance.Balance;
-import com.example.wallet.data.icons.IconObject;
-import com.example.wallet.data.icons.IconsItemStoreProvider;
 import com.example.wallet.feature.details.base.BaseActivity;
+import com.example.wallet.feature.list.WorkWithDate;
 import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
 import java.util.List;
 
-public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
+public class BalanceListCategorySortInnerAdapter extends BaseRecyclerAdapter<Balance> {
+
     private BaseRecyclerAdapter.OnItemClick<Balance> itemListener;
 
-    protected BalanceListDayAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
-        super(baseActivity, items, onItemClick);
+    protected BalanceListCategorySortInnerAdapter(BaseActivity baseActivity, List<Balance> items, OnItemClick<Balance> onItemClick) {
+        super(baseActivity, items);
         this.itemListener = onItemClick;
     }
 
     @Override
     protected int getCardLayoutID() {
-        return R.layout.item_of_balance_list_date;
+        return R.layout.item_of_balance_list_category;
     }
 
     @Override
@@ -31,14 +30,11 @@ public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
         return new BaseItem(view) {
             @Override
             public void bind(Balance item) {
-                ImageView categoryImageView = view.findViewById(R.id.image_value_item_balance_for_day);
-                TextView categoryNameTextView = view.findViewById(R.id.title_item_balance_for_day);
-                TextView sumTextView = view.findViewById(R.id.sum_item_balance_for_day);
-                TextView commentTextView = view.findViewById(R.id.comment_item_balance_for_day);
+                TextView dateTextView = view.findViewById(R.id.date_recycler_one_category);
+                TextView sumTextView = view.findViewById(R.id.sum_recycler_one_category);
+                TextView commentTextView = view.findViewById(R.id.comment_recycler_one_category);
 
-                IconObject icon = IconsItemStoreProvider.getInstance(view.getContext()).getIconById(item.getCategoryId());
-                categoryImageView.setImageResource(icon.getIconImage());
-                categoryNameTextView.setText(icon.getIconName());
+                dateTextView.setText(WorkWithDate.showSimpleDateFormat(item.getDate()));
                 sumTextView.setText(String.valueOf(item.getOperationSum()));
                 commentTextView.setText(item.getComment());
 
@@ -49,9 +45,7 @@ public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
     }
 
     private View.OnClickListener makeItemClickListener(Balance item, int id) {
-        View.OnClickListener clickListener = v -> {
-            itemListener.onItemClick(item, id);
-        };
+        View.OnClickListener clickListener = v -> itemListener.onItemClick(item, id);
 
         return clickListener;
     }
@@ -64,4 +58,5 @@ public class BalanceListDayAdapter extends BaseRecyclerAdapter<Balance> {
 
         return longClickListener;
     }
+
 }

@@ -26,8 +26,7 @@
                 android:id="@+id/icon_image_category_setting"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ex_necklace"/>
+                android:background="@android:color/transparent"/>
 
             <TextView
                 android:id="@+id/category_name_category_setting"

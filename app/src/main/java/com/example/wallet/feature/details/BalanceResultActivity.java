@@ -48,6 +48,10 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.expense_button_balance_result).setOnClickListener(this);
         findViewById(R.id.chart_button_balance_result).setOnClickListener(this);
         findViewById(R.id.settings_button_balance_result).setOnClickListener(this);
+        findViewById(R.id.title_profit_result_balance).setOnClickListener(this);
+        findViewById(R.id.title_expense_result_balance).setOnClickListener(this);
+        findViewById(R.id.add_profit_result_balance).setOnClickListener(this);
+        findViewById(R.id.add_expense_result_balance).setOnClickListener(this);
 
         dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(today, this));
 
@@ -151,19 +155,26 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.profit_button_balance_result:
+            case R.id.title_profit_result_balance:
                 openBalanceListActivity(true);
                 break;
             case R.id.expense_button_balance_result:
+            case R.id.title_expense_result_balance:
                 openBalanceListActivity(false);
                 break;
             case R.id.chart_button_balance_result:
                 showToast("Chart button pressed");
                 // Open Char activity
-
                 break;
             case R.id.settings_button_balance_result:
                 Intent intent = new Intent(this, CategorySettingsActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.add_profit_result_balance:
+                showToast("Add profit");
+                break;
+            case R.id.add_expense_result_balance:
+                showToast("Add expense");
                 break;
         }
     }

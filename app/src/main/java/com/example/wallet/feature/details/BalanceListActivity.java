@@ -64,11 +64,11 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
 
 
         findViewById(R.id.add_item).setOnClickListener(this);
-        findViewById(R.id.next_month).setOnClickListener(this);
-        findViewById(R.id.previous_month).setOnClickListener(this);
+        findViewById(R.id.next_month_balance_list).setOnClickListener(this);
+        findViewById(R.id.previous_month_balance_list).setOnClickListener(this);
         findViewById(R.id.change_view_list).setOnClickListener(this);
         findViewById(R.id.balance_list).setOnClickListener(this);
-        findViewById(R.id.button_back_balance_list).setOnClickListener(this);
+        dateTextView.setOnClickListener(this);
         profitImageButton.setOnClickListener(this);
 
         makeChangeProfit(profit);
@@ -238,7 +238,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 startActivityForResult(intent, REQUEST_ACCESS_TYPE);
                 break;
 
-            case R.id.next_month:
+            case R.id.next_month_balance_list:
                 if(WorkWithDate.isMonthInBalanceList(this, lastDayInMonth(), false)) {
                     currentDate.add(Calendar.MONTH, 1);
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
@@ -248,7 +248,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
 
-            case R.id.previous_month:
+            case R.id.previous_month_balance_list:
                 if(WorkWithDate.isMonthInBalanceList(this, firstDayInMonth(), true)) {
                     currentDate.add(Calendar.MONTH, -1);
                     dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
@@ -273,7 +273,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
 
-            case R.id.button_back_balance_list:
+            case R.id.month_and_year_balance_list:
                 currentDate = new GregorianCalendar();
                 dateTextView.setText(WorkWithDate.showDateUtilsFormatWithoutDay(currentDate, this));
                 makeRecyclerView();

@@ -17,6 +17,8 @@ import com.example.wallet.feature.list.WorkWithDate;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static com.example.wallet.feature.list.baseConst.BaseConst.PROFIT_VALUE;
+
 public class BalanceResultActivity extends BaseActivity implements View.OnClickListener {
 
     RelativeLayout relativeLayout;
@@ -104,12 +106,19 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
         totalBalanceTextView.setText(String.valueOf(result));
     }
 
-    // Открыть новую активити и передать значение profit
+    // Открыть BalanceListActivity активити и передать значение profit
     private void openBalanceListActivity(Boolean profit) {
         Intent intent = new Intent(this, BalanceListActivity.class);
-        intent.putExtra("profit", profit);
+        intent.putExtra(PROFIT_VALUE, profit);
         startActivity(intent);
         finish();
+    }
+
+    // Открыть ItemOperationActivity и передать значение profit
+    private void openItemOperationActivity(Boolean profit) {
+        Intent intent = new Intent(this, ItemOperationActivity.class);
+        intent.putExtra(PROFIT_VALUE, profit);
+        startActivity(intent);
     }
 
 //    Проверить правильность сохраненных в prefsUtils первого и последнего дня  и при необходимости их перезаписать
@@ -171,10 +180,10 @@ public class BalanceResultActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.add_profit_result_balance:
-                showToast("Add profit");
+                openItemOperationActivity(true);
                 break;
             case R.id.add_expense_result_balance:
-                showToast("Add expense");
+                openItemOperationActivity(false);
                 break;
         }
     }

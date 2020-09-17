@@ -26,11 +26,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
-public class BalanceListActivity extends BaseActivity implements View.OnClickListener {
+import static com.example.wallet.feature.list.baseConst.BaseConst.PROFIT_VALUE;
 
-    private static final int REQUEST_ACCESS_TYPE = 1;
-    public static final String PROFIT_VALUE = "profit_value";
-    public static final String ITEMS_ID = "items_id";
+public class BalanceListActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView titleTextView;
     private ImageButton profitImageButton;
@@ -53,7 +51,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
     protected void initView() {
         currentDate = new GregorianCalendar();
         Intent intent = getIntent();
-        profit = (boolean) intent.getSerializableExtra("profit");
+        profit = (boolean) intent.getSerializableExtra(PROFIT_VALUE);
 
         recyclerView = findViewById(R.id.recycler);
 
@@ -141,7 +139,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
         if (data == null) {
             return;
         }
-        profit = (boolean) data.getSerializableExtra("profit");
+        profit = (boolean) data.getSerializableExtra(PROFIT_VALUE);
         makeChangeProfit(profit);
     }
 
@@ -235,7 +233,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             case R.id.add_item:
                 intent = new Intent(this, ItemOperationActivity.class);
                 intent.putExtra(PROFIT_VALUE, profit);
-                startActivityForResult(intent, REQUEST_ACCESS_TYPE);
+                startActivity(intent);
                 break;
 
             case R.id.next_month_balance_list:
@@ -271,6 +269,7 @@ public class BalanceListActivity extends BaseActivity implements View.OnClickLis
             case R.id.balance_list:
                 intent = new Intent(this, BalanceResultActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.month_and_year_balance_list:

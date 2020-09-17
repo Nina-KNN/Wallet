@@ -20,8 +20,9 @@ import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 
 import java.util.List;
 
+import static com.example.wallet.feature.list.baseConst.BaseConst.ITEMS_ID;
+
 public class BalanceListCategorySortAdapter extends BaseRecyclerAdapter<IconObject> {
-    public static final String ITEMS_ID = "items_id";
     private Context context;
     private BalanceListCategorySortInnerAdapter adapter;
     private RecyclerView recyclerView;

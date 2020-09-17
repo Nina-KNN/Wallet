@@ -37,8 +37,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
-import static com.example.wallet.feature.details.BalanceListActivity.ITEMS_ID;
-import static com.example.wallet.feature.details.BalanceListActivity.PROFIT_VALUE;
+import static com.example.wallet.feature.list.baseConst.BaseConst.ITEMS_ID;
+import static com.example.wallet.feature.list.baseConst.BaseConst.PROFIT_VALUE;
 
 public class ItemOperationActivity extends BaseActivity implements View.OnClickListener{
     RelativeLayout relativeLayout;
@@ -192,9 +192,9 @@ public class ItemOperationActivity extends BaseActivity implements View.OnClickL
                 BalanceItemStoreProvider.getInstance(this).addNewItemInBalanceList(balance);
             }
 
-            Intent intent = new Intent();
-            intent.putExtra("profit", profit);
-            setResult(RESULT_OK, intent);
+            Intent intent = new Intent(this, BalanceListActivity.class);
+            intent.putExtra(PROFIT_VALUE, profit);
+            startActivity(intent);
             finish();
         }
     }

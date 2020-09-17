@@ -20,8 +20,9 @@ import com.example.wallet.feature.list.adapter.baseAdapter.BaseRecyclerAdapter;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static com.example.wallet.feature.list.baseConst.BaseConst.ITEMS_ID;
+
 public class BalanceListDateSortAdapter extends BaseRecyclerAdapter<GregorianCalendar> {
-    public static final String ITEMS_ID = "items_id";
     private Context context;
 
     private List<GregorianCalendar> items;
